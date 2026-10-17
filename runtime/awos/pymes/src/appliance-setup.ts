@@ -1,0 +1,50 @@
+// A manual installation checklist, never a provider connectivity claim.
+const setupKey = "pymes:appliance:setup:v1";
+const checklist = document.querySelector<HTMLElement>("#setup-checklist");
+const inputs = Array.from(checklist?.querySelectorAll<HTMLInputElement>("input[type=checkbox]") ?? []);
+const progress = document.querySelector<HTMLProgressElement>("#setup-progress");
+const count = document.querySelector<HTMLElement>("#setup-count");
+const feedback = document.querySelector<HTMLElement>("#setup-feedback");
+try {
+  const stored: unknown = JSON.parse(localStorage.getItem(setupKey) ?? "[]");
+  if (Array.isArray(stored)) inputs.forEach(input => { input.checked = stored.includes(input.value); });
+} catch { /* An unavailable storage area leaves the checklist usable in this session. */ }
+function updateSetup(): void {
+  const selected = inputs.filter(input => input.checked).map(input => input.value);
+  if (progress) progress.value = selected.length;
+  if (count) count.textContent = `${selected.length} de ${inputs.length} pasos revisados`;
+  const state = document.querySelector<HTMLElement>("#setup-state");
+  if (state) {
+    state.textContent = selected.length === inputs.length ? "Revisión manual completada" : "Preparación pendiente";
+    state.classList.toggle("complete", selected.length === inputs.length);
+  }
+  try {
+    localStorage.setItem(setupKey, JSON.stringify(selected));
+    if (feedback) feedback.textContent = "Lista guardada en este navegador.";
+  } catch {
+    if (feedback) feedback.textContent = "Lista disponible solo durante esta sesión.";
+  }
+}
+inputs.forEach(input => input.addEventListener("change", updateSetup));
+document.querySelector("#setup-reset")?.addEventListener("click", () => {
+  inputs.forEach(input => { input.checked = false; });
+  updateSetup();
+});
+updateSetup();
+
+const textSize = document.querySelector<HTMLSelectElement>("#display-text-size")!;
+const displayFeedback = document.querySelector<HTMLElement>("#display-feedback")!;
+try { textSize.value = localStorage.getItem("pymes:display:text-size") === "large" ? "large" : "standard"; }
+catch { textSize.value = "standard"; }
+function applyTextSize(save = false): void {
+  document.body.classList.toggle("large-text", textSize.value === "large");
+  if (!save) return;
+  try {
+    localStorage.setItem("pymes:display:text-size", textSize.value);
+    displayFeedback.textContent = "Preferencia guardada en este navegador.";
+  } catch {
+    displayFeedback.textContent = "Preferencia aplicada solo durante esta sesión.";
+  }
+}
+textSize.addEventListener("change", () => applyTextSize(true));
+applyTextSize();

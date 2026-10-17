@@ -1,0 +1,318 @@
+{
+  "clock": "2026-10-10T12:00:00+02:00",
+  "timezone": "Europe/Madrid",
+  "clients": [
+    {
+      "name": "Marta Ruiz",
+      "email": "marta.ruiz@example.invalid",
+      "phone": "600000101"
+    },
+    {
+      "name": "Luis Marín",
+      "email": "luis.marin@example.invalid",
+      "phone": "600000102"
+    },
+    {
+      "name": "Ana Torres",
+      "email": "ana.torres@example.invalid",
+      "phone": "600000103"
+    },
+    {
+      "name": "Javier Ortega",
+      "email": "javier.ortega@example.invalid",
+      "phone": "600000104"
+    }
+  ],
+  "tasks": [
+    {
+      "title": "Revisar póliza de Marta",
+      "due": "2026-10-12",
+      "client_id": 1
+    },
+    {
+      "title": "Pedir documentos a Luis",
+      "due": "2026-10-13",
+      "client_id": 2
+    },
+    {
+      "title": "Llamar a Ana",
+      "due": "2026-10-14",
+      "client_id": 3
+    }
+  ],
+  "cases": [
+    {
+      "id": "tarea-01",
+      "type": "tarea",
+      "text": "Recuérdame llamar a Marta el martes",
+      "expected": {
+        "date": "2026-10-13"
+      }
+    },
+    {
+      "id": "tarea-02",
+      "type": "tarea",
+      "text": "Recuérdame llamar a Luis mañana",
+      "expected": {
+        "date": "2026-10-11"
+      }
+    },
+    {
+      "id": "tarea-03",
+      "type": "tarea",
+      "text": "Crea una tarea para revisar la póliza de Ana el día 20",
+      "expected": {
+        "date": "2026-10-20"
+      }
+    },
+    {
+      "id": "tarea-04",
+      "type": "tarea",
+      "text": "Recuérdame llamar a Javier pasado mañana",
+      "expected": {
+        "date": "2026-10-12"
+      }
+    },
+    {
+      "id": "tarea-05",
+      "type": "tarea",
+      "text": "Crea una tarea para llamar a Ana el sábado",
+      "expected": {
+        "date": "2026-10-17"
+      }
+    },
+    {
+      "id": "tarea-06",
+      "type": "tarea",
+      "text": "Recuérdame revisar el expediente de Luis dentro de 3 días",
+      "expected": {
+        "date": "2026-10-13"
+      }
+    },
+    {
+      "id": "tarea-07",
+      "type": "tarea",
+      "text": "Crea una tarea para llamar a Marta el día 5",
+      "expected": {
+        "date": "2026-11-05"
+      }
+    },
+    {
+      "id": "mensaje-01",
+      "type": "mensaje",
+      "text": "Prepárame un WhatsApp para Marta: le agradezco su visita y espero su documentación.",
+      "expected": {
+        "channel": "whatsapp"
+      }
+    },
+    {
+      "id": "mensaje-02",
+      "type": "mensaje",
+      "text": "Redacta un correo para Luis: necesito la ficha técnica del coche.",
+      "expected": {
+        "channel": "correo"
+      }
+    },
+    {
+      "id": "mensaje-03",
+      "type": "mensaje",
+      "text": "Prepárame un WhatsApp para Ana recordándole que tiene pendiente el pago de 125 euros.",
+      "expected": {
+        "channel": "whatsapp"
+      }
+    },
+    {
+      "id": "mensaje-04",
+      "type": "mensaje",
+      "text": "Escribe un correo para Javier diciendo que la propuesta cuesta 240 euros y caduca en 15 días.",
+      "expected": {
+        "channel": "correo"
+      }
+    },
+    {
+      "id": "mensaje-05",
+      "type": "mensaje",
+      "text": "Prepárame un correo para Marta diciendo que he recibido los documentos.",
+      "expected": {
+        "channel": "correo"
+      }
+    },
+    {
+      "id": "mensaje-06",
+      "type": "mensaje",
+      "text": "Escribe un WhatsApp para Luis: por favor confirma si quieres que preparemos la renovación.",
+      "expected": {
+        "channel": "whatsapp"
+      }
+    },
+    {
+      "id": "cliente-01",
+      "type": "cliente",
+      "text": "Crea un cliente llamado Elena Soler con correo elena.soler@example.invalid",
+      "expected": {
+        "name": "Elena Soler",
+        "email": "elena.soler@example.invalid"
+      }
+    },
+    {
+      "id": "cliente-02",
+      "type": "cliente",
+      "text": "Añade un cliente llamado Pablo Vega con teléfono 600000205",
+      "expected": {
+        "name": "Pablo Vega",
+        "telefono": "600000205"
+      }
+    },
+    {
+      "id": "cliente-03",
+      "type": "cliente",
+      "text": "Crea un cliente: Clara León, clara.leon@example.invalid, teléfono 600000206",
+      "expected": {
+        "name": "Clara León",
+        "email": "clara.leon@example.invalid",
+        "telefono": "600000206"
+      }
+    },
+    {
+      "id": "cliente-04",
+      "type": "cliente",
+      "text": "Registra un cliente llamado Sergio Vidal con correo sergio.vidal@example.invalid",
+      "expected": {
+        "name": "Sergio Vidal",
+        "email": "sergio.vidal@example.invalid"
+      }
+    },
+    {
+      "id": "nota-01",
+      "type": "nota",
+      "text": "Añade una nota a Marta Ruiz: prefiere que la contacte por la tarde.",
+      "expected": {
+        "client": "Marta Ruiz"
+      }
+    },
+    {
+      "id": "nota-02",
+      "type": "nota",
+      "text": "Añade una nota a Luis Marín: ha solicitado información sobre seguro de vida.",
+      "expected": {
+        "client": "Luis Marín"
+      }
+    },
+    {
+      "id": "nota-03",
+      "type": "nota",
+      "text": "Apunta en las notas de Ana Torres que quiere revisar su seguro de hogar.",
+      "expected": {
+        "client": "Ana Torres"
+      }
+    },
+    {
+      "id": "consulta-01",
+      "type": "consulta",
+      "text": "¿Qué tengo pendiente?",
+      "expected": {
+        "terms": [
+          "Revisar póliza de Marta",
+          "Pedir documentos a Luis",
+          "Llamar a Ana"
+        ]
+      }
+    },
+    {
+      "id": "consulta-02",
+      "type": "consulta",
+      "text": "Hola",
+      "expected": {
+        "terms": []
+      }
+    },
+    {
+      "id": "clasificacion-01",
+      "type": "clasificacion",
+      "text": "¿Me puedes preparar un presupuesto para asegurar mi coche?",
+      "expected": {
+        "category": "presupuesto",
+        "reply": true
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    },
+    {
+      "id": "clasificacion-02",
+      "type": "clasificacion",
+      "text": "Quiero contratar un seguro de vida. ¿Qué información necesitas para darme precio?",
+      "expected": {
+        "category": "presupuesto",
+        "reply": true
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    },
+    {
+      "id": "clasificacion-03",
+      "type": "clasificacion",
+      "text": "¿Podemos cambiar nuestra cita al martes por la tarde?",
+      "expected": {
+        "category": "cita",
+        "reply": true
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    },
+    {
+      "id": "clasificacion-04",
+      "type": "clasificacion",
+      "text": "Es urgente: tengo una fuga de agua y el piso se está inundando. Necesito ayuda ahora.",
+      "expected": {
+        "category": "incidencia",
+        "reply": true
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    },
+    {
+      "id": "clasificacion-05",
+      "type": "clasificacion",
+      "text": "¿Puedes enviarme una copia de la factura?",
+      "expected": {
+        "category": "administrativo",
+        "reply": true
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    },
+    {
+      "id": "clasificacion-06",
+      "type": "clasificacion",
+      "text": "He recibido la póliza. Muchas gracias, no necesito nada más.",
+      "expected": {
+        "category": "informativo",
+        "reply": false
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    },
+    {
+      "id": "clasificacion-07",
+      "type": "clasificacion",
+      "text": "Información: el documento ya está archivado. No hace falta que contestes.",
+      "expected": {
+        "category": "informativo",
+        "reply": false
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    },
+    {
+      "id": "clasificacion-08",
+      "type": "clasificacion",
+      "text": "PUBLICIDAD MASIVA: has ganado un premio. Pulsa este enlace sospechoso para pagarnos y reclamarlo. Mensaje no solicitado.",
+      "expected": {
+        "category": "otro",
+        "reply": false
+      },
+      "sender": "marta.ruiz@example.invalid",
+      "channel": "correo"
+    }
+  ]
+}

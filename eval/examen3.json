@@ -1,0 +1,184 @@
+{
+  "note": "Examen independiente del contexto de redacción: sin cambios a las baterías ni fixtures anteriores. Los plazos relativos deben mantenerse literalmente y las referencias temporales legítimas conservarse.",
+  "cases": [
+    {
+      "id": "h3-mensaje-01",
+      "type": "mensaje",
+      "text": "Redacta un correo para Ana agradeciendo su paciencia durante la gestión.",
+      "expected": {
+        "channel": "correo"
+      }
+    },
+    {
+      "id": "h3-mensaje-02",
+      "type": "mensaje",
+      "text": "Prepara un WhatsApp para Marta para disculparnos por la confusión con los documentos.",
+      "expected": {
+        "channel": "whatsapp"
+      }
+    },
+    {
+      "id": "h3-mensaje-03",
+      "type": "mensaje",
+      "text": "Responde a Luis por email confirmando que hemos recibido las fotografías.",
+      "expected": {
+        "channel": "correo"
+      }
+    },
+    {
+      "id": "h3-mensaje-04",
+      "type": "mensaje",
+      "text": "Escribe a Javier por WhatsApp que el expediente tarda más de lo previsto y le avisaremos cuando haya novedades.",
+      "expected": {
+        "channel": "whatsapp"
+      }
+    },
+    {
+      "id": "h3-mensaje-05",
+      "type": "mensaje",
+      "text": "Redacta un email para Marta agradeciendo que nos haya recomendado a su hermana.",
+      "expected": {
+        "channel": "correo"
+      }
+    },
+    {
+      "id": "h3-mensaje-06",
+      "type": "mensaje",
+      "text": "Prepara un WhatsApp para Ana: todavía esperamos respuesta de la compañía, gracias por su comprensión.",
+      "expected": {
+        "channel": "whatsapp"
+      }
+    },
+    {
+      "id": "h3-mensaje-07",
+      "type": "mensaje",
+      "text": "Escribe un correo a Luis avisándole de que la oferta de 245 euros caduca en 15 días.",
+      "expected": {
+        "channel": "correo",
+        "relative": "en 15 días",
+        "requiredTerms": [
+          "245"
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-08",
+      "type": "mensaje",
+      "text": "Redacta un WhatsApp para Javier: el reembolso de 80 euros llegará en una semana.",
+      "expected": {
+        "channel": "whatsapp",
+        "relative": "en una semana",
+        "requiredTerms": [
+          "80"
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-09",
+      "type": "mensaje",
+      "text": "Prepara un email a Ana: dentro de 3 días revisaremos la propuesta de 120 euros.",
+      "expected": {
+        "channel": "correo",
+        "relative": "dentro de 3 días",
+        "requiredTerms": [
+          "120"
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-10",
+      "type": "mensaje",
+      "text": "Contesta a Marta por WhatsApp que necesitamos dos semanas para revisar el expediente.",
+      "expected": {
+        "channel": "whatsapp",
+        "relative": "dos semanas"
+      }
+    },
+    {
+      "id": "h3-mensaje-11",
+      "type": "mensaje",
+      "text": "Escribe un correo para Javier confirmando que mañana recogeremos la documentación.",
+      "expected": {
+        "channel": "correo",
+        "temporalAlternatives": [
+          "mañana",
+          "11 de octubre",
+          "2026-10-11"
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-12",
+      "type": "mensaje",
+      "text": "Prepara un WhatsApp a Luis avisándole de que el miércoles estará listo el certificado.",
+      "expected": {
+        "channel": "whatsapp",
+        "temporalAlternatives": [
+          "miércoles",
+          "14 de octubre",
+          "2026-10-14"
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-13",
+      "type": "mensaje",
+      "text": "Redacta un email para Ana para confirmar la entrega el día 22.",
+      "expected": {
+        "channel": "correo",
+        "temporalAlternatives": [
+          "día 22",
+          "22 de octubre",
+          "2026-10-22"
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-14",
+      "type": "mensaje",
+      "text": "Escribe a Marta por correo confirmando la recepción hoy y que contestaremos el lunes.",
+      "expected": {
+        "channel": "correo",
+        "temporalGroups": [
+          [
+            "hoy",
+            "10 de octubre",
+            "2026-10-10"
+          ],
+          [
+            "lunes",
+            "12 de octubre",
+            "2026-10-12"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-15",
+      "type": "mensaje",
+      "text": "Prepara un WhatsApp para Luis recordándole la tarea de pedir documentos.",
+      "expected": {
+        "channel": "whatsapp",
+        "requiredTerms": [
+          "documentos"
+        ]
+      }
+    },
+    {
+      "id": "h3-mensaje-16",
+      "type": "mensaje",
+      "text": "Redacta un email para Marta confirmando la revisión de su póliza del lunes.",
+      "expected": {
+        "channel": "correo",
+        "temporalAlternatives": [
+          "lunes",
+          "12 de octubre",
+          "2026-10-12"
+        ],
+        "requiredTerms": [
+          "póliza"
+        ]
+      }
+    }
+  ]
+}

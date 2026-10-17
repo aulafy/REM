@@ -1,0 +1,49 @@
+{
+  "name": "@agent-world/pymes",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5174 --strictPort",
+    "api": "tsx src/server.ts",
+    "pilot:read": "tsx src/pilot-read.ts",
+    "pilot:classify": "tsx src/pilot-classify.ts",
+    "pilot:evaluate": "tsx src/evaluate-classifier.ts",
+    "check:operations": "bash scripts/check-operations.sh",
+    "validate:production-env": "bash scripts/validate-production-env.sh",
+    "build": "vite build",
+    "check": "npm run typecheck && npm test && npm run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "diagnose:mac": "bash scripts/mac-diagnostics.sh",
+    "benchmark:local": "tsx src/benchmark-local.ts",
+    "start:ui": "tsx src/ui-server.ts",
+    "mac:launch-agent": "tsx src/mac-launch-agent.ts",
+    "gmail:build-keychain": "bash scripts/build-gmail-keychain.sh",
+    "p01:kill": "tsx src/p01-pilot-kill.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@agent-world/task-runtime": "0.1.0",
+    "@agent-world/inference": "0.1.0",
+    "@agent-world/runtime-store-sqlite": "0.1.0",
+    "@agent-world/control-plane": "0.1.0",
+    "@agent-world/composition-policy": "0.1.0",
+    "@agent-world/contracts": "0.1.0",
+    "@agent-world/effects": "0.1.0",
+    "@agent-world/information-flow": "0.1.0",
+    "@agent-world/leases": "0.1.0",
+    "@agent-world/observation": "0.1.0",
+    "@agent-world/reconciliation": "0.1.0",
+    "@agent-world/recovery": "0.1.0",
+    "@agent-world/resources": "0.1.0",
+    "@agent-world/supervision": "0.1.0"
+  }
+}

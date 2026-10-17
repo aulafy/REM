@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "base": "REPLACE_WITH_CURRENT_40_CHARACTER_GIT_SHA",
+  "tasks": [
+    {
+      "id": "contratos",
+      "engine": "opencode",
+      "model": "opencode/deepseek-v4.1-flash-free",
+      "mode": "review",
+      "goal": "Review the supplied contracts for concrete authorization, revision, idempotency, recovery, escaping, or accessibility defects. Return evidence with file/line and a reproducible scenario. Do not implement changes or claim tests/visual QA that were not executed.",
+      "files": [
+        "src/rem-modules.js",
+        "src/awos-client.js",
+        "public/module-contract.js",
+        "test/rem-modules.test.js",
+        "docs/MODULES.md"
+      ],
+      "writePaths": []
+    },
+    {
+      "id": "interfaz",
+      "engine": "opencode",
+      "model": "opencode/deepseek-v4.1-flash-free",
+      "mode": "review",
+      "goal": "Review the supplied contracts for concrete authorization, revision, idempotency, recovery, escaping, or accessibility defects. Return evidence with file/line and a reproducible scenario. Do not implement changes or claim tests/visual QA that were not executed.",
+      "files": [
+        "public/module-ui.js",
+        "public/module-library.js",
+        "public/modules.css",
+        "docs/MODULES.md"
+      ],
+      "writePaths": []
+    }
+  ]
+}

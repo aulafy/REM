@@ -1,0 +1,146 @@
+import { normalizeSearch } from "./search.js";
+import { demoData as data } from "./demo-data.js";
+import { buildMorningBrief } from "./domain.js";
+import { insuranceLines } from "./config.js";
+const list = document.querySelector<HTMLElement>("#clients-list")!;
+const profile = document.querySelector<HTMLElement>("#clients-profile")!;
+const search = document.querySelector<HTMLInputElement>("#clients-search")!;
+const kind = document.querySelector<HTMLSelectElement>("#clients-kind")!;
+let selected = data.contacts[0]?.id;
+const unsavedNotes = new Map<string, string>();
+function node(tag: string, text: string): HTMLElement {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  return element;
+}
+function renderClients(): void {
+  const query = normalizeSearch(search.value);
+  const contacts = data.contacts.filter(contact =>
+    (kind.value === "all" || contact.relationship === kind.value) &&
+    normalizeSearch(contact.name + " " + (contact.product ? insuranceLines[contact.product] : "")).includes(query));
+  if (!contacts.some(contact => contact.id === selected)) selected = contacts[0]?.id;
+  list.replaceChildren();
+  profile.replaceChildren();
+  document.querySelector("#clients-results")!.textContent = `${contacts.length} contactos · Datos ficticios, sin sincronización CRM`;
+  for (const contact of contacts) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "client-row";
+    button.setAttribute("aria-pressed", String(contact.id === selected));
+    button.append(node("strong", contact.name), node("span", `${contact.relationship === "client" ? "Cliente" : "Oportunidad"} · ${contact.product ? insuranceLines[contact.product] : "Sin ramo"}`));
+    button.addEventListener("click", () => { selected = contact.id; renderClients(); });
+    list.append(button);
+  }
+  const contact = contacts.find(contact => contact.id === selected);
+  if (!contact) { profile.append(node("h3", "No hay contactos que coincidan"), node("p", "Prueba con otro nombre o cambia el filtro.")); return; }
+  profile.append(node("h3", contact.name), node("p", `Responsable: ${contact.owner}`), node("h4", "Conversaciones"));
+  const seen = new Set<string>();
+  for (const message of data.messages.filter(message => message.contactId === contact.id)) {
+    if (seen.has(message.externalId)) continue;
+    seen.add(message.externalId);
+    profile.append(node("small", message.channel), node("p", message.text));
+    const conversation = document.createElement("a");
+    conversation.href = "#inbox";
+    conversation.textContent = "Abrir esta conversación →";
+    conversation.addEventListener("click", () => {
+      requestAnimationFrame(() => window.dispatchEvent(new CustomEvent("pymes:open-message", {
+        detail: { externalId: message.externalId, channel: message.channel }
+      })));
+    });
+    profile.append(conversation);
+  }
+  profile.append(node("h4", "Próxima cita"));
+  const appointment = data.appointments.find(value => value.contactId === contact.id);
+  profile.append(node("p", appointment ? `${appointment.title} · ${new Date(appointment.startsAt).toLocaleString("es-ES", { timeZone: "Europe/Madrid" })}` : "Sin cita en la agenda de ejemplo"));
+  const preparation = document.createElement("details");
+  preparation.className = "client-call-brief";
+  const summary = document.createElement("summary");
+  summary.textContent = "Guion para preparar la llamada";
+  preparation.append(summary, node("p", "Preparación a partir de los mensajes de ejemplo. Confirma la información con el cliente."));
+  const requests = buildMorningBrief(data).items.filter(item => item.contact?.id === contact.id);
+  const actions = document.createElement("ul");
+  for (const action of new Set(requests.map(item => item.nextAction))) actions.append(node("li", action));
+  if (actions.childElementCount) preparation.append(node("h4", "Objetivo de la conversación"), actions);
+  const missing = document.createElement("ul");
+  for (const question of new Set(requests.flatMap(item => item.missingInformation))) missing.append(node("li", question));
+  if (missing.childElementCount) preparation.append(node("h4", "Información que confirmar"), missing);
+  if (!requests.length) preparation.append(node("p", "No hay solicitudes para preparar en esta demo."));
+  preparation.append(node("p", "Al terminar: anota lo acordado y revisa la siguiente acción. Este guion no realiza llamadas ni modifica el CRM."));
+  profile.append(preparation);
+  const noteKey = `pymes:demo:contact-note:v1:${contact.id}`;
+  const notes = document.createElement("form");
+  notes.className = "client-notes";
+  const label = document.createElement("label");
+  label.htmlFor = "client-note";
+  label.textContent = "Preparación de la próxima llamada";
+  const textarea = document.createElement("textarea");
+  textarea.id = "client-note";
+  textarea.maxLength = 2000;
+  textarea.rows = 4;
+  textarea.placeholder = "Preguntas pendientes, documentos que pedir…";
+  const status = node("p", "");
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  try {
+    textarea.value = (unsavedNotes.get(contact.id) ?? localStorage.getItem(noteKey) ?? "").slice(0, 2000);
+    if (textarea.value) status.textContent = "Nota guardada en este navegador.";
+  } catch { status.textContent = "El almacenamiento no está disponible."; }
+  if (unsavedNotes.has(contact.id)) {
+    textarea.value = unsavedNotes.get(contact.id)!;
+    status.textContent = "Borrador recuperado de esta sesión. Pendiente de guardar.";
+  }
+  const save = document.createElement("button");
+  save.type = "submit";
+  save.textContent = "Guardar nota";
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.textContent = "Borrar nota";
+  remove.disabled = !textarea.value;
+  textarea.addEventListener("input", () => {
+    unsavedNotes.set(contact.id, textarea.value);
+    status.textContent = "Cambios sin guardar. El borrador se conserva durante esta sesión.";
+    remove.disabled = !textarea.value;
+  });
+  notes.addEventListener("submit", event => {
+    event.preventDefault();
+    try {
+      if (textarea.value.trim()) localStorage.setItem(noteKey, textarea.value.trim());
+      else localStorage.removeItem(noteKey);
+      unsavedNotes.delete(contact.id);
+      status.textContent = "Nota guardada en este navegador. No se sincroniza con el CRM.";
+    } catch { status.textContent = "No se pudo guardar. Copia la nota antes de salir."; }
+  });
+  remove.addEventListener("click", () => {
+    try {
+      localStorage.removeItem(noteKey);
+      unsavedNotes.delete(contact.id);
+      textarea.value = "";
+      remove.disabled = true;
+      status.textContent = "Nota borrada de este navegador.";
+    } catch { status.textContent = "No se pudo borrar la nota guardada."; }
+  });
+  notes.append(label, node("small", "Notas locales de demostración · No introducir datos reales de clientes"), textarea, save, remove, status);
+  profile.append(notes);
+  const link = document.createElement("a");
+  link.href = "#inbox";
+  link.textContent = "Ir a la bandeja unificada →";
+  profile.append(link);
+}
+search.addEventListener("input", renderClients);
+kind.addEventListener("change", renderClients);
+renderClients();
+window.addEventListener("beforeunload", event => {
+  if (!unsavedNotes.size) return;
+  event.preventDefault();
+  event.returnValue = "";
+});
+window.addEventListener("pymes:open-contact", event => {
+  if (!(event instanceof CustomEvent) || typeof event.detail !== "string") return;
+  if (!data.contacts.some(contact => contact.id === event.detail)) return;
+  selected = event.detail;
+  search.value = "";
+  kind.value = "all";
+  renderClients();
+  const heading = profile.querySelector<HTMLElement>("h3");
+  if (heading) { heading.tabIndex = -1; heading.focus(); }
+});

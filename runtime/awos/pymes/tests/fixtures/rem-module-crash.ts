@@ -1,0 +1,2 @@
+import {CapsuleStore} from '../../src/capsule-store.js';import {remModules} from '../../src/rem-module-sdk.js';
+const [path,phase]=process.argv.slice(2),m=remModules[0]!;const kill=()=>process.kill(process.pid,'SIGKILL');const s=new CapsuleStore(path!,'agency',undefined,()=>2000,phase==='before'?{beforeCommit:kill}:{afterCommit:kill});s.configureModule('agency','owner',{sdkVersion:2,commandId:'pause',expectedRevision:1,capsuleId:m.id,version:m.version,enabled:false,grants:m.capabilities,config:m.defaults});throw Error('CRASH_NOT_REACHED');

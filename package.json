@@ -1,0 +1,26 @@
+{
+  "name": "rem",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A modular, local-first AI workspace foundation for independent professionals and small businesses.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js --open",
+    "dev": "node --disable-warning=ExperimentalWarning src/server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.js\"",
+    "eval": "node --disable-warning=ExperimentalWarning scripts/eval.js",
+    "demo": "node --disable-warning=ExperimentalWarning scripts/demo.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aulafy/REM.git"
+  },
+  "homepage": "https://github.com/aulafy/REM#readme",
+  "bugs": {
+    "url": "https://github.com/aulafy/REM/issues"
+  }
+}

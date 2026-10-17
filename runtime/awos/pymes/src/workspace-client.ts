@@ -1,0 +1,584 @@
+import {parseTelegramStatus,parseTelegramPage,parseTelegramConfig,parseTelegramDecision,type TelegramConfigInput,type TelegramDecisionInput} from './telegram-contract.js';
+import {parseTelegramIdentityView,parseTelegramContactIdentities,parseTelegramIdentityCommand,parseTelegramIdentityReceipt,type TelegramIdentityCommand} from './telegram-identity-contract.js';
+import { parseSpaceCommand, parseSpaceView, parseSpaceReceipt, type SpaceCommand } from './space-contract.js';
+import {parseMailCancelInput} from './mail-cancellation-contract.js';
+import {parseCapsuleCatalog,parseCapsuleCommand,parseCapsuleReceipt,parseClientSummary,capsuleId,type CapsuleCommand} from './capsule-sdk.js';
+import {parseReviewQuery,parseReviewPage,type ReviewQuery} from './review-contract.js';
+import {parseMailAssistanceView} from './mail-assistance-contract.js';
+import {parseMailTaskInput,parseMailTaskView,type MailTaskInput} from './mail-task-contract.js';
+import {parseCrmView,parseCrmResolution} from './crm-view.js';
+import {parseCrmCommand,crmRecord,crmRevision,crmId,type CrmCommandInput} from './crm-contract.js';
+import { parseGmailInboxStatus, parseGmailInboxPage, parseGmailInboxDetail, parsePurgeChallenge } from "./gmail-inbox-view.js";
+import {parseEmailView} from './email-view.js';
+import { parseRuntimeView } from "./runtime-view.js";
+import type { RuntimeWorkspaceView } from "@agent-world/task-runtime";
+import { isConnectorConfig, supportedChannels, type ConnectorStatus } from "./config.js";
+const MAX_REMOTE_ITEMS = 10_000;
+const MAX_REMOTE_RESPONSE_BYTES = 1_048_576;
+
+export interface WorkspaceClientConfig {
+  baseUrl: string;
+  tenantId: string;
+  token: string;
+  requestTimeoutMs?: number;
+}
+
+export interface RemoteApproval {
+  id: string;
+  tenantId: string;
+  resourceId: string;
+  operation: "approveOffer" | "executeEffect";
+  approvedBy: string;
+  approvedAt: string;
+  reason: string;
+  draftHash: string;
+}
+
+export interface RemoteInboxRecord {
+  id: string;
+  tenantId: string;
+  state: string;
+  summary: string;
+  sourceEventId?: string;
+  sourceExternalMessageId?: string;
+  sourceChannel?: string;
+  version?: number;
+  updatedAt?: string;
+}
+export interface RemoteConnector { id: string; name: string; status: ConnectorStatus; }
+export interface RemoteCaseAudit { id: string; caseId: string; from: string; to: string; operation: string; actorId: string; at: string; version: number; requestId?: string; }
+export type WorkspaceEffectKind = "call" | "calendar" | "message" | "crm_task";
+export type WorkspaceEffectStatus = "pending" | "confirmed" | "succeeded" | "failed";
+export interface CallEffectPayload { objective: string; questions: string[]; contactId?: string; phone?: string; }
+export interface CalendarEffectPayload { title: string; startsAt: string; endsAt: string; contactId?: string; }
+export interface MessageEffectPayload { channel: "whatsapp" | "telegram" | "imessage" | "email"; text: string; contactId?: string; }
+export interface CrmTaskEffectPayload { title: string; contactId: string; sourceMessageId?: string; }
+export type WorkspaceEffectPayload = CallEffectPayload | CalendarEffectPayload | MessageEffectPayload | CrmTaskEffectPayload;
+export type CreateEffectInput = { id: string; caseId: string; requestedAt?: string; draftHash: string } &
+  ({ kind: "call"; payload: CallEffectPayload } | { kind: "calendar"; payload: CalendarEffectPayload } |
+   { kind: "message"; payload: MessageEffectPayload } | { kind: "crm_task"; payload: CrmTaskEffectPayload });
+export interface RemoteEffect { tenantId: string; id: string; caseId: string; kind: WorkspaceEffectKind; status: WorkspaceEffectStatus; requestedBy: string; requestedAt: string; retryCount?: number; draftHash?: string; payload: WorkspaceEffectPayload; executionNote?: string; executedBy?: string; executedAt?: string; confirmedBy?: string; confirmedAt?: string; }
+export interface WorkspaceHealth { status: "ok" | "not_ready"; service: string; version: string; retryAfter?: string; }
+export interface WorkspaceMetrics {
+  tenantId: string;
+  generatedAt: string;
+  inbox: { total: number; byState: Record<string, number> };
+  effects: { total: number; byStatus: Record<string, number> };
+  approvals: { total: number };
+  alerts?: Array<{ code: "FAILED_EFFECTS" | "INBOX_BACKLOG" | "UNCERTAIN_CASES" | "STALE_CASES"; severity: "warning" | "critical"; count: number }>;
+}
+function isRemoteEffect(value: unknown, tenantId: string): value is RemoteEffect {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+  const effect = value as Record<string, unknown>;
+  return effect.tenantId === tenantId && typeof effect.id === "string" && validResourceId(effect.id) &&
+    typeof effect.caseId === "string" && validResourceId(effect.caseId) &&
+    (effect.kind === "call" || effect.kind === "calendar" || effect.kind === "message" || effect.kind === "crm_task") &&
+    (effect.status === "pending" || effect.status === "confirmed" || effect.status === "succeeded" || effect.status === "failed") &&
+    typeof effect.requestedBy === "string" && validInputText(effect.requestedBy, 200) &&
+    typeof effect.requestedAt === "string" && validTimestamp(effect.requestedAt) &&
+    (effect.draftHash === undefined || (typeof effect.draftHash === "string" && validInputText(effect.draftHash, 512))) &&
+    validRemoteEffectPayload(effect.kind as string, effect.payload) &&
+    (effect.retryCount === undefined || (Number.isInteger(effect.retryCount) && (effect.retryCount as number) >= 0 && (effect.retryCount as number) <= 1_000)) &&
+    (effect.executionNote === undefined || (typeof effect.executionNote === "string" && validMultilineText(effect.executionNote, 2_000))) &&
+    (effect.executedBy === undefined || (typeof effect.executedBy === "string" && validInputText(effect.executedBy, 200))) &&
+    (effect.executedAt === undefined || (typeof effect.executedAt === "string" && validTimestamp(effect.executedAt))) &&
+    (effect.confirmedBy === undefined || (typeof effect.confirmedBy === "string" && validInputText(effect.confirmedBy, 200))) &&
+    (effect.confirmedAt === undefined || (typeof effect.confirmedAt === "string" && validTimestamp(effect.confirmedAt)));
+}
+function isRemoteApproval(value: unknown, tenantId: string): value is RemoteApproval {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+  const approval = value as Record<string, unknown>;
+  return approval.tenantId === tenantId && typeof approval.id === "string" && validResourceId(approval.id) &&
+    typeof approval.resourceId === "string" && validResourceId(approval.resourceId) &&
+    (approval.operation === "approveOffer" || approval.operation === "executeEffect") &&
+    typeof approval.approvedBy === "string" && validInputText(approval.approvedBy, 200) &&
+    typeof approval.approvedAt === "string" && validTimestamp(approval.approvedAt) &&
+    typeof approval.reason === "string" && validInputText(approval.reason, 2_000) &&
+    typeof approval.draftHash === "string" && validInputText(approval.draftHash, 512);
+}
+function validResourceId(value: string): boolean {
+  return value.trim().length > 0 && value.length <= 200 && !/[\u0000-\u001f\u007f]/.test(value);
+}
+function validInputText(value: string, maxLength: number): boolean {
+  return value.trim().length > 0 && value.length <= maxLength && !/[\u0000-\u001f\u007f]/.test(value);
+}
+function validMultilineText(value: string, maxLength: number): boolean {
+  return value.trim().length > 0 && value.length <= maxLength && !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value);
+}
+function validTimestamp(value: string): boolean {
+  return validInputText(value, 100) && Number.isFinite(Date.parse(value));
+}
+function validEffectPayload(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value) || Object.keys(value).length === 0) return false;
+  try { return new TextEncoder().encode(JSON.stringify(value)).byteLength <= 65536; }
+  catch { return false; }
+}
+function validRemoteEffectPayload(kind: string, value: unknown): value is Record<string, unknown> {
+  if (!validEffectPayload(value)) return false;
+  const payload = value as Record<string, unknown>;
+  if (kind === "message") return (payload.channel === "whatsapp" || payload.channel === "telegram" || payload.channel === "imessage" || payload.channel === "email") && typeof payload.text === "string" && validMultilineText(payload.text, 4_000);
+  if (kind === "calendar") return typeof payload.title === "string" && validInputText(payload.title, 500) && typeof payload.startsAt === "string" && validTimestamp(payload.startsAt) && typeof payload.endsAt === "string" && validTimestamp(payload.endsAt) && Date.parse(payload.endsAt) > Date.parse(payload.startsAt);
+  if (kind === "crm_task") return typeof payload.title === "string" && validInputText(payload.title, 500) && typeof payload.contactId === "string" && validResourceId(payload.contactId);
+  return (typeof payload.objective === "string" && validInputText(payload.objective, 2_000) && Array.isArray(payload.questions) && payload.questions.length <= 100 && payload.questions.every(value => typeof value === "string" && validInputText(value, 500))) ||
+    (typeof payload.phone === "string" && validInputText(payload.phone, 100));
+}
+function safeHeaderValue(value: string | null, maxLength = 200): string | null {
+  const normalized = value?.trim() ?? "";
+  return normalized && normalized.length <= maxLength && !/[\u0000-\u001f\u007f]/.test(normalized) ? normalized : null;
+}
+export class WorkspaceConflictError extends Error {
+  constructor(readonly currentVersion: number) { super(`CASE_VERSION_CONFLICT_CURRENT_${currentVersion}`); }
+}
+export class WorkspaceHttpError extends Error {
+  constructor(readonly status: number, message: string, readonly requestId: string | null, readonly retryAfter: string | null) { super(message); }
+}
+
+function requestId(): string {
+  return typeof globalThis.crypto?.randomUUID === "function" ? globalThis.crypto.randomUUID() : `pymes-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function validConfig(config: WorkspaceClientConfig): void {
+  let base: URL;
+  try { base = new URL(config.baseUrl.trim()); } catch { throw new Error("INVALID_WORKSPACE_CLIENT_CONFIG"); }
+  if (config.baseUrl.trim().length > 2048 || (base.protocol !== "http:" && base.protocol !== "https:") || base.username || base.password || base.search || base.hash ||
+    !config.tenantId.trim() || config.tenantId.trim().length > 200 || /[\u0000-\u001f\u007f]/.test(config.tenantId.trim()) || config.token.trim().length < 16 || config.token.trim().length > 4096 || /[\u0000-\u001f\u007f]/.test(config.token) || (config.requestTimeoutMs !== undefined && (!Number.isInteger(config.requestTimeoutMs) || config.requestTimeoutMs < 100 || config.requestTimeoutMs > 60000))) throw new Error("INVALID_WORKSPACE_CLIENT_CONFIG");
+}
+
+export class WorkspaceClient {
+  async createRuntimeTask(input: { id: string; goal: string }): Promise<void> {
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/runtime`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
+    if (body.tenantId !== this.config.tenantId || body.taskId !== input.id || typeof body.created !== "boolean") throw new Error("INVALID_RUNTIME_CREATE_RESPONSE");
+  }
+  async planRuntimeTask(taskId:string):Promise<void> {
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,99}$/.test(taskId))throw new Error('INVALID_RUNTIME_TASK');
+    const result=await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/runtime/${encodeURIComponent(taskId)}/plan`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({workflow:'email-lead-v1'})},[201],40_000);
+    if(result.tenantId!==this.config.tenantId||result.taskId!==taskId||!Number.isSafeInteger(result.planVersion)||Number(result.planVersion)<1||typeof result.created!=='boolean')throw new Error('INVALID_RUNTIME_PLAN_RESPONSE');
+  }
+
+  async emailWorkflow(taskId:string,operation?:'review'|'decision'|'execute'|'reconcile'|'draft',decision?:{bindingHash:string;decision:'approved'|'rejected'}|{to:string;subject:string;body:string;contactId:string}) {
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,99}$/.test(taskId))throw new Error('INVALID_RUNTIME_TASK');
+    const path=`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/runtime/${encodeURIComponent(taskId)}/email${operation?'/'+operation:''}`;
+    const response=await this.request(path,operation?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(decision??{})}:{},[],40_000);
+    return parseEmailView(response,this.config.tenantId,taskId);
+  }
+  async cancelEmailTask(taskId:string,input:import('./mail-cancellation-contract.js').MailCancelInput){
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,99}$/.test(taskId))throw new Error('INVALID_RUNTIME_TASK');
+    const body=parseMailCancelInput(input);
+    const r=await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/runtime/${encodeURIComponent(taskId)}/email/cancel`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},[],40_000);
+    return parseEmailView(r,this.config.tenantId,taskId);
+  }
+  async reprepareEmailTask(taskId:string,cancellationId:string){
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,99}$/.test(taskId)||!/^cancel-[a-f0-9-]{36}$/.test(cancellationId))throw new Error('INVALID_EMAIL_CANCELLATION');
+    const r=await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/runtime/${encodeURIComponent(taskId)}/email/reprepare`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cancellationId})},[],40_000);
+    if(Object.keys(r).sort().join(',')!=='replacementTaskId,taskId,tenantId'||r.tenantId!==this.config.tenantId||r.taskId!==taskId||typeof r.replacementTaskId!=='string'||r.replacementTaskId===taskId||!/^mail-[a-zA-Z0-9-]{1,80}$/.test(r.replacementTaskId))throw new Error('INVALID_EMAIL_REVISION_RESPONSE');
+    return r.replacementTaskId;
+  }
+  async reviseEmailTask(taskId:string,bindingHash:string){
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,99}$/.test(taskId)||!/^[a-f0-9]{64}$/.test(bindingHash))throw new Error('INVALID_EMAIL_REVISION');
+    const r=await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/runtime/${encodeURIComponent(taskId)}/email/revise`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({bindingHash})},[],40_000);
+    if(Object.keys(r).sort().join(',')!=='replacementTaskId,taskId,tenantId'||r.tenantId!==this.config.tenantId||r.taskId!==taskId||typeof r.replacementTaskId!=='string'||r.replacementTaskId===taskId||!/^mail-[a-zA-Z0-9-]{1,80}$/.test(r.replacementTaskId))throw new Error('INVALID_EMAIL_REVISION_RESPONSE');
+    return r.replacementTaskId;
+  }
+
+  async gmail(operation?:'connect'|'check'|'disconnect',verification=false):Promise<import('./gmail-oauth.js').GmailConnectionView>{
+    const value=await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/gmail${operation?'/'+operation:''}`,operation?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(operation==='connect'?{verification}:{})}:{});
+    if(value.tenantId!==this.config.tenantId||!['not_connected','connecting','connected','authorization_error'].includes(String(value.state))||typeof value.configured!=='boolean'||typeof value.verification!=='boolean'||!(value.account===null||typeof value.account==='string'&&value.account.length<=254)||!Array.isArray(value.scopes)||value.scopes.length>10||!value.scopes.every(s=>typeof s==='string'&&s.length<256)||!(value.lastCheckedAt===null||Number.isFinite(value.lastCheckedAt))||!(value.error===null||typeof value.error==='string'&&value.error.length<100))throw new Error('INVALID_GMAIL_VIEW');
+    return structuredClone(value) as unknown as import('./gmail-oauth.js').GmailConnectionView;
+  }
+
+  async mailTask(accountRef:string,gmailId:string,input?:MailTaskInput){
+    const path=`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/mail-tasks`;
+    const raw=await this.request(path+(input?'':`?${new URLSearchParams({accountRef,gmailId})}`),input?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(parseMailTaskInput(input))}:{});
+    return parseMailTaskView(raw,this.config.tenantId,accountRef,gmailId);
+  }
+  async mailAssistance(accountRef:string,gmailId:string,operation?:'generate'|'review',review?:{proposalId:string;decision:'accepted'|'rejected'}){
+    const path=`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/mail-assistance`;
+    const raw=operation?await this.request(path+'/'+operation,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accountRef,gmailId,...(review??{})})}):await this.request(path+'?'+new URLSearchParams({accountRef,gmailId}));
+    return parseMailAssistanceView(raw,this.config.tenantId,accountRef,gmailId);
+  }
+  async telegramStatus(){return parseTelegramStatus(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/telegram`),this.config.tenantId);}
+  async telegramIdentity(botId:string,updateId:number){const query=new URLSearchParams({botId,updateId:String(updateId)});return parseTelegramIdentityView(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/telegram/identity?${query}`),this.config.tenantId,botId,updateId);}
+  async telegramContactIdentities(contactId:string){return parseTelegramContactIdentities(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/telegram/identities?${new URLSearchParams({contactId})}`),this.config.tenantId,contactId);}
+  async telegramIdentityCommand(raw:TelegramIdentityCommand){const input=parseTelegramIdentityCommand(raw),receipt=parseTelegramIdentityReceipt(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/telegram/identity`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)}));if(receipt.decisionId!==input.commandId||receipt.revision!==input.expectedRevision+1)throw new Error('TELEGRAM_IDENTITY_INVALID_RESPONSE');return receipt;}
+  async telegramMessages(query='',cursor:string|null=null){const q=new URLSearchParams({q:query,limit:'20'});if(cursor)q.set('cursor',cursor);return parseTelegramPage(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/telegram/messages?${q}`),this.config.tenantId);}
+  async telegramSync(){return parseTelegramStatus(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/telegram/sync`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'},[202]),this.config.tenantId);}
+  private async telegramDecision(path:string,input:TelegramConfigInput|TelegramDecisionInput){
+    const r=await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/telegram/${path}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)});
+    if(r.decisionRevision!==input.expectedRevision+1)throw new Error('TELEGRAM_INVALID_RESPONSE');const {decisionRevision,...status}=r;return parseTelegramStatus(status,this.config.tenantId);
+  }
+  async connectTelegram(raw:TelegramConfigInput){return this.telegramDecision('connect',parseTelegramConfig(raw));}
+  async disconnectTelegram(raw:TelegramDecisionInput){return this.telegramDecision('disconnect',parseTelegramDecision(raw));}
+  async space() {
+    return parseSpaceView(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/space`), this.config.tenantId);
+  }
+  async configureSpace(raw: SpaceCommand) {
+    const input = parseSpaceCommand(raw);
+    parseSpaceReceipt(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/space/configure`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) }), this.config.tenantId, input);
+    return this.space();
+  }
+  async capsules() {
+    return parseCapsuleCatalog(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/capsules`),this.config.tenantId);
+  }
+  async configureCapsule(raw:CapsuleCommand) {
+    const input=parseCapsuleCommand(raw);
+    parseCapsuleReceipt(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/capsules/configure`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)}),this.config.tenantId,input);
+    return this.capsules();
+  }
+  async capsuleView(id:string) {
+    const valid=capsuleId(id);
+    return parseClientSummary(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/capsules/${encodeURIComponent(valid)}/view`),this.config.tenantId,valid);
+  }
+  async crm(input:{query?:string;contactId?:string|null;taskStatus?:'pending'|'done'|'cancelled'|'all'}={}) {
+    const q=new URLSearchParams({q:input.query??'',taskStatus:input.taskStatus??'pending'});
+    if(input.contactId)q.set('contactId',crmId(input.contactId));
+    return parseCrmView(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/crm?${q}`),this.config.tenantId,input.contactId??null);
+  }
+  private crmResult(value:Record<string,unknown>){
+    if(value.tenantId!==this.config.tenantId)throw new Error('INVALID_CRM_RESPONSE');const r=crmRecord(value.result);
+    return {revision:crmRevision(r.revision),contactId:r.contactId===null?null:crmId(r.contactId),recordId:r.recordId===null?null:crmId(r.recordId)};
+  }
+  async crmCommand(input:CrmCommandInput){
+    parseCrmCommand(input);
+    return this.crmResult(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/crm/commands`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)}));
+  }
+  async crmResolve(accountRef:string,gmailId:string){
+    const raw=await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/crm/resolve`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accountRef,gmailId})});
+    return parseCrmResolution(raw,this.config.tenantId,accountRef,gmailId);
+  }
+  async crmLink(input:{commandId:string;expectedRevision:number;accountRef:string;gmailId:string;contactId:string|null;reviewed:boolean}){
+    return this.crmResult(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/crm/link`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)}));
+  }
+  private gmailInboxPath(suffix = "", accountRef?: string): string {
+    const path = `/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/gmail-inbox${suffix}`;
+    if (accountRef !== undefined && !/^[a-f0-9]{32}$/.test(accountRef)) throw new Error("INVALID_ACCOUNT_REF");
+    return path + (accountRef ? (path.includes("?") ? "&" : "?") + "accountRef=" + accountRef : "");
+  }
+  async gmailInbox(accountRef?: string) {
+    return parseGmailInboxStatus(await this.request(this.gmailInboxPath("", accountRef)), this.config.tenantId);
+  }
+  async gmailInboxMessages(input: {scope: "inbox" | "sent" | "archived"; query: string; cursor?: string|null; accountRef?: string}) {
+    const q = new URLSearchParams({scope:input.scope,q:input.query,limit:"30"});
+    if(input.cursor) q.set("cursor",input.cursor);
+    return parseGmailInboxPage(await this.request(this.gmailInboxPath("/messages?"+q,input.accountRef)),this.config.tenantId);
+  }
+  async gmailInboxMessage(id: string, accountRef: string) {
+    if(!/^[-a-zA-Z0-9_]{1,100}$/.test(id)) throw new Error("INVALID_MESSAGE_ID");
+    const result=parseGmailInboxDetail(await this.request(this.gmailInboxPath("/messages/"+id,accountRef)),this.config.tenantId);
+    if(result.message.gmailId!==id) throw new Error("INVALID_GMAIL_INBOX_RESPONSE");
+    return result;
+  }
+  async gmailInboxSync() {
+    const response=await this.request(this.gmailInboxPath("/sync"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({background:true})},[202]);
+    return parseGmailInboxStatus(response,this.config.tenantId);
+  }
+  async gmailInboxPreparePurge(accountRef: string) {
+    const response=await this.request(this.gmailInboxPath("/purge/prepare"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({accountRef})});
+    const challenge=parsePurgeChallenge(response,this.config.tenantId);
+    if(challenge.accountRef!==accountRef) throw new Error("INVALID_GMAIL_INBOX_RESPONSE");
+    return challenge;
+  }
+  async gmailInboxPurge(challenge: import("./gmail-inbox-view.js").PurgeChallenge, phrase: string) {
+    const response=await this.request(this.gmailInboxPath("/purge"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({accountRef:challenge.accountRef,confirmationId:challenge.confirmationId,phrase})},[],40_000);
+    if(response.purged!==true) throw new Error("INVALID_GMAIL_INBOX_RESPONSE");
+    return parseGmailInboxStatus(response,this.config.tenantId);
+  }
+
+  async reviewQueue(raw:Partial<ReviewQuery>={}){
+    const q=parseReviewQuery(raw),params=new URLSearchParams({filter:q.filter,query:q.query,limit:String(q.limit)});
+    if(q.cursor)params.set('cursor',q.cursor);
+    return parseReviewPage(await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/review-queue?${params}`),this.config.tenantId,q);
+  }
+  async runtimeView(taskId?:string): Promise<RuntimeWorkspaceView> {
+    const suffix=taskId===undefined?'':'/'+encodeURIComponent(crmId(taskId));
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/runtime${suffix}`);
+    const view=parseRuntimeView(body, this.config.tenantId);
+    if(taskId!==undefined&&(view.tasks.length!==1||view.tasks[0]!.id!==taskId))throw new Error('INVALID_RUNTIME_RESPONSE');
+    return view;
+  }
+  private lastRequestIdValue: string | null = null;
+  private lastStatusValue: number | null = null;
+  private lastResponseRequestIdValue: string | null = null;
+  constructor(private readonly config: WorkspaceClientConfig,
+    private readonly fetcher: typeof fetch = (input, init) => fetch(input, init)) {
+    validConfig(config);
+    this.config = { baseUrl: new URL(config.baseUrl.trim()).toString().replace(/\/$/, ""), tenantId: config.tenantId.trim(), token: config.token.trim(), requestTimeoutMs: config.requestTimeoutMs ?? 10000 };
+  }
+
+  private async request(path: string, init: RequestInit = {}, acceptedStatuses: readonly number[] = [], timeoutMs?:number): Promise<Record<string, unknown>> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs ?? this.config.requestTimeoutMs ?? 10000);
+    const correlationId = requestId();
+    this.lastRequestIdValue = correlationId;
+    this.lastStatusValue = null;
+    this.lastResponseRequestIdValue = null;
+    let response: Response;
+    try {
+      response = await this.fetcher(`${this.config.baseUrl}${path}`, {
+        ...init, signal: controller.signal, headers: { Accept: "application/json", "Cache-Control": "no-store", Authorization: `Bearer ${this.config.token}`, "X-Request-Id": correlationId,
+          ...(init.headers ?? {}) }
+      });
+    } catch (error) {
+      clearTimeout(timeout);
+      if (controller.signal.aborted) throw new Error("WORKSPACE_REQUEST_TIMEOUT");
+      throw error;
+    }
+    this.lastStatusValue = response.status;
+    this.lastResponseRequestIdValue = safeHeaderValue(response.headers.get("x-request-id"));
+    const contentLength = response.headers.get("content-length");
+    if (contentLength && (/^\d+$/.test(contentLength) === false || Number(contentLength) > MAX_REMOTE_RESPONSE_BYTES)) {
+      clearTimeout(timeout);
+      throw new Error("WORKSPACE_RESPONSE_TOO_LARGE");
+    }
+    const contentType = response.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase();
+    if (contentType && contentType !== "application/json") {
+      clearTimeout(timeout);
+      throw new Error("INVALID_WORKSPACE_CONTENT_TYPE");
+    }
+    let body: unknown;
+    try {
+      const raw = await response.text();
+      if (new TextEncoder().encode(raw).byteLength > MAX_REMOTE_RESPONSE_BYTES) {
+        clearTimeout(timeout);
+        throw new Error("WORKSPACE_RESPONSE_TOO_LARGE");
+      }
+      body = raw ? JSON.parse(raw) : undefined;
+    }
+    catch (error) {
+      clearTimeout(timeout);
+      if (error instanceof Error && error.message === "WORKSPACE_RESPONSE_TOO_LARGE") throw error;
+      if (controller.signal.aborted) throw new Error("WORKSPACE_REQUEST_TIMEOUT");
+      throw new Error("INVALID_WORKSPACE_RESPONSE");
+    }
+    clearTimeout(timeout);
+    if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("INVALID_WORKSPACE_RESPONSE");
+    if (!response.ok && !acceptedStatuses.includes(response.status)) {
+      const record = body as Record<string, unknown>;
+      if (response.status === 409 && record.error === "CASE_VERSION_CONFLICT" && typeof record.currentVersion === "number") {
+        throw new WorkspaceConflictError(record.currentVersion);
+      }
+      const message = typeof record.error === "string" && validInputText(record.error, 200) ? record.error.trim() : "WORKSPACE_REQUEST_FAILED";
+      throw new WorkspaceHttpError(response.status, message, this.lastResponseRequestIdValue, safeHeaderValue(response.headers.get("retry-after")));
+    }
+    return body as Record<string, unknown>;
+  }
+  get lastRequestId(): string | null { return this.lastRequestIdValue; }
+  get lastStatus(): number | null { return this.lastStatusValue; }
+  get lastResponseRequestId(): string | null { return this.lastResponseRequestIdValue; }
+
+  async approvals(): Promise<RemoteApproval[]> {
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/approvals`);
+    if (body.tenantId !== this.config.tenantId || !Array.isArray(body.approvals) || body.approvals.length > MAX_REMOTE_ITEMS || !body.approvals.every(item => isRemoteApproval(item, this.config.tenantId)) ||
+      new Set(body.approvals.map(item => item.id)).size !== body.approvals.length) throw new Error("INVALID_WORKSPACE_APPROVALS");
+    return body.approvals as RemoteApproval[];
+  }
+  async health(): Promise<WorkspaceHealth> {
+    const body = await this.request("/healthz");
+    if (body.status !== "ok" || typeof body.service !== "string" || !validInputText(body.service, 200) || typeof body.version !== "string" || !validInputText(body.version, 200)) throw new Error("INVALID_WORKSPACE_HEALTH");
+    return body as unknown as WorkspaceHealth;
+  }
+  async ready(): Promise<WorkspaceHealth> {
+    let body: Record<string, unknown>;
+    try { body = await this.request("/readyz"); }
+    catch (error) {
+      if (!(error instanceof WorkspaceHttpError) || error.status !== 503) throw error;
+      return { status: "not_ready", service: "pymes-workspace", version: "unknown", retryAfter: error.retryAfter ?? undefined };
+    }
+    if ((body.status !== "ok" && body.status !== "not_ready") || typeof body.service !== "string" || !validInputText(body.service, 200) || typeof body.version !== "string" || !validInputText(body.version, 200) ||
+      (body.retryAfter !== undefined && (typeof body.retryAfter !== "string" || !validInputText(body.retryAfter, 200)))) throw new Error("INVALID_WORKSPACE_READINESS");
+    return body as unknown as WorkspaceHealth;
+  }
+
+  async inbox(): Promise<RemoteInboxRecord[]> {
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/inbox`);
+    if (body.tenantId !== this.config.tenantId || !Array.isArray(body.items) || body.items.length > MAX_REMOTE_ITEMS || body.items.some(item => {
+      if (item === null || typeof item !== "object" || Array.isArray(item)) return true;
+      const record = item as Record<string, unknown>;
+      return record.tenantId !== this.config.tenantId || typeof record.id !== "string" || !record.id ||
+        typeof record.state !== "string" || !validInputText(record.state, 100) ||
+        typeof record.summary !== "string" || !validInputText(record.summary, 4_000) ||
+        (record.sourceEventId !== undefined && (typeof record.sourceEventId !== "string" || !validResourceId(record.sourceEventId))) ||
+        (record.sourceExternalMessageId !== undefined && (typeof record.sourceExternalMessageId !== "string" || !validResourceId(record.sourceExternalMessageId))) ||
+        (record.sourceChannel !== undefined && (typeof record.sourceChannel !== "string" || !supportedChannels.includes(record.sourceChannel as typeof supportedChannels[number]))) ||
+        (record.version !== undefined && (!Number.isInteger(record.version) || (record.version as number) < 0)) ||
+        (record.updatedAt !== undefined && (typeof record.updatedAt !== "string" || !validTimestamp(record.updatedAt)));
+    }) || new Set(body.items.map(item => (item as Record<string, unknown>).id)).size !== body.items.length) throw new Error("INVALID_WORKSPACE_INBOX");
+    return body.items as RemoteInboxRecord[];
+  }
+  async attention(): Promise<RemoteInboxRecord[]> {
+    let body: Record<string, unknown>;
+    try { body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/attention`); }
+    catch (error) {
+      if (!(error instanceof WorkspaceHttpError) || error.status !== 404) throw error;
+      return (await this.inbox()).filter(item => item.state === "pending_review" || item.state === "uncertain");
+    }
+    if (body.tenantId !== this.config.tenantId || !Array.isArray(body.items) || body.items.length > 100 || body.items.some(item => {
+      if (item === null || typeof item !== "object" || Array.isArray(item)) return true;
+      const record = item as Record<string, unknown>;
+      return record.tenantId !== this.config.tenantId || typeof record.id !== "string" || !validResourceId(record.id) ||
+        (record.state !== "pending_review" && record.state !== "uncertain") || typeof record.summary !== "string" || !validInputText(record.summary, 4_000) ||
+        (record.sourceEventId !== undefined && (typeof record.sourceEventId !== "string" || !validResourceId(record.sourceEventId))) ||
+        (record.sourceExternalMessageId !== undefined && (typeof record.sourceExternalMessageId !== "string" || !validResourceId(record.sourceExternalMessageId))) ||
+        (record.sourceChannel !== undefined && (typeof record.sourceChannel !== "string" || !supportedChannels.includes(record.sourceChannel as typeof supportedChannels[number]))) ||
+        (record.version !== undefined && (!Number.isInteger(record.version) || (record.version as number) < 0)) ||
+        (record.updatedAt !== undefined && (typeof record.updatedAt !== "string" || !validTimestamp(record.updatedAt)));
+    }) || new Set(body.items.map(item => (item as Record<string, unknown>).id)).size !== body.items.length) {
+      throw new Error("INVALID_WORKSPACE_ATTENTION");
+    }
+    return body.items as RemoteInboxRecord[];
+  }
+  async connectors(): Promise<RemoteConnector[]> {
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/connectors`);
+    if (body.tenantId !== this.config.tenantId || !Array.isArray(body.connectors) || body.connectors.length > 100 || !body.connectors.every(isConnectorConfig) ||
+      new Set(body.connectors.map(connector => connector.id)).size !== body.connectors.length) {
+      throw new Error("INVALID_WORKSPACE_CONNECTORS");
+    }
+    return body.connectors as RemoteConnector[];
+  }
+  async metrics(): Promise<WorkspaceMetrics> {
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/metrics`);
+    const validCounts = (value: unknown): value is Record<string, number> => value !== null && typeof value === "object" && !Array.isArray(value) &&
+      Object.entries(value).length <= 100 && Object.entries(value).every(([key, count]) => validInputText(key, 100) && Number.isInteger(count) && count >= 0 && count <= MAX_REMOTE_ITEMS);
+    const validBucket = (value: unknown, field: "byState" | "byStatus"): value is { total: number } & Record<typeof field, Record<string, number>> =>
+      value !== null && typeof value === "object" && !Array.isArray(value) && Number.isInteger((value as Record<string, unknown>).total) &&
+      ((value as Record<string, unknown>).total as number) >= 0 && ((value as Record<string, unknown>).total as number) <= MAX_REMOTE_ITEMS && validCounts((value as Record<string, unknown>)[field]);
+    const coherentBucket = (value: unknown, field: "byState" | "byStatus"): boolean => {
+      if (!validBucket(value, field)) return false;
+      const bucket = value as { total: number } & Record<typeof field, Record<string, number>>;
+      return Object.values(bucket[field]).reduce((sum, count) => sum + count, 0) === bucket.total;
+    };
+    const validAlerts = body.alerts === undefined || (Array.isArray(body.alerts) && body.alerts.length <= 20 && body.alerts.every(alert =>
+      alert !== null && typeof alert === "object" && !Array.isArray(alert) &&
+      ((alert as Record<string, unknown>).code === "FAILED_EFFECTS" || (alert as Record<string, unknown>).code === "INBOX_BACKLOG" || (alert as Record<string, unknown>).code === "UNCERTAIN_CASES" || (alert as Record<string, unknown>).code === "STALE_CASES") &&
+      ((alert as Record<string, unknown>).severity === "warning" || (alert as Record<string, unknown>).severity === "critical") &&
+      Number.isInteger((alert as Record<string, unknown>).count) && ((alert as Record<string, unknown>).count as number) > 0 && ((alert as Record<string, unknown>).count as number) <= MAX_REMOTE_ITEMS));
+    if (body.tenantId !== this.config.tenantId || typeof body.generatedAt !== "string" || !validTimestamp(body.generatedAt) ||
+      !coherentBucket(body.inbox, "byState") || !coherentBucket(body.effects, "byStatus") || body.approvals === null || typeof body.approvals !== "object" ||
+      Array.isArray(body.approvals) || !Number.isInteger((body.approvals as Record<string, unknown>).total) ||
+      ((body.approvals as Record<string, unknown>).total as number) < 0 || ((body.approvals as Record<string, unknown>).total as number) > MAX_REMOTE_ITEMS || !validAlerts) {
+      throw new Error("INVALID_WORKSPACE_METRICS");
+    }
+    return body as unknown as WorkspaceMetrics;
+  }
+
+  async approve(input: { resourceId: string; reason: string; draftHash: string; approvedAt: string }): Promise<RemoteApproval> {
+    if (!input || typeof input.resourceId !== "string" || !validResourceId(input.resourceId) ||
+      typeof input.reason !== "string" || !validInputText(input.reason, 2_000) ||
+      typeof input.draftHash !== "string" || !validInputText(input.draftHash, 512) ||
+      typeof input.approvedAt !== "string" || !validTimestamp(input.approvedAt)) throw new Error("INVALID_WORKSPACE_APPROVAL_INPUT");
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/approvals`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input)
+    });
+    if (!isRemoteApproval(body, this.config.tenantId)) throw new Error("INVALID_WORKSPACE_APPROVAL");
+    return body;
+  }
+  async audit(caseId: string): Promise<RemoteCaseAudit[]> {
+    if (!validResourceId(caseId)) throw new Error("INVALID_WORKSPACE_CASE_INPUT");
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/cases/${encodeURIComponent(caseId)}/audit`);
+    if (body.tenantId !== this.config.tenantId || body.caseId !== caseId || !Array.isArray(body.audit) || body.audit.some(item => {
+      if (item === null || typeof item !== "object" || Array.isArray(item)) return true;
+      const audit = item as Record<string, unknown>;
+      return typeof audit.id !== "string" || !validResourceId(audit.id) || audit.caseId !== caseId ||
+        typeof audit.from !== "string" || !validInputText(audit.from, 100) || typeof audit.to !== "string" || !validInputText(audit.to, 100) ||
+        typeof audit.operation !== "string" || !validInputText(audit.operation, 100) ||
+        typeof audit.actorId !== "string" || !validInputText(audit.actorId, 200) || typeof audit.at !== "string" || !validTimestamp(audit.at) ||
+        !Number.isInteger(audit.version) || (audit.version as number) < 0 ||
+        (audit.requestId !== undefined && (typeof audit.requestId !== "string" || !validResourceId(audit.requestId)));
+    })) throw new Error("INVALID_WORKSPACE_AUDIT");
+    const auditEntries = body.audit as unknown[];
+    if (new Set(auditEntries.map(item => (item as Record<string, unknown>).id)).size !== auditEntries.length ||
+      auditEntries.some((item, index) => index > 0 && (item as Record<string, unknown>).version as number <= ((auditEntries[index - 1] as Record<string, unknown>).version as number))) {
+      throw new Error("INVALID_WORKSPACE_AUDIT");
+    }
+    return auditEntries as RemoteCaseAudit[];
+  }
+  async transition(caseId: string, to: string, at = new Date().toISOString(), expectedVersion?: number): Promise<void> {
+    if (!validResourceId(caseId) || !validInputText(to, 100) || !validTimestamp(at) || (expectedVersion !== undefined && (!Number.isInteger(expectedVersion) || expectedVersion < 0))) {
+      throw new Error("INVALID_WORKSPACE_TRANSITION_INPUT");
+    }
+    await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/cases/${encodeURIComponent(caseId)}/transition`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ to, at, ...(expectedVersion === undefined ? {} : { expectedVersion }) })
+    });
+  }
+  async effects(status?: "confirmed"): Promise<RemoteEffect[]> {
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/effects${status ? "?status=confirmed" : ""}`);
+    if (body.tenantId !== this.config.tenantId || !Array.isArray(body.effects) || body.effects.length > MAX_REMOTE_ITEMS || !body.effects.every(item => isRemoteEffect(item, this.config.tenantId)) ||
+      new Set(body.effects.map(item => item.id)).size !== body.effects.length) throw new Error("INVALID_WORKSPACE_EFFECTS");
+    return body.effects as RemoteEffect[];
+  }
+  async confirmedEffects(): Promise<RemoteEffect[]> {
+    return (await this.effects("confirmed")).filter(effect => effect.status === "confirmed");
+  }
+  async effectsForCase(caseId: string): Promise<RemoteEffect[]> {
+    if (!validResourceId(caseId)) throw new Error("INVALID_WORKSPACE_CASE_INPUT");
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/cases/${encodeURIComponent(caseId)}/effects`);
+    if (body.tenantId !== this.config.tenantId || body.caseId !== caseId || !Array.isArray(body.effects) || body.effects.length > MAX_REMOTE_ITEMS || !body.effects.every(item => isRemoteEffect(item, this.config.tenantId)) ||
+      new Set(body.effects.map(item => item.id)).size !== body.effects.length) throw new Error("INVALID_WORKSPACE_EFFECTS");
+    return body.effects as RemoteEffect[];
+  }
+  async createEffect(input: CreateEffectInput): Promise<RemoteEffect> {
+    let payloadBytes = -1;
+    try { payloadBytes = input?.payload ? new TextEncoder().encode(JSON.stringify(input.payload)).byteLength : -1; }
+    catch { payloadBytes = -1; }
+    const payload = input?.payload as unknown as Record<string, unknown> | undefined;
+    const payloadShapeValid = input?.kind === "message"
+      ? (payload?.channel === "whatsapp" || payload?.channel === "telegram" || payload?.channel === "imessage" || payload?.channel === "email") && typeof payload.text === "string" && validMultilineText(payload.text, 4_000)
+      : input?.kind === "calendar"
+        ? typeof payload?.title === "string" && validInputText(payload.title, 500) && typeof payload.startsAt === "string" && validTimestamp(payload.startsAt) && typeof payload.endsAt === "string" && validTimestamp(payload.endsAt) && Date.parse(payload.endsAt) > Date.parse(payload.startsAt)
+        : input?.kind === "crm_task"
+          ? typeof payload?.title === "string" && validInputText(payload.title, 500) && typeof payload.contactId === "string" && validResourceId(payload.contactId)
+          : input?.kind === "call"
+            ? typeof payload?.objective === "string" && validInputText(payload.objective, 2_000) && Array.isArray(payload.questions) && payload.questions.length <= 100 && payload.questions.every(value => typeof value === "string" && validInputText(value, 500))
+            : false;
+    if (!input || !validResourceId(input.id) || !validResourceId(input.caseId) ||
+      !["call", "calendar", "message", "crm_task"].includes(input.kind) ||
+      !input.payload || typeof input.payload !== "object" || Array.isArray(input.payload) || Object.keys(input.payload).length === 0 ||
+      payloadBytes < 0 || payloadBytes > 65536 ||
+      !payloadShapeValid ||
+      !validInputText(input.draftHash, 512) ||
+      (input.requestedAt !== undefined && !validTimestamp(input.requestedAt))) {
+      throw new Error("INVALID_WORKSPACE_EFFECT_INPUT");
+    }
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/effects`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...input, requestedAt: input.requestedAt ?? new Date().toISOString() })
+    });
+    if (!isRemoteEffect(body, this.config.tenantId)) throw new Error("INVALID_WORKSPACE_EFFECT");
+    return body;
+  }
+  async effect(effectId: string): Promise<RemoteEffect> {
+    if (!validResourceId(effectId)) throw new Error("INVALID_WORKSPACE_EFFECT_INPUT");
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/effects/${encodeURIComponent(effectId)}`);
+    if (!isRemoteEffect(body, this.config.tenantId)) throw new Error("INVALID_WORKSPACE_EFFECT");
+    return body;
+  }
+  async confirmEffect(effectId: string, confirmedAt = new Date().toISOString()): Promise<RemoteEffect> {
+    if (!validResourceId(effectId) || !validTimestamp(confirmedAt)) throw new Error("INVALID_WORKSPACE_EFFECT_INPUT");
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/effects/${encodeURIComponent(effectId)}/confirm`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ confirm: true, confirmedAt })
+    });
+    if (!isRemoteEffect(body, this.config.tenantId)) throw new Error("INVALID_WORKSPACE_EFFECT");
+    return body;
+  }
+  async reportEffectResult(effectId: string, result: "succeeded" | "failed", note: string): Promise<RemoteEffect> {
+    if (!validResourceId(effectId) || (result !== "succeeded" && result !== "failed") || !validInputText(note, 2_000)) throw new Error("INVALID_WORKSPACE_EFFECT_INPUT");
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/effects/${encodeURIComponent(effectId)}/result`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ result, note, executedAt: new Date().toISOString() })
+    });
+    if (!isRemoteEffect(body, this.config.tenantId)) throw new Error("INVALID_WORKSPACE_EFFECT");
+    return body;
+  }
+  async retryEffect(effectId: string, reason: string, requestedAt = new Date().toISOString()): Promise<RemoteEffect> {
+    if (!validResourceId(effectId) || !validInputText(reason, 2_000) || !validTimestamp(requestedAt)) throw new Error("INVALID_WORKSPACE_EFFECT_INPUT");
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/effects/${encodeURIComponent(effectId)}/retry`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reason, requestedAt })
+    });
+    if (!isRemoteEffect(body, this.config.tenantId)) throw new Error("INVALID_WORKSPACE_EFFECT");
+    return body;
+  }
+  async revokeSession(): Promise<void> {
+    const body = await this.request(`/v1/workspaces/${encodeURIComponent(this.config.tenantId)}/session/revoke`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: "{}"
+    });
+    if (body.tenantId !== this.config.tenantId || body.status !== "revoked") throw new Error("INVALID_WORKSPACE_REVOKE_RESPONSE");
+  }
+}

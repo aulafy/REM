@@ -1,0 +1,90 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { createHmac } from "node:crypto";
+import { handlePymesRequest } from "../src/api-server.js";
+import { WorkspaceApi } from "../src/workspace-api.js";
+
+const policy = {
+  tenantId: "agency-1", allowedAgentIds: new Set(["agent-1"]),
+  allowedResourceIds: new Set(["inbox-1"]), allowedChannels: new Set(["whatsapp"] as const),
+  pairedSenderIds: new Set(["sender-1"]), consentedConversationIds: new Set(["conversation-1"])
+};
+const envelope = { tenantId: "agency-1", agentId: "agent-1", resourceId: "inbox-1",
+  inbound: { eventId: "evt-api-1", externalMessageId: "wa-api-1", channel: "whatsapp" as const,
+    conversationId: "conversation-1", senderId: "sender-1", receivedAt: new Date(Date.now() - 60_000).toISOString(),
+    text: "Necesito una propuesta", senderPaired: true, consented: true } };
+
+test("internal ingress endpoint persists an OpenClaw event", async () => {
+  const api = new WorkspaceApi(undefined, { token: "ingress-token-123456", policy });
+  api.addSession("owner-token-123456", { userId: "owner", tenantId: "agency-1", role: "owner" });
+  const response = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", {
+    method: "POST", headers: { "x-pymes-ingress-token": "ingress-token-123456", "content-type": "application/json", "x-request-id": "req-ingress-1" },
+    body: JSON.stringify(envelope)
+  }));
+  assert.equal(response.status, 201);
+  assert.equal((await response.json()).id, "openclaw:evt-api-1");
+  const auditBody = api.handle({ method: "GET", path: "/v1/workspaces/agency-1/cases/openclaw:evt-api-1/audit", authorization: "Bearer owner-token-123456" }).body;
+  assert.equal(Array.isArray(auditBody.audit) ? auditBody.audit.length : 0, 1);
+  assert.equal(Array.isArray(auditBody.audit) ? (auditBody.audit[0] as { requestId?: string }).requestId : undefined, "req-ingress-1");
+});
+
+test("internal ingress token and policy are not caller-controlled", async () => {
+  const api = new WorkspaceApi(undefined, { token: "ingress-token-123456", policy });
+  const response = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", {
+    method: "POST", headers: { "x-pymes-ingress-token": "wrong-token", "content-type": "application/json" },
+    body: JSON.stringify({ ...envelope, tenantId: "agency-2", agentId: "untrusted" })
+  }));
+  assert.equal(response.status, 401);
+});
+
+test("signed ingress requires a valid HMAC when configured", async () => {
+  const secret = "enterprise-signing-secret";
+  const signedPolicy = { ...policy, signingSecret: secret };
+  const api = new WorkspaceApi(undefined, { token: "ingress-token-123456", policy: signedPolicy });
+  const body = JSON.stringify({ ...envelope, inbound: { ...envelope.inbound, eventId: "evt-signed" } });
+  const signature = createHmac("sha256", secret).update(body).digest("hex");
+  const valid = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", { method: "POST", headers: { "x-pymes-ingress-token": "ingress-token-123456", "x-pymes-ingress-signature": signature, "content-type": "application/json" }, body }));
+  assert.equal(valid.status, 201);
+  const validBody = await valid.text();
+  assert.equal(validBody.includes(secret), false);
+  assert.equal(valid.headers.get("x-pymes-signing-secret"), null);
+  const invalid = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", { method: "POST", headers: { "x-pymes-ingress-token": "ingress-token-123456", "x-pymes-ingress-signature": "0".repeat(64), "content-type": "application/json" }, body: JSON.stringify({ ...envelope, inbound: { ...envelope.inbound, eventId: "evt-invalid" } }) }));
+  assert.equal(invalid.status, 401);
+});
+
+test("ingress stays disabled when the server has no configured gateway", async () => {
+  const api = new WorkspaceApi();
+  const response = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", {
+    method: "POST", headers: { "x-pymes-ingress-token": "ingress-token-123456", "content-type": "application/json" },
+    body: JSON.stringify(envelope)
+  }));
+  assert.equal(response.status, 401);
+  assert.deepEqual(await response.json(), { error: "INGRESS_UNAUTHORIZED" });
+});
+
+test("HTTP ingress rejects a null envelope without an internal error", async () => {
+  const api = new WorkspaceApi(undefined, { token: "ingress-token-123456", policy });
+  const response = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", {
+    method: "POST", headers: { "x-pymes-ingress-token": "ingress-token-123456", "content-type": "application/json" }, body: "null"
+  }));
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { error: "INVALID_EVENT" });
+});
+
+test("direct workspace requests do not persist unsafe correlation ids", () => {
+  const api = new WorkspaceApi(undefined, { token: "ingress-token-123456", policy });
+  api.addSession("owner-token-123456", { userId: "owner", tenantId: "agency-1", role: "owner" });
+  const result = api.handle({ method: "POST", path: "/v1/workspaces/agency-1/ingress/openclaw", ingressToken: "ingress-token-123456", requestId: "bad\nrequest", body: envelope });
+  assert.equal(result.status, 201);
+  const audit = api.handle({ method: "GET", path: "/v1/workspaces/agency-1/cases/openclaw:evt-api-1/audit", authorization: "Bearer owner-token-123456" });
+  assert.equal((audit.body.audit as Array<{ requestId?: string }>)[0]?.requestId, undefined);
+});
+
+test("internal ingress reports duplicate events as a conflict", async () => {
+  const api = new WorkspaceApi(undefined, { token: "ingress-token-123456", policy });
+  const init = { method: "POST", headers: { "x-pymes-ingress-token": "ingress-token-123456", "content-type": "application/json" }, body: JSON.stringify(envelope) } as const;
+  assert.equal((await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", init))).status, 201);
+  const duplicate = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", init));
+  assert.equal(duplicate.status, 409);
+  assert.equal((await duplicate.json()).error, "DUPLICATE_EVENT");
+});

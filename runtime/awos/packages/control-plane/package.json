@@ -1,0 +1,30 @@
+{
+  "name": "@agent-world/control-plane",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "node --import tsx --test tests/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@agent-world/budgets": "0.1.0",
+    "@agent-world/composition-policy": "0.1.0",
+    "@agent-world/contracts": "0.1.0",
+    "@agent-world/effects": "0.1.0",
+    "@agent-world/information-flow": "0.1.0",
+    "@agent-world/leases": "0.1.0",
+    "@agent-world/observation": "0.1.0",
+    "@agent-world/policy-engine": "0.1.0",
+    "@agent-world/protocol": "0.1.0",
+    "@agent-world/reconciliation": "0.1.0",
+    "@agent-world/resources": "0.1.0",
+    "@agent-world/supervision": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.3"
+  }
+}

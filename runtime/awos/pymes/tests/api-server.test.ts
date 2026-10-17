@@ -1,0 +1,172 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { handlePymesRequest } from "../src/api-server.js";
+import { WorkspaceApi } from "../src/workspace-api.js";
+import { normalizeRequestId } from "../src/request-id.js";
+
+function api() {
+  const value = new WorkspaceApi();
+  value.addSession("owner-token-123456", { userId: "owner", tenantId: "agency-1", role: "owner" });
+  return value;
+}
+
+test("health endpoint is public and reports service identity", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/healthz"));
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { status: "ok", service: "pymes-workspace", version: "0.1.0" });
+  assert.equal(response.headers.get("permissions-policy"), "camera=(), microphone=(), geolocation=()");
+  assert.equal(response.headers.get("x-dns-prefetch-control"), "off");
+});
+
+test("health endpoint exposes an injected release version", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/healthz"), { serviceVersion: " 2026.09.29 " });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).version, "2026.09.29");
+});
+
+test("health endpoint falls back when the release version is blank", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/healthz"), { serviceVersion: "   " });
+  assert.equal((await response.json()).version, "0.1.0");
+});
+
+test("request ids are bounded consistently", () => {
+  assert.equal(normalizeRequestId("support-42"), "support-42");
+  assert.equal(normalizeRequestId("  support-42  "), "support-42");
+  assert.match(normalizeRequestId("x".repeat(201)), /^[0-9a-f-]{36}$/);
+});
+
+test("readiness endpoint is public", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/readyz"));
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).status, "ok");
+});
+
+test("readiness endpoint exposes the injected release version", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/readyz"), { serviceVersion: "2026.09.30" });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).version, "2026.09.30");
+});
+
+test("readiness reports storage failures", async () => {
+  const broken = new WorkspaceApi({
+    findSession() { return null; }, listInbox() { throw new Error("DB_DOWN"); },
+    revokeSession() {},
+    appendInbox() {}, updateInbox() {}, appendApproval() {}, listApprovals() { return []; },
+    appendCaseAudit() {}, listCaseAudit() { return []; }, appendEffect() {}, updateEffect() {}, listEffects() { return []; }
+  });
+  const response = await handlePymesRequest(broken, new Request("http://localhost/readyz"));
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).status, "not_ready");
+  assert.equal(response.headers.get("retry-after"), "5");
+});
+
+test("HTTP adapter preserves or creates request correlation ids", async () => {
+  const provided = await handlePymesRequest(api(), new Request("http://localhost/healthz", { headers: { "x-request-id": "support-case-42" } }));
+  assert.equal(provided.headers.get("x-request-id"), "support-case-42");
+  const generated = await handlePymesRequest(api(), new Request("http://localhost/healthz"));
+  assert.match(generated.headers.get("x-request-id") ?? "", /^[0-9a-f-]{36}$/);
+  const oversized = await handlePymesRequest(api(), new Request("http://localhost/healthz", { headers: { "x-request-id": "x".repeat(201) } }));
+  assert.match(oversized.headers.get("x-request-id") ?? "", /^[0-9a-f-]{36}$/);
+});
+
+test("HTTP adapter supports restricted local CORS preflight", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/healthz", {
+    method: "OPTIONS", headers: { origin: "http://127.0.0.1:5174" }
+  }));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("access-control-allow-origin"), "http://127.0.0.1:5174");
+  assert.equal(response.headers.get("access-control-allow-methods"), "GET, POST, OPTIONS");
+  assert.equal(response.headers.get("access-control-expose-headers"), "x-request-id, retry-after");
+  assert.equal(response.headers.get("access-control-max-age"), "600");
+  const denied = await handlePymesRequest(api(), new Request("http://localhost/healthz", {
+    method: "OPTIONS", headers: { origin: "https://attacker.example" }
+  }));
+  assert.equal(denied.headers.get("access-control-allow-origin"), null);
+  assert.equal(denied.headers.get("vary"), "Origin");
+  const deniedGet = await handlePymesRequest(api(), new Request("http://localhost/healthz", {
+    headers: { origin: "https://attacker.example" }
+  }));
+  assert.equal(deniedGet.status, 200);
+  assert.equal(deniedGet.headers.get("access-control-allow-origin"), null);
+});
+
+test("HTTP adapter accepts explicitly configured CORS origins", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/healthz", {
+    headers: { origin: "https://agency.example" }
+  }), { allowedOrigins: ["https://agency.example"] });
+  assert.equal(response.headers.get("access-control-allow-origin"), "https://agency.example");
+});
+
+test("wildcard CORS configuration does not grant browser access", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/healthz", {
+    headers: { origin: "https://agency.example" }
+  }), { allowedOrigins: ["*"] });
+  assert.equal(response.headers.get("access-control-allow-origin"), null);
+});
+
+test("HTTP adapter returns JSON and enforces authentication", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/v1/workspaces/agency-1/inbox"));
+  assert.equal(response.status, 401);
+  assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.equal(response.headers.get("x-frame-options"), "DENY");
+  assert.equal(response.headers.get("content-security-policy"), "default-src 'none'; frame-ancestors 'none'");
+  assert.equal(response.headers.get("cross-origin-resource-policy"), "same-origin");
+  assert.equal(response.headers.get("cross-origin-opener-policy"), "same-origin");
+  assert.deepEqual(await response.json(), { error: "UNAUTHENTICATED" });
+});
+
+test("HTTP adapter contains unexpected workspace failures", async () => {
+  const broken = new WorkspaceApi({
+    findSession() { throw new Error("DB_DOWN"); }, listInbox() { return []; }, revokeSession() {},
+    appendInbox() {}, updateInbox() {}, appendApproval() {}, listApprovals() { return []; },
+    appendCaseAudit() {}, listCaseAudit() { return []; }, appendEffect() {}, updateEffect() {}, listEffects() { return []; }
+  });
+  const response = await handlePymesRequest(broken, new Request("http://localhost/v1/workspaces/agency-1/inbox", {
+    headers: { authorization: "Bearer owner-token-123456" }
+  }));
+  assert.equal(response.status, 500);
+  assert.deepEqual(await response.json(), { error: "INTERNAL_SERVER_ERROR" });
+  assert.match(response.headers.get("x-request-id") ?? "", /^[0-9a-f-]{36}$/);
+});
+
+test("HTTP adapter accepts an approval JSON document", async () => {
+  const response = await handlePymesRequest(api(), new Request("http://localhost/v1/workspaces/agency-1/approvals", {
+    method: "POST", headers: { authorization: "Bearer owner-token-123456", "content-type": "application/json" },
+    body: JSON.stringify({ resourceId: "offer-1", reason: "Revisada por el responsable",
+      draftHash: "sha256:v1", approvedAt: "2026-09-29T12:00:00Z" })
+  }));
+  assert.equal(response.status, 201);
+  assert.equal((await response.json()).tenantId, "agency-1");
+});
+
+test("HTTP adapter rejects invalid JSON and unsupported methods", async () => {
+  const invalid = await handlePymesRequest(api(), new Request("http://localhost/v1/workspaces/agency-1/approvals", {
+    method: "POST", headers: { "content-type": "application/json" }, body: "{" }));
+  assert.equal(invalid.status, 400);
+  const media = await handlePymesRequest(api(), new Request("http://localhost/v1/workspaces/agency-1/approvals", {
+    method: "POST", headers: { "content-type": "text/plain" }, body: "{}" }));
+  assert.equal(media.status, 415);
+  const method = await handlePymesRequest(api(), new Request("http://localhost/v1/workspaces/agency-1/inbox", { method: "PUT" }));
+  assert.equal(method.status, 405);
+  assert.equal(method.headers.get("allow"), "GET, POST, OPTIONS");
+});
+
+test("HTTP adapter bounds OpenClaw ingress bodies before dispatch", async () => {
+  const api = new WorkspaceApi(undefined, { token: "ingress-token-123456", policy: {
+    tenantId: "agency-1", allowedAgentIds: new Set(["agent-1"]), allowedResourceIds: new Set(["inbox-1"]),
+    allowedChannels: new Set(["whatsapp"]), pairedSenderIds: new Set(["sender-1"]), consentedConversationIds: new Set(["conversation-1"])
+  } });
+  const response = await handlePymesRequest(api, new Request("http://localhost/v1/workspaces/agency-1/ingress/openclaw", {
+    method: "POST", headers: { "content-type": "application/json", "x-pymes-ingress-token": "ingress-token-123456", "content-length": "1048577" }, body: "{}"
+  }));
+  assert.equal(response.status, 413);
+  assert.deepEqual(await response.json(), { error: "BODY_TOO_LARGE" });
+});
+
+test('workspace browser CORS accepts authenticated no-store request headers',async()=>{
+ const result=await handlePymesRequest(api(),new Request('http://localhost/v1/workspaces/agency-1/runtime',{method:'OPTIONS',headers:{origin:'http://127.0.0.1:5174','access-control-request-headers':'authorization,cache-control,x-request-id'}}));
+ assert.equal(result.headers.get('access-control-allow-origin'),'http://127.0.0.1:5174');
+ assert.ok(result.headers.get('access-control-allow-headers')!.toLowerCase().includes('cache-control'));
+});

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="pyme1-token" content="__PYME1_TOKEN__">
+<title>REM</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="modules.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.3 1.8 2.2 3.8 4 4.3l1.2-1.2 1.8.8-.3 1.3c-3 .5-6.8-3.2-6.4-6.3l1.3-.3.8 1.8z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+  <symbol id="i-backup" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4h4"/><path d="M12 8v4l3 2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.2v.3"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M12 4c5 0 9 3.1 9 7s-4 7-9 7c-1 0-2-.1-2.9-.4L4 19.5l1.4-3.6C3.9 14.6 3 12.9 3 11c0-3.9 4-7 9-7z"/></symbol>
+  <symbol id="i-tray" viewBox="0 0 24 24"><path d="M3 13l2.5-7.5A2 2 0 0 1 7.4 4h9.2a2 2 0 0 1 1.9 1.5L21 13v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 13h5l1.5 3h5L16 13h5"/></symbol>
+  <symbol id="i-seal" viewBox="0 0 24 24"><path d="M9 3h6l-1 6h3a2 2 0 0 1 2 2v2H5v-2a2 2 0 0 1 2-2h3z"/><path d="M5 17h14M7 21h10"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L6.8 5M3.5 12l1.2 1.2 2.1-2.2M3.5 18l1.2 1.2 2.1-2.2"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 4L3 11l6 2.2L18 7l-7 7.2.5 6.3 3.3-4 4.7 3.5z"/></symbol>
+  <symbol id="i-log" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5a4.8 4.8 0 0 1-.5 9.5z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></symbol>
+</svg>
+
+<div class="app">
+  <aside class="side" aria-label="Navigation">
+    <div class="brand"><span class="mark" aria-hidden="true">R</span><div><strong>REM</strong><span id="biz">Your AI workspace</span></div></div>
+    <nav class="nav" id="nav">
+      <a href="#hoy" data-view="hoy" aria-label="Today"><svg class="i"><use href="#i-sun"/></svg><span>Today</span><b class="count" id="c-today"></b></a>
+      <a href="#asistente" data-view="asistente" aria-label="Assistant"><svg class="i"><use href="#i-chat"/></svg><span>Assistant</span></a>
+      <a href="#clasificar" data-view="clasificar" aria-label="Message triage"><svg class="i"><use href="#i-tray"/></svg><span>Message triage</span></a>
+      <a href="#aprobaciones" data-view="aprobaciones" aria-label="Review"><svg class="i"><use href="#i-seal"/></svg><span>Review</span><b class="count call" id="c-pend"></b></a>
+      <a href="#clientes" data-view="clientes" aria-label="Clients"><svg class="i"><use href="#i-people"/></svg><span>Clients</span></a>
+      <a href="#tareas" data-view="tareas" aria-label="Tasks"><svg class="i"><use href="#i-list"/></svg><span>Tasks</span><b class="count" id="c-tasks"></b></a>
+      <a href="#encargos" data-view="encargos" aria-label="Errands"><svg class="i"><use href="#i-send"/></svg><span>Errands</span></a>
+      <div class="nav-sep"></div>
+      <a href="#modulos" data-view="modulos" aria-label="Modules"><svg class="i" aria-hidden="true"><use href="#i-archive"/></svg><span>Modules</span></a>
+      <a href="#awos" data-view="awos" id="awos-nav" aria-label="Experimental email" hidden><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span>Experimental email</span></a>
+      <a href="#registro" data-view="registro" aria-label="Activity and privacy"><svg class="i"><use href="#i-log"/></svg><span>Activity and privacy</span></a>
+    </nav>
+    <div class="side-foot">
+      <nav class="nav"><a href="#ajustes" data-view="ajustes" aria-label="Settings"><svg class="i"><use href="#i-gear"/></svg><span>Settings</span></a></nav>
+      <div class="status" id="st-local"></div>
+      <div class="status" id="st-ext"></div>
+      <div class="status" id="st-dec"></div>
+      <div class="status" id="st-backup"></div>
+    </div>
+  </aside>
+
+  <main class="main" id="main" aria-busy="true">
+    <header class="toolbar"><h1 id="title">Assistant</h1><span class="toolbar-note" id="tnote"></span><a class="btn ghost toolbar-shortcut" href="#asistente" data-view="asistente">Ask your assistant</a></header>
+
+    <section class="view" id="v-modulos" aria-labelledby="rm-library-title"><div class="page wide rm-library">
+      <header class="rm-hero"><div class="rm-hero-copy"><p class="rm-eyebrow">A WORKSPACE THAT FITS YOU</p><h2 id="rm-library-title">Your business.<br>Your way of working.</h2><p>Combine focused tools that do their job well. Shape your workspace around your business, with care in every process.</p><div class="rm-hero-notes"><span><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>Your work, with a history</span><i class="rm-note-separator" aria-hidden="true"></i><span><b id="rm-active-count">—</b> active modules</span></div></div><aside class="rm-composition" aria-label="Conceptual workflow example"><div class="rm-composition-head"><strong>One workflow. Every piece.</strong><span class="rm-local">On your Mac</span></div><ol><li><span>01</span><strong>Capture a request</strong><small>Capture</small></li><li><span>02</span><strong>Prepare a proposal</strong><small>Prepare</small></li><li><span>03</span><strong>Follow through to closure</strong><small>Resolve</small></li></ol><p>Workflow illustration. This does not represent your clients’ activity.</p></aside></header>
+      <div class="rm-library-heading"><div><h3>Module library</h3><p>Included in REM. Adaptable to your profession.</p></div><span class="rm-included" id="rm-included">Loading library</span></div>
+      <div class="rm-controls"><div class="rm-segments" role="group" aria-label="Filter modules"><button data-module-filter="all" aria-pressed="true">All</button><button data-module-filter="active" aria-pressed="false">Active</button><button data-module-filter="paused" aria-pressed="false">Paused</button></div><label class="rm-search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span class="sr">Search modules</span><input id="rm-search" type="search" placeholder="Search modules…" autocomplete="off"></label></div>
+      <p id="rm-result-count" class="sr" aria-live="polite"></p><div id="rm-grid" class="rm-grid"><div class="rm-empty"><h3>Preparing your library</h3><p>Reading modules and their configuration from AWOS.</p></div></div>
+      <div class="rm-afterword"><section><h3>Coming next, with the same care.</h3><p>These workflows are in development. They cannot be enabled yet.</p><div class="rm-coming"><span>Documents · In development</span><span>Appointments · In development</span></div></section><section><h3>Built to adapt.</h3><p>Your implementer can reuse each module’s contracts. Versioned configuration and explicit permissions, without duplicating the runtime or your client records.</p></section></div>
+      <footer class="rm-footer"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><p id="rm-status" role="status" aria-live="polite">No automatic sending in this workspace. Your decisions keep their history.</p></footer>
+    </div></section>
+
+    <!-- Today: mismos datos y actions, revisión primero. -->
+    <section class="view" id="v-hoy">
+      <div class="page wide today-page">
+        <div class="today-head"><div class="today-date" id="today-date"></div>
+          <div><p class="eyebrow">YOUR BUSINESS AT A GLANCE</p><h2 id="hello">Good morning</h2><p id="today-sum"></p></div>
+          <a class="btn primary" id="today-review" href="#aprobaciones" data-view="aprobaciones">Review proposals</a>
+        </div>
+        <div class="today-overview" id="today-overview" aria-label="Daily overview"></div>
+        <div class="today-grid">
+          <section class="today-review-section" aria-labelledby="today-review-title">
+            <div class="panel-h"><h3 id="today-review-title">Your work queue</h3><span class="pill warn" id="today-pend"></span></div>
+            <p class="section-note">Review the text before deciding. Saving a draft does not send it; you can then open it in Mail or WhatsApp.</p>
+            <div class="stack" id="today-props"></div>
+            <section class="today-approved-section" id="today-approved-section" aria-labelledby="today-approved-title"><div class="panel-h"><h3 id="today-approved-title">Recently reviewed</h3></div><div id="today-approved"></div></section>
+          </section>
+          <div class="today-secondary">
+            <section aria-labelledby="today-next-title"><div class="panel-h"><h3 id="today-next-title">Upcoming tasks</h3><a class="btn ghost" href="#tareas" data-view="tareas">View tasks</a></div><ul class="today-next" id="today-next"></ul></section>
+            <section aria-labelledby="today-messages-title"><div class="panel-h"><h3 id="today-messages-title">Recent messages</h3><a class="btn ghost" href="#clasificar" data-view="clasificar">Paste a message</a></div><div class="inbox" id="today-inbox"></div></section>
+            <div class="privacy" id="privacy" role="status"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Assistant -->
+    <section class="view chatview" id="v-asistente">
+      <div class="chat-scroll" id="chat-scroll"><div class="chat" id="chat"></div></div>
+      <form class="composer" id="composer">
+        <div class="composer-shell">
+          <label class="sr" for="msg">Message to your assistant</label>
+          <textarea id="msg" rows="1" placeholder="Spanish example: «recuérdame llamar a Marta el lunes»"></textarea>
+          <div class="composer-row">
+            <label class="sr" for="prefer">Choose AI provider</label>
+            <select id="prefer" title="AI provider for this message">
+              <option value="">Use your settings</option>
+              <option value="local">Local AI only</option>
+              <option value="external">External AI</option>
+            </select>
+            <button class="btn ghost" type="button" id="clear-chat">Clear conversation</button>
+            <button class="btn primary" type="submit" id="send">Send</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Clasificar -->
+    <section class="view" id="v-clasificar">
+      <div class="page wide triage-page">
+        <header class="screen-intro"><div><p class="eyebrow">INBOX</p><h2 class="title">Message triage</h2><p class="lede">Paste a message to understand the request, assess its urgency, and prepare a draft for review.</p></div><span class="trust-note"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>The reply is not sent</span></header>
+        <div class="triage-layout"><section aria-labelledby="triage-input-title"><div class="section-heading"><div><h3 id="triage-input-title">Received message</h3><p>Add the channel, sender, and full message.</p></div></div><form class="card form triage-form" id="triage-form"><div class="row2"><label>Channel<select id="t-channel"><option value="correo">Email</option><option value="whatsapp">WhatsApp</option><option value="telegram">Telegram</option><option value="imessage">iMessage</option><option value="telefono">Phone</option><option value="otro">Other</option></select></label><label>Sender<input id="t-sender" placeholder="Name, email, or phone" autocomplete="off"></label></div><label>Message<textarea id="t-text" rows="8" placeholder="Paste the message here"></textarea></label><div class="actions"><button class="btn primary" id="t-go">Classify and draft reply</button></div></form><div id="triage-result"></div><section id="intake-panel" class="intake-panel" hidden aria-label="AWOS requests and contacts"></section></section>
+        <aside class="triage-recent" aria-labelledby="triage-recent-title"><div class="section-heading"><div><h3 id="triage-recent-title">Recent messages</h3><p>Recently classified messages.</p></div></div><div class="inbox" id="inbox-list"></div></aside></div>
+      </div>
+    </section>
+
+    <!-- Aprobaciones -->
+    <section class="view" id="v-aprobaciones">
+      <div class="page wide review-page">
+        <header class="screen-intro"><div><p class="eyebrow">REVIEW BEFORE ACTING</p><h2 class="title">Review</h2><p class="lede">Check and edit each proposal. Records or drafts are prepared only after your explicit approval.</p></div><span class="trust-note"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>You stay in control</span></header>
+        <section aria-labelledby="pending-title"><div class="section-heading"><div><h3 id="pending-title">Pending</h3><p>Review the full content and decide on each proposal separately.</p></div><span class="pill warn">Your decision is needed</span></div><div class="review-queue" id="pending"></div></section>
+        <section class="recent-review" aria-labelledby="recent-title"><div class="section-heading"><div><h3 id="recent-title">Recently decided</h3><p>Recent approved and dismissed proposals.</p></div></div><ul class="list" id="recent"></ul></section>
+      </div>
+    </section>
+
+    <!-- Clients -->
+    <section class="view" id="v-clientes">
+      <div class="page wide clients-page">
+        <header class="screen-intro"><div><p class="eyebrow">LOCAL CLIENTS</p><h2 class="title">Clients</h2><p class="lede">Contacts, context, and upcoming tasks stored on this Mac.</p></div><label class="search"><svg class="i"><use href="#i-search"/></svg><span class="sr">Search clients</span><input id="c-search" type="search" placeholder="Search clients" autocomplete="off"></label></header>
+        <div class="clients-layout"><section aria-labelledby="client-list-title"><div class="section-heading"><div><h3 id="client-list-title">Your clients <span class="section-count" id="clients-count"></span></h3><p>Sorted by name. Find contact details, notes, and pending work.</p></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Client</th><th>Contact</th><th>Notes</th><th><span class="sr">Actions</span></th></tr></thead><tbody id="clients"></tbody></table></div></section>
+        <aside class="client-create" aria-labelledby="client-create-title"><h3 id="client-create-title">Add client</h3><p>Enter a name and any available contact details.</p><form class="card form" id="client-form"><div class="client-fields"><label>Name<input id="c-name" required autocomplete="off"></label><label>Email<input id="c-email" type="email" autocomplete="off"></label><label>Phone<input id="c-phone" autocomplete="off"></label></div><div class="actions"><button class="btn primary">Add client</button></div></form></aside></div>
+      </div>
+    </section>
+
+    <!-- Tasks -->
+    <section class="view" id="v-tareas">
+      <div class="page wide tasks-page">
+        <header class="screen-intro"><div><p class="eyebrow">PENDING WORK</p><h2 class="title">Tasks</h2><p class="lede">Keep your work together, with a date and client where relevant.</p></div></header>
+        <div class="tasks-layout"><section aria-labelledby="tasks-list-title"><div class="section-heading"><div><h3 id="tasks-list-title">Your list <span class="section-count" id="tasks-count"></span></h3><p>Pending tasks by due date; completed tasks last.</p></div></div><div class="list-tools"><label class="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span class="sr">Search tasks</span><input id="task-search" type="search" placeholder="Search task or client" autocomplete="off"></label><label><span class="sr">Filter tasks</span><select id="task-filter"><option value="open">Pending</option><option value="all">All</option><option value="done">Completed</option></select></label></div><ul class="list task-list" id="tasks" aria-live="polite"></ul></section>
+        <aside class="task-create" aria-labelledby="task-create-title"><h3 id="task-create-title">New task</h3><p>Add it directly to your list.</p><form class="card form" id="task-form"><div class="task-fields"><label class="grow">Task<input id="k-title" required autocomplete="off" placeholder="Call…"></label><label>Date<input id="k-due" type="date"></label><label>Client<select id="k-client"></select></label></div><div class="actions"><button class="btn primary">Add task</button></div></form></aside></div>
+      </div>
+    </section>
+
+    <!-- Errands -->
+    <section class="view" id="v-encargos">
+      <div class="page wide errands-page">
+        <header class="screen-intro"><div><p class="eyebrow">DELEGATED WORK</p><h2 class="title">Errands</h2><p class="lede">Prepare requests for other agents and review every detail before approving delivery.</p></div><span class="trust-note"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>Delivery requires approval</span></header>
+        <div class="errands-layout"><section aria-labelledby="errand-new-title"><div class="section-heading"><div><h3 id="errand-new-title">Prepare errand</h3><p>Include only the information needed for the task.</p></div></div><form class="card form errand-form" id="errand-form"><label>Agent<select id="e-agent"></select></label><label>Errand<textarea id="e-brief" rows="6" placeholder="Explain what you need. Include only the information required."></textarea></label><div class="actions"><button class="btn primary">Prepare errand</button></div></form><div id="errand-new"></div></section>
+        <section class="errands-history" aria-labelledby="errands-title"><div class="section-heading"><div><h3 id="errands-title">Follow-up <span class="section-count" id="errands-count"></span></h3><p>Newest first; search by agent, request, or response.</p></div></div><label class="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span class="sr">Search errands</span><input id="errand-search" type="search" placeholder="Search errands" autocomplete="off"></label><ul class="list stack" id="errands" aria-live="polite"></ul></section></div>
+      </div>
+    </section>
+
+    <!-- Registro -->
+    <section class="view" id="v-registro">
+      <div class="page wide audit-page">
+        <header class="screen-intro"><div><p class="eyebrow">DATA CONTROL</p><h2 class="title">Activity and privacy</h2><p class="lede">Check when an external service was used, its destination, and the data volume.</p></div><span class="trust-note"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Content is not stored here</span></header>
+        <div class="section-heading"><div><h3>Overview and timeline <span class="section-count" id="audit-count"></span></h3><p>The overview groups activity; the timeline preserves each recorded access.</p></div><label class="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span class="sr">Search activity log</span><input id="audit-search" type="search" placeholder="Search activity" autocomplete="off"></label></div><div class="ledger"><aside class="zero" id="audit-zero"></aside><section class="audit-stream" aria-label="Activity timeline"><ol class="tl" id="audit" aria-live="polite"></ol></section></div>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section class="view" id="v-ajustes">
+      <div class="page wide settings-page" id="settings"></div>
+    </section>
+    <section class="view" id="v-awos"><div class="page wide awos-page">
+      <div class="rm-workbench-bar" id="rm-workbench-bar" hidden><a href="#modulos" data-view="modulos">← Module library</a><button id="rm-workbench-all" type="button">View full workspace</button></div>
+      <div class="today-head"><div><h2 id="rm-workbench-title">Email with governed review</h2><p id="rm-workbench-subtitle">Isolated experiment · fictional contacts · sending disabled</p></div><span class="badge" id="awos-planner"></span></div>
+      <p>Decisions are recorded in AWOS. Approval does not send. Previous versions retain their history.</p>
+      <div class="awos-layout"><form id="awos-form" class="awos-card">
+        <h3 id="awos-editing">Prepare proposal</h3><div id="awos-intake-source" class="inline-notice" hidden><p>This proposal retains the selected contact’s source request.</p><button id="awos-intake-unlink" class="secondary" type="button">New proposal without this request</button></div>
+        <label>Test contact<select name="contactId" required></select></label>
+        <label>Template<select name="templateId" required></select></label><button class="secondary" id="awos-template-edit" type="button">Edit selected template</button>
+        <label>Client<input name="cliente" maxlength="120" required></label>
+        <label>Service<input name="servicio" maxlength="200" required></label>
+        <div class="awos-fields"><label>Amount<input name="importe" inputmode="decimal" pattern="[0-9]+([.,][0-9]{1,2})?" required aria-describedby="awos-money-help"></label><label>Timeframe<input name="plazo" maxlength="120" required></label></div>
+        <p class="help" id="awos-money-help">Numeric amount; normalized to two decimal places in EUR.</p>
+        <label>Validity<input name="validez" maxlength="120" required></label>
+        <label>Terms<textarea name="condiciones" rows="4" maxlength="2000" required></textarea></label>
+        <button class="secondary" id="awos-suggest" type="button">Suggest terms with local AI</button><p class="help" id="awos-suggestion-note" hidden>Editable local AI suggestion; not approved content.</p>
+        <button class="secondary" id="awos-preview-button" type="button">Preview proposal</button>
+        <section id="awos-preview" class="proposal-preview" aria-live="polite"><div class="empty-state"><div><h3>No preview</h3><p>Fill in the variables and choose Preview proposal.</p></div></div></section>
+        <button type="submit">Save and prepare review</button>
+      </form><div><div class="awos-list-head"><h3>Reviews and history</h3><button class="secondary" type="button" id="awos-refresh">Refresh</button></div><p id="awos-status" tabindex="-1" role="status" aria-live="polite"></p><div id="awos-list"></div></div></div>
+      <form id="awos-template-form" class="awos-card"><header><h3>Local templates</h3><button class="secondary" type="button" id="awos-template-new">New template</button></header><input type="hidden" name="id"><label>Name<input name="nombre" maxlength="120" required></label><label>Subject<input name="asunto" maxlength="200" required></label><label>Body<textarea name="cuerpo" rows="7" maxlength="6000" required></textarea></label><p class="help">Allowed variables: {{cliente}}, {{servicio}}, {{importe}}, {{plazo}}, {{validez}}, {{condiciones}}.</p><button type="submit">Save template</button> <button class="secondary" type="button" id="awos-template-delete" hidden>Delete template</button><p id="awos-template-status" class="inline-notice" role="status" aria-live="polite"></p></form>
+      <section id="awos-copies" class="awos-card" hidden aria-label="Coordinated copies and recovery"></section>
+    </div></section>
+  </main>
+</div>
+
+<nav class="mobile-tabs" aria-label="Main navigation">
+  <a href="#hoy" data-view="hoy" aria-label="Today"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg><span>Today</span></a>
+  <a href="#aprobaciones" data-view="aprobaciones" aria-label="Review"><svg class="i" aria-hidden="true"><use href="#i-seal"/></svg><span>Review</span></a>
+  <a href="#asistente" data-view="asistente" aria-label="Assistant"><svg class="i" aria-hidden="true"><use href="#i-chat"/></svg><span>Assistant</span></a>
+  <a href="#clientes" data-view="clientes" aria-label="Clients"><svg class="i" aria-hidden="true"><use href="#i-people"/></svg><span>Clients</span></a>
+  <button id="more-open" aria-label="More sections" aria-haspopup="dialog" aria-expanded="false" aria-controls="more-sheet"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg><span>More</span></button>
+</nav>
+<dialog id="more-sheet" class="more-sheet" aria-labelledby="more-title">
+  <header><h2 id="more-title">More sections</h2><form method="dialog"><button class="btn" aria-label="Close more sections">Close</button></form></header>
+  <nav class="grouped-list" aria-label="More sections">
+    <a href="#modulos" data-view="modulos">Modules</a>
+    <a href="#tareas" data-view="tareas">Tasks</a>
+    <a href="#clasificar" data-view="clasificar">Message triage</a>
+    <a href="#encargos" data-view="encargos">Errands</a>
+    <a href="#registro" data-view="registro">Activity and privacy</a>
+    <a href="#awos" data-view="awos" id="awos-more" hidden>Experimental email</a>
+    <a href="#ajustes" data-view="ajustes">Settings</a>
+  </nav>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="app.js"></script>
+<dialog id="rm-module-dialog" class="rm-dialog" aria-labelledby="rm-dialog-title"></dialog>
+</body>
+</html>

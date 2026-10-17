@@ -1,0 +1,251 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pymes-workspace
+  labels:
+    app.kubernetes.io/name: pymes-workspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pymes-workspace
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pymes-workspace
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: workspace
+          image: your-registry/pymes-workspace:0.1.0
+          ports:
+            - name: http
+              containerPort: 8790
+          env:
+            - name: PYMES_API_HOST
+              value: "0.0.0.0"
+            - name: PYMES_API_PORT
+              value: "8790"
+            - name: PYMES_API_CORS_ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: cors-origins
+            - name: PYMES_OPENCLAW_AGENT_IDS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: openclaw-agent-ids
+            - name: PYMES_OPENCLAW_RESOURCE_IDS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: openclaw-resource-ids
+            - name: PYMES_OPENCLAW_CHANNELS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: openclaw-channels
+            - name: PYMES_OPENCLAW_PAIRED_SENDERS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: openclaw-paired-senders
+            - name: PYMES_OPENCLAW_CONSENTED_CONVERSATIONS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: openclaw-consented-conversations
+            - name: PYMES_OPENCLAW_MAX_EVENT_AGE_MS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: openclaw-max-event-age-ms
+            - name: PYMES_OPENCLAW_MAX_FUTURE_SKEW_MS
+              valueFrom:
+                configMapKeyRef:
+                  name: pymes-workspace-config
+                  key: openclaw-max-future-skew-ms
+            - name: PYMES_API_DB_PATH
+              value: /data/pymes-workspace.db
+            - name: PYMES_API_BOOTSTRAP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: bootstrap-token
+            - name: PYMES_API_BOOTSTRAP_TENANT
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: tenant
+            - name: PYMES_API_WORKER_ID
+              value: "effects-worker"
+            - name: PYMES_API_WORKER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: worker-token
+                  optional: true
+            - name: PYMES_OPENCLAW_INGRESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: openclaw-ingress-token
+                  optional: true
+            - name: PYMES_OPENCLAW_SIGNING_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: openclaw-signing-secret
+                  optional: true
+            - name: PYMES_MESSAGE_GATEWAY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: message-gateway-url
+                  optional: true
+            - name: PYMES_MESSAGE_GATEWAY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: message-gateway-token
+                  optional: true
+            - name: PYMES_WHATSAPP_CLOUD_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: whatsapp-cloud-access-token
+                  optional: true
+            - name: PYMES_WHATSAPP_CLOUD_PHONE_NUMBER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: whatsapp-cloud-phone-number-id
+                  optional: true
+            - name: PYMES_WHATSAPP_WEBHOOK_VERIFY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: whatsapp-webhook-verify-token
+                  optional: true
+            - name: PYMES_WHATSAPP_APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: whatsapp-app-secret
+                  optional: true
+            - name: PYMES_LOCAL_MODEL
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: local-model
+                  optional: true
+            - name: PYMES_LOCAL_LLM_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: local-llm-url
+                  optional: true
+            - name: PYMES_CRM_GATEWAY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: crm-gateway-url
+                  optional: true
+            - name: PYMES_CRM_GATEWAY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: crm-gateway-token
+                  optional: true
+            - name: PYMES_CALL_GATEWAY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: call-gateway-url
+                  optional: true
+            - name: PYMES_CALL_GATEWAY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pymes-workspace-secrets
+                  key: call-gateway-token
+                  optional: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pymes-workspace-data
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pymes-workspace
+spec:
+  selector:
+    app.kubernetes.io/name: pymes-workspace
+  ports:
+    - name: http
+      port: 8790
+      targetPort: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pymes-workspace-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pymes-workspace-config
+data:
+  # Sustituye por los orígenes exactos de la interfaz, separados por comas.
+  cors-origins: https://app.example.com
+  openclaw-agent-ids: ""
+  openclaw-resource-ids: ""
+  openclaw-channels: whatsapp,telegram,imessage,email
+  openclaw-paired-senders: ""
+  openclaw-consented-conversations: ""
+  openclaw-max-event-age-ms: "604800000"
+  openclaw-max-future-skew-ms: "600000"

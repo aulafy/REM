@@ -1,0 +1,15 @@
+{
+  "note": "Segundo examen independiente: mensajes que contienen fechas frente a tareas de escribir más tarde. No ajustes prompts ni reglas a estas frases concretas; corrige la causa general.",
+  "cases": [
+    {"id":"h2-mensaje-01","type":"mensaje","text":"Escríbele un WhatsApp a Javier diciéndole que el jueves le paso el presupuesto","expected":{"channel":"whatsapp"}},
+    {"id":"h2-mensaje-02","type":"mensaje","text":"Prepárame un correo para Marta diciéndole que mañana la llamo","expected":{"channel":"correo"}},
+    {"id":"h2-mensaje-03","type":"mensaje","text":"Mándale un wasap a Luis: el lunes le llevo los papeles","expected":{"channel":"whatsapp"}},
+    {"id":"h2-mensaje-04","type":"mensaje","text":"Dile a Ana por correo que su póliza se renueva el día 28","expected":{"channel":"correo"}},
+    {"id":"h2-mensaje-05","type":"mensaje","text":"Contesta a Javier por WhatsApp que el perito pasa pasado mañana","expected":{"channel":"whatsapp"}},
+    {"id":"h2-mensaje-06","type":"mensaje","text":"Redacta un email a Luis recordándole que el viernes vence el recibo","expected":{"channel":"correo"}},
+    {"id":"h2-tarea-01","type":"tarea","text":"Recuérdame escribir a Marta el jueves","expected":{"date":"2026-10-15"}},
+    {"id":"h2-tarea-02","type":"tarea","text":"El lunes tengo que mandarle el presupuesto a Javier, apúntalo","expected":{"date":"2026-10-12"}},
+    {"id":"h2-tarea-03","type":"tarea","text":"Pon una tarea para enviar el correo de renovación a Ana el día 20","expected":{"date":"2026-10-20"}},
+    {"id":"h2-tarea-04","type":"tarea","text":"Apúntame que el miércoles llamo a Luis","expected":{"date":"2026-10-14"}}
+  ]
+}
