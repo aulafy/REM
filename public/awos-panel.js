@@ -296,8 +296,8 @@ export function mountAwos({ api }) {
         moduleKind = e.detail.kind;
         section.querySelector('.awos-page').dataset.moduleKind = moduleKind;
         document.getElementById('rm-workbench-bar').hidden = false;
-        bindValue(document.getElementById('rm-workbench-title'), "textContent", () => e.detail.title);
-        bindValue(document.getElementById('rm-workbench-subtitle'), "textContent", () => e.detail.subtitle + tx("awos-panel.extra.4c74a6aba"));
+        bindValue(document.getElementById('rm-workbench-title'), "textContent", () => currentUiMessage(e.detail.title));
+        bindValue(document.getElementById('rm-workbench-subtitle'), "textContent", () => currentUiMessage(e.detail.subtitle) + tx("awos-panel.extra.4c74a6aba"));
         request(refresh);
     });
     document.addEventListener('awos-copy-changed', () => {

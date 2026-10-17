@@ -2,7 +2,7 @@
 
 Base: `3321d4b45409e49d2cb553ea95c5c2871a2aa8a2` · branch: `feat/bilingual-workspace`.
 
-Implementation commit: `effe0358d1ffa8751ece7ee3b9f01aa475728f07`.
+Initial implementation commit: `effe0358d1ffa8751ece7ee3b9f01aa475728f07`.
 
 ## Product change
 
@@ -56,4 +56,4 @@ Bundled AWOS source is unchanged; REM integration tests start only temporary syn
 4. A pending proposal, an older decision and an UNKNOWN result: exact content retained; approval never labelled sending; no retry for UNKNOWN.
 5. Template editor/version history, matching-language money preview and separate draft language; customer text never translated automatically.
 
-No real data, installed instance, model service, Keychain, OAuth account, external effect or installer was used for this step. No DMG was built. No Step 2 implementation is included. Keep this PR unmerged until the visual review returns concrete results.
+No real data, installed instance, model service, Keychain, OAuth account, external effect or installer was used for this step. No DMG was built. No Step 2 implementation is included. Final review also checks cached module headings after a locale switch, without translating custom workspace text. Keep this PR unmerged until the visual review returns concrete results.

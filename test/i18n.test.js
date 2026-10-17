@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createServer} from 'node:http';
 import {execFileSync} from 'node:child_process';
-import {catalogs,translate,t,setLanguage,getLanguage,detectLanguage,localized,formatDate,formatNumber,formatMoney,renderStaticDocument,bindValue,onLanguageChange,patchTranslatedHtml} from '../public/i18n.js';
+import {catalogs,translate,t,setLanguage,getLanguage,detectLanguage,currentUiMessage,localized,formatDate,formatNumber,formatMoney,renderStaticDocument,bindValue,onLanguageChange,patchTranslatedHtml} from '../public/i18n.js';
 import {createLanguagePreference} from '../public/language-preference.js';
 import {checkI18n,catalogProblems,fixedCopy,staticCopy} from '../scripts/check-i18n.mjs';
 import {openDb} from '../src/db.js';
@@ -75,8 +75,8 @@ test('locale formatters use Intl en-GB/es-ES and Madrid across DST; codes and su
 });
 
 test('reactive labels refresh after field restoration and do not replace business identities',()=>{
- const labels=localized(()=>({heading:t('common.proposals')}));let callback;
- const unsubscribe=onLanguageChange(lang=>callback=lang);setLanguage('es');assert.equal(labels.heading,'propuestas');assert.equal(callback,'es');setLanguage('en');assert.equal(labels.heading,'proposals');unsubscribe();
+ const labels=localized(()=>({heading:t('common.proposals')}));const workbenchTitle=t('messages.legacy.requests.ada2759');let callback;
+ const unsubscribe=onLanguageChange(lang=>callback=lang);setLanguage('es');assert.equal(labels.heading,'propuestas');assert.equal(currentUiMessage(workbenchTitle),'Solicitudes');assert.equal(currentUiMessage('Custom customer workspace'),'Custom customer workspace');assert.equal(callback,'es');setLanguage('en');assert.equal(labels.heading,'proposals');unsubscribe();
 });
 
 // Deliberate minimal DOM, not browser/layout QA. Rebuilds emulate real innerHTML replacement.

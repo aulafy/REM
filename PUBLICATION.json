@@ -149,8 +149,8 @@
     },
     {
       "path": "docs/STEP_1_BILINGUAL_WORKSPACE.md",
-      "bytes": 6589,
-      "sha256": "936fc7aa751a38bb1d6b2b254c2cc351aad4b0db189fd0f8610f8921eca60896"
+      "bytes": 6711,
+      "sha256": "b74c7f916bcc0723a19e3295ccaaa4b7a5e857812c7963b3464ba61eb153ddc2"
     },
     {
       "path": "eval/casos.json",
@@ -214,8 +214,8 @@
     },
     {
       "path": "public/awos-panel.js",
-      "bytes": 25728,
-      "sha256": "e434bc11042f13475f89c672d74ed54d37e93bcbc8f90a4e1d25ce2eb31c2bf5"
+      "bytes": 25764,
+      "sha256": "0e2c7fc2ba7d8ac76cb083d16d47fa048ecedfbe0c5c06f9f3a8cfb025e0b719"
     },
     {
       "path": "public/business-controls.js",
@@ -4019,8 +4019,8 @@
     },
     {
       "path": "test/i18n.test.js",
-      "bytes": 22169,
-      "sha256": "075cbfcc452f3eabe01c66bcdf55bbdedd93b36ba08313c1e7ba861675f1c8b4"
+      "bytes": 22394,
+      "sha256": "556e7972b4019f2111df3c3c09e80c78f3e3e6f9d87e2b3bd2c03c5005476a3f"
     },
     {
       "path": "test/intakes-api.test.js",
@@ -4100,7 +4100,9 @@
         "skipped": 0,
         "consecutiveRuns": 2
       },
-      "visualQa": "Pending Claude review; do not merge before visual acceptance"
+      "visualQa": "Pending Claude review; do not merge before visual acceptance",
+      "reviewedParentCommit": "6c7b98203bea3160b910e0a46a099f7e11f141f8",
+      "followup": "Preserve locale refresh of cached module headings; independent regression check retains custom customer text."
     }
   ]
 }
