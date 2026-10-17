@@ -2,6 +2,8 @@
 
 Base: `3321d4b45409e49d2cb553ea95c5c2871a2aa8a2` · branch: `feat/bilingual-workspace`.
 
+Implementation commit: `effe0358d1ffa8751ece7ee3b9f01aa475728f07`.
+
 ## Product change
 
 Settings → Language switches the workspace immediately, without reloading. First use chooses the primary browser language (`es` or `en`), otherwise Spanish. The existing settings store persists the choice. A failed settings save is visible and rolls an explicit change back. No model is selected, downloaded or called by choosing a language.
