@@ -1,3 +1,6 @@
+import {localizedMessage} from '../public/display-text.js';
+import {validLanguage} from './language.js';
+import {renderStaticDocument,translate} from '../public/i18n.js';
 import {ACTION_ROUTES} from '../public/module-contract.js';
 // API local de la app. Solo escucha en 127.0.0.1 y exige el token de la sesión en cada llamada.
 import { readFile } from 'node:fs/promises';
@@ -14,7 +17,7 @@ import { seedDemo, hasData } from './demo.js';
 import { AwosError } from './awos-client.js';
 import {renderProposal} from './proposal-templates.js';
 
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml' };
 const SECURITY_HEADERS = {
   'x-content-type-options': 'nosniff',
   'x-frame-options': 'DENY',
@@ -49,7 +52,8 @@ export function createApp({ db, secrets, token, staticDir, getPort, onShutdown, 
   const backupScope = value => awos ? {...value, scope: 'pyme1-only', notice: 'Esta copia solo incluye REM. El correo experimental necesita una copia conjunta con AWOS.'} : value;
   const templateError=e=>{if(e?.code==='PROPOSAL_TEMPLATE_INVALID')throw new ValidationError(e.message);throw e;};
   const templateId=v=>/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(v||'')?v:(()=>{throw new ValidationError('Identificador de plantilla no válido.');})();
-  function renderedProposal(body){try{const id=templateId(body?.templateId),version=Number(body?.templateVersion),template=db.proposalTemplates.get(id,version);if(!template)throw new NotFoundError('No encuentro esa versión de la plantilla.');const rendered=renderProposal(template,body.variables);return {template,rendered};}catch(e){return templateError(e);}}
+  const draftLocale=value=>{if(value!==undefined&&!validLanguage(value))throw new ValidationError('Elige español o inglés.');return value;};
+  function renderedProposal(body){try{const id=templateId(body?.templateId),version=Number(body?.templateVersion),template=db.proposalTemplates.get(id,version);if(!template)throw new NotFoundError('No encuentro esa versión de la plantilla.');const rendered=renderProposal(template,body.variables,{language:draftLocale(body.language)});return {template,rendered};}catch(e){return templateError(e);}}
   const routes = [
     ['GET', /^\/api\/awos\/modules$/,async()=>{if(!awos?.modules)return {enabled:false};if(!awos.host.ready())throw new AwosError('AWOS_UNAVAILABLE',503);return {enabled:true,...await awos.modules.catalog()};}],
     ['POST', /^\/api\/awos\/modules\/configure$/,async b=>{if(!awos?.modules)throw new AwosError('AWOS_DISABLED',404);return {enabled:true,...await awos.modules.configure(b)};}],
@@ -78,14 +82,14 @@ export function createApp({ db, secrets, token, staticDir, getPort, onShutdown, 
       if(m[1]==='prepare'){
        if(!b.proposal)return awos.flow.prepare(b);
        const {template,rendered}=renderedProposal(b.proposal);
-       return awos.flow.prepare({...b,subject:rendered.subject,body:rendered.body,template:{templateId:template.id,templateVersion:template.version,variables:rendered.variables}});
+       return awos.flow.prepare({...b,subject:rendered.subject,body:rendered.body,template:{templateId:template.id,templateVersion:template.version,variables:rendered.variables,...(rendered.language?{language:rendered.language}:{})}});
       }
       if(m[1]==='resume')return awos.flow.resume(b.opId,b.version);
       if(m[1]==='decision')return awos.flow.decide(b.opId,b.version,{commandId:b.commandId,bindingHash:b.bindingHash,decision:b.decision});
-      if(m[1]==='proposal-suggestion'){try{return await awos.suggest(ctx.settings(),{kind:b.kind,cliente:b.cliente,servicio:b.servicio});}catch(e){if(/^AWOS_[A-Z_]+$/.test(e.message))throw new AwosError(e.message,400);throw e;}}
+      if(m[1]==='proposal-suggestion'){try{return await awos.suggest(ctx.settings(),{kind:b.kind,cliente:b.cliente,servicio:b.servicio,language:draftLocale(b.language)});}catch(e){if(/^AWOS_[A-Z_]+$/.test(e.message))throw new AwosError(e.message,400);throw e;}}
       const c=(await awos.flow.contacts()).find(c=>c.id===b.contactId);
       if(!c||typeof b.request!=='string'||!b.request.trim()||b.request.length>8000)throw new AwosError('AWOS_INPUT_INVALID',400);
-      try{return await awos.draft(ctx.settings(),c,b.request);}catch(e){if(/^AWOS_[A-Z_]+$/.test(e.message))throw new AwosError(e.message,400);throw e;}
+      try{return await awos.draft(ctx.settings(),c,b.request,{language:draftLocale(b.language)});}catch(e){if(/^AWOS_[A-Z_]+$/.test(e.message))throw new AwosError(e.message,400);throw e;}
     }],
     ['GET', /^\/api\/proposal-templates$/, async()=>db.proposalTemplates.list()],
     ['GET', /^\/api\/proposal-templates\/([a-f0-9-]{36})$/, async(_b,m)=>{const rows=db.proposalTemplates.history(m[1]);if(!rows.length)throw new NotFoundError('No encuentro esa plantilla.');return rows;}],
@@ -131,14 +135,14 @@ export function createApp({ db, secrets, token, staticDir, getPort, onShutdown, 
       const text = String(b.text || '').trim();
       if (!text) throw new ValidationError('Escribe algo para el asistente.');
       if (text.length > 8000) throw new ValidationError('El mensaje es demasiado largo.');
-      return askAgent(ctx, text, { prefer: ['local', 'external'].includes(b.prefer) ? b.prefer : undefined });
+      return askAgent(ctx, text, { prefer: ['local', 'external'].includes(b.prefer) ? b.prefer : undefined,draftLanguage:draftLocale(b.draftLanguage) });
     }],
     ['POST', /^\/api\/chat\/clear$/, async () => { db.chat.clear(); return { ok: true }; }],
     ['POST', /^\/api\/triage$/, async (b) => {
       const text = String(b.text || '').trim();
       if (!text) throw new ValidationError('Pega el mensaje que quieres clasificar.');
       if (text.length > 12000) throw new ValidationError('El mensaje es demasiado largo.');
-      return triage(ctx, { text, channel: String(b.channel || 'otro'), sender: String(b.sender || '').slice(0, 200) });
+      return triage(ctx, { text, channel: String(b.channel || 'otro'), sender: String(b.sender || '').slice(0, 200),draftLanguage:draftLocale(b.draftLanguage) });
     }],
     ['POST', /^\/api\/proposals\/(\d+)\/approve$/, async (b, m) => approveProposal(ctx, Number(m[1]), b.payload)],
     ['POST', /^\/api\/proposals\/(\d+)\/discard$/, async (_b, m) => discardProposal(ctx, Number(m[1]))],
@@ -234,17 +238,20 @@ export function createApp({ db, secrets, token, staticDir, getPort, onShutdown, 
   }
 
   return async function handler(req, res) {
+    let responseLanguage=validLanguage(req.headers['x-rem-language'])?req.headers['x-rem-language']:'es';
+    const message=(value,code)=>localizedMessage(value,responseLanguage,code);
     try {
       // Protección frente a "DNS rebinding": solo se acepta el host local exacto.
       const port = getPort();
       const host = String(req.headers.host || '');
-      if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`) return send(res, 421, { error: 'HOST', message: 'Host no permitido.' });
+      if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`) return send(res, 421, { error: 'HOST', message: message('Host no permitido.','HOST') });
       const url = new URL(req.url, `http://${host}`);
 
       if (url.pathname.startsWith('/api/')) {
-        if (!safeEq(req.headers['x-pyme1-token'] || '', token)) return send(res, 401, { error: 'TOKEN', message: 'Sesión no válida. Vuelve a abrir la app.' });
+        if (!safeEq(req.headers['x-pyme1-token'] || '', token)) return send(res, 401, { error: 'TOKEN', message: message('Sesión no válida. Vuelve a abrir la app.','TOKEN') });
         const origin = req.headers.origin;
-        if (origin && origin !== `http://${host}`) return send(res, 403, { error: 'ORIGIN', message: 'Origen no permitido.' });
+        if (origin && origin !== `http://${host}`) return send(res, 403, { error: 'ORIGIN', message: message('Origen no permitido.','ORIGIN') });
+        if(!validLanguage(req.headers['x-rem-language']))responseLanguage=ctx.settings().language||'es';
         for (const [method, re, fn, control] of routes) {
           const m = url.pathname.match(re);
           if (m && req.method === method) {
@@ -255,20 +262,20 @@ export function createApp({ db, secrets, token, staticDir, getPort, onShutdown, 
             return send(res, 200, output);
           }
         }
-        return send(res, 404, { error: 'NOT_FOUND', message: 'Ruta desconocida.' });
+        return send(res, 404, { error: 'NOT_FOUND', message: message('Ruta desconocida.','NOT_FOUND') });
       }
 
-      if (req.method !== 'GET') return send(res, 405, 'Método no permitido', { 'content-type': 'text/plain; charset=utf-8' });
+      if (req.method !== 'GET') return send(res, 405, translate(ctx.settings().language||'es','http.method'), { 'content-type': 'text/plain; charset=utf-8' });
       const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
-      if (!/^[\w.-]+$/.test(file) || !MIME[extname(file)]) return send(res, 404, 'No encontrado', { 'content-type': 'text/plain; charset=utf-8' });
+      if ((!/^[\w.-]+$/.test(file) && !/^i18n\/(es|en)\.json$/.test(file)) || !MIME[extname(file)]) return send(res, 404, translate(ctx.settings().language||'es','http.notFound'), { 'content-type': 'text/plain; charset=utf-8' });
       let content = await readFile(join(staticDir, file)).catch(() => null);
-      if (!content) return send(res, 404, 'No encontrado', { 'content-type': 'text/plain; charset=utf-8' });
-      if (file === 'index.html') content = content.toString('utf8').replace('__PYME1_TOKEN__', token);
+      if (!content) return send(res, 404, translate(ctx.settings().language||'es','http.notFound'), { 'content-type': 'text/plain; charset=utf-8' });
+      if (file === 'index.html') content = renderStaticDocument(content.toString('utf8'), ctx.settings().language || 'es').replace('__PYME1_TOKEN__', token);
       return send(res, 200, content, { 'content-type': MIME[extname(file)], 'content-security-policy': CSP, ...(file === 'index.html' && instanceId ? { 'x-pyme1-instance': instanceId } : {}) });
     } catch (e) {
       const status = e instanceof AwosError ? e.status : e instanceof ValidationError ? 400 : e instanceof NotFoundError ? 404 : e instanceof AiError ? (e.code === 'NOT_CONFIGURED' ? 400 : 502) : 500;
       if (status === 500) console.error('Error interno:', e);
-      return send(res, status, { error: e.code || 'INTERNAL', message: status === 500 ? 'Ha ocurrido un error interno. Revisa la consola.' : e.message });
+      return send(res, status, { error: e.code || 'INTERNAL', message: message(status === 500 ? 'Ha ocurrido un error interno. Revisa la consola.' : e.message,e.code||'INTERNAL') });
     }
   };
 }

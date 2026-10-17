@@ -1,8 +1,8 @@
 // Política del borrador, separada del calendario de tareas y de los criterios de evaluación.
-import {dateReferences,fold} from './dates.js';
-const quantity='(?:\\d{1,4}|un|una|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciseis|diecisiete|dieciocho|diecinueve|veinte|treinta)';
+import {dateReferences,fold,businessDate} from './dates.js';
+const quantity='(?:\\d{1,4}|un|una|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciseis|diecisiete|dieciocho|diecinueve|veinte|treinta|a|an|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|thirty)';
 export function relativePeriods(request){
- const input=String(request||''), re=new RegExp(`\\b(?:(?:dentro de|en|al cabo de|durante)\\s+)?${quantity}\\s+(?:dias?|semanas?|mes(?:es)?|anos?|horas?)\\b`,'g');
+ const input=String(request||''), re=new RegExp(`\\b(?:(?:dentro de|en|al cabo de|durante|in|within|for|after)\\s+)?${quantity}\\s+(?:dias?|semanas?|mes(?:es)?|anos?|horas?|days?|weeks?|months?|years?|hours?)\\b`,'g');
  return [...fold(input).matchAll(re)].map(m=>({expression:input.slice(m.index,m.index+m[0].length),start:m.index,end:m.index+m[0].length}));
 }
 export function draftingDateReferences(request,base){
@@ -12,7 +12,7 @@ export function draftingDateReferences(request,base){
   const at=text.indexOf(fold(r.expression),cursor);cursor=at+r.expression.length;
   if(periods.some(p=>fold(p.expression).includes(fold(r.expression))))return false;
   // Un weekday que ya acompaña una fecha literal no debe recalcularla.
-  if(/^(domingo|lunes|martes|miercoles|jueves|viernes|sabado)$/.test(fold(r.expression)) && literals.some(d=>d.start>=at&&d.start<=cursor+4))return false;
+  if(/^(domingo|lunes|martes|miercoles|jueves|viernes|sabado|sunday|monday|tuesday|wednesday|thursday|friday|saturday)$/.test(fold(r.expression)) && literals.some(d=>d.start>=at&&d.start<=cursor+4))return false;
   return true;
  });
 }
@@ -25,12 +25,14 @@ export function draftingDatesPrompt(request,base){
  return lines.join('\n');
 }
 const MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const EN_MONTHS=['january','february','march','april','may','june','july','august','september','october','november','december'];
 const SHORT=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const dayWords=['','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve','diez','once','doce','trece','catorce','quince','dieciseis','diecisiete','dieciocho','diecinueve','veinte','veintiuno','veintidos','veintitres','veinticuatro','veinticinco','veintiseis','veintisiete','veintiocho','veintinueve','treinta','treinta y uno'];
 const dayPattern=`(?:${dayWords.slice(1).sort((a,b)=>b.length-a.length).join('|')}|\\d{1,2})`;
 const number = word => /^\d+$/.test(word)?Number(word):dayWords.indexOf(word);
 const iso=(y,m,d)=>`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 export function absoluteDates(text,base=new Date()){
+ base=businessDate(base);
  const input=String(text||''),t=fold(input),found=[];
  const add=(m,y,month,day,inferred=false)=>{
   if(found.some(d=>m.index<d.end && m.index+m[0].length>d.start))return;
@@ -45,7 +47,12 @@ export function absoluteDates(text,base=new Date()){
   const month=m[2]==='setiembre'?9:MONTHS.includes(m[2])?MONTHS.indexOf(m[2])+1:SHORT.indexOf(m[2])+1;
   add(m,m[3]?Number(m[3]):base.getFullYear(),month,number(m[1]));
  }
- const weekRe=new RegExp(`\\b(?:domingo|lunes|martes|miercoles|jueves|viernes|sabado),?\\s+(${dayPattern})\\b`,'g');
+ const enMonthPattern=EN_MONTHS.join('|');
+ const englishDM=new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(${enMonthPattern})\\b(?:\\s+(20\\d{2}))?`,'g');
+ for(const m of t.matchAll(englishDM))add(m,m[3]?Number(m[3]):base.getFullYear(),EN_MONTHS.indexOf(m[2])+1,Number(m[1]));
+ const englishMD=new RegExp(`\\b(${enMonthPattern})\\s+(\\d{1,2})(?:st|nd|rd|th)?\\b(?:,?\\s+(20\\d{2}))?`,'g');
+ for(const m of t.matchAll(englishMD))add(m,m[3]?Number(m[3]):base.getFullYear(),EN_MONTHS.indexOf(m[1])+1,Number(m[2]));
+ const weekRe=new RegExp(`\\b(?:domingo|lunes|martes|miercoles|jueves|viernes|sabado|sunday|monday|tuesday|wednesday|thursday|friday|saturday),?\\s+(${dayPattern})\\b`,'g');
  for(const m of t.matchAll(weekRe))add(m,base.getFullYear(),base.getMonth()+1,number(m[1]),true);
  const dayRe=new RegExp(`\\b(?:el\\s+)?dia\\s+(${dayPattern})\\b`,'g');
  for(const m of t.matchAll(dayRe))add(m,base.getFullYear(),base.getMonth()+1,number(m[1]),true);

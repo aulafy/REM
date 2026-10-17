@@ -1,3 +1,4 @@
+import {validLanguage} from './language.js';
 import {followupOperationIds,followupStop} from './awos-followups.js';
 // Durable orchestration only. Approval and history are always read back from AWOS.
 import {createHash} from 'node:crypto';
@@ -16,6 +17,7 @@ export function createAwosFlow(db,client,{hook=()=>{},onSupersede=()=>{}}={}){
  const columns=new Set(db.all('PRAGMA table_info(awos_ops)').map(c=>c.name));
  for(const name of ['parent_task_id','parent_binding_hash','intake_command_id','followup_id'])if(!columns.has(name))db.run(`ALTER TABLE awos_ops ADD COLUMN ${name} TEXT`);
  db.run(`CREATE TABLE IF NOT EXISTS awos_op_templates (op_id TEXT NOT NULL, version INTEGER NOT NULL, template_id TEXT NOT NULL, template_version INTEGER NOT NULL, variables TEXT NOT NULL, PRIMARY KEY(op_id,version))`);
+ const templateColumns=new Set(db.all('PRAGMA table_info(awos_op_templates)').map(c=>c.name));if(!templateColumns.has('language'))db.run('ALTER TABLE awos_op_templates ADD COLUMN language TEXT');
  const busy=new Set();
  const row=r=>r&&({...r,payload:JSON.parse(r.payload),decision_intent:r.decision_intent?JSON.parse(r.decision_intent):null});
  const all=()=>db.all('SELECT * FROM awos_ops ORDER BY created_at DESC,version DESC').map(row);
@@ -26,7 +28,7 @@ export function createAwosFlow(db,client,{hook=()=>{},onSupersede=()=>{}}={}){
  async function contact(id){const detail=await client.call('crm',id),c=detail.contacts?.find(c=>c.id===id&&c.status==='active'),ids=detail.identities?.filter(i=>i.active&&i.contactId===id);if(!c||!ids||ids.length!==1||!/^[^@\s]+@example\.test$/.test(ids[0].email))return null;return {...c,email:ids[0].email};}
  async function contacts(){const v=await client.call('crm');if(!Array.isArray(v.contacts))throw new AwosError('AWOS_RESPONSE_INVALID',502);const out=[];for(const c of v.contacts){const item=await contact(c.id);if(item)out.push(item);}return out;}
 
- function templateContext(r){const x=db.all('SELECT * FROM awos_op_templates WHERE op_id=? AND version=?',r.op_id,r.version)[0];return x?{templateId:x.template_id,templateVersion:x.template_version,variables:JSON.parse(x.variables)}:null;}
+ function templateContext(r){const x=db.all('SELECT * FROM awos_op_templates WHERE op_id=? AND version=?',r.op_id,r.version)[0];return x?{templateId:x.template_id,templateVersion:x.template_version,variables:JSON.parse(x.variables),...(x.language?{language:x.language}:{})}:null;}
  async function view(r){const v=await client.call('view',r.task_id),base=new Date(r.created_at),p=v.review?.payload??v.draft,payload={asunto:p?.subject??'',texto:p?.body??''},template=templateContext(r),basis=template?[r.request,...Object.values(template.variables)].join('\n'):r.request;return {opId:r.op_id,version:r.version,taskId:r.task_id,latest:r.version===last(r.op_id),legacyUnlinked:r.version>1&&!r.parent_task_id,stage:r.stage,request:r.request,desired:r.payload,template,intakeCommandId:r.intake_command_id??null,followupId:r.followup_id??null,businessStop:followupStop(db,r.op_id,r.version),state:displayState(v),avisosFecha:unexpectedDates(basis,payload,base),avisos:unexpectedNumbers(basis,payload,draftingDateReferences(basis,base).map(d=>d.date)),remote:v};}
  async function resumeRow(r){
   if(r.version>1&&!r.parent_task_id)throw new AwosError('AWOS_LEGACY_VERSION_UNLINKED');
@@ -56,7 +58,7 @@ export function createAwosFlow(db,client,{hook=()=>{},onSupersede=()=>{}}={}){
  async function prepare(input){
   if(!uuid(input.opId)||!uuid(input.commandId)||!Number.isSafeInteger(input.expectedVersion)||input.expectedVersion<0)throw new AwosError('AWOS_INPUT_INVALID',400);
   if(typeof input.subject!=='string'||!input.subject.trim()||input.subject.length>200||/[\r\n]/.test(input.subject)||typeof input.body!=='string'||!input.body.trim()||input.body.length>6000||typeof input.request!=='string'||input.request.length>8000)throw new AwosError('AWOS_INPUT_INVALID',400);
-  let tc=input.template;if(tc!==undefined){if(!tc||!uuid(tc.templateId)||!Number.isSafeInteger(tc.templateVersion)||tc.templateVersion<1||!tc.variables||typeof tc.variables!=='object'||Array.isArray(tc.variables))throw new AwosError('AWOS_INPUT_INVALID',400);try{tc={...tc,variables:validateVariables(tc.variables)};}catch{throw new AwosError('AWOS_INPUT_INVALID',400);}}
+  let tc=input.template;if(tc!==undefined){if(tc?.language!==undefined&&!validLanguage(tc.language))throw new AwosError('AWOS_INPUT_INVALID',400);if(!tc||!uuid(tc.templateId)||!Number.isSafeInteger(tc.templateVersion)||tc.templateVersion<1||!tc.variables||typeof tc.variables!=='object'||Array.isArray(tc.variables))throw new AwosError('AWOS_INPUT_INVALID',400);try{tc={...tc,variables:validateVariables(tc.variables)};}catch{throw new AwosError('AWOS_INPUT_INVALID',400);}}
   return locked(input.opId,async()=>{
    const c=await contact(input.contactId);if(!c)throw new AwosError('AWOS_CONTACT_INVALID',400);
    const payload={to:c.email,subject:input.subject,body:input.body,contactId:c.id};
@@ -82,7 +84,7 @@ export function createAwosFlow(db,client,{hook=()=>{},onSupersede=()=>{}}={}){
     if(last(input.opId)!==input.expectedVersion)throw new AwosError('AWOS_VERSION_CONFLICT');
     const version=input.expectedVersion+1,taskId=`p1-${input.opId}-v${version}`;
     db.run('INSERT INTO awos_ops (op_id,version,command_id,identity_hash,task_id,contact_id,request,payload,stage,created_at,parent_task_id,parent_binding_hash,intake_command_id,followup_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',input.opId,version,input.commandId,identity,taskId,c.id,input.request,JSON.stringify(payload),'recorded',new Date().toISOString(),previous?.task_id??null,parentBinding,intakeCommandId,followupId);
-    if(tc)db.run('INSERT INTO awos_op_templates (op_id,version,template_id,template_version,variables) VALUES (?,?,?,?,?)',input.opId,version,tc.templateId,tc.templateVersion,JSON.stringify(tc.variables));
+    if(tc)db.run('INSERT INTO awos_op_templates (op_id,version,template_id,template_version,variables,language) VALUES (?,?,?,?,?,?)',input.opId,version,tc.templateId,tc.templateVersion,JSON.stringify(tc.variables),tc.language??null);
     db.run('COMMIT');r=get(input.opId,version);
    }catch(e){db.run('ROLLBACK');throw e;}
    hook('recorded',r);return resumeRow(r);

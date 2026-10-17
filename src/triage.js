@@ -1,3 +1,4 @@
+import {resolveLanguage} from './language.js';
 // Clasificar un mensaje recibido (de cualquier canal) y preparar la respuesta.
 import { runDecision, runJson } from './ai/router.js';
 import { draftingDateReferences, unexpectedDates } from './draft-dates.js';
@@ -52,7 +53,7 @@ export function matchClient(clients, sender, text) {
     || null;
 }
 
-export async function triage(ctx, { text, channel = 'otro', sender = '' }) {
+export async function triage(ctx, { text, channel = 'otro', sender = '', draftLanguage }) {
   const { db } = ctx;
   const settings = ctx.settings();
   const base = nowDate(ctx);
@@ -65,10 +66,10 @@ export async function triage(ctx, { text, channel = 'otro', sender = '' }) {
   const a = decision.answers;
   const needsReply = a.responder.noul >= 0.5 && a.categoria.choice !== 'informativo';
 
-  const isolated = draftingRequest(db,text,base,{clientName:client?.name || sender,channel});
+  const isolated = draftingRequest(db,text,base,{clientName:client?.name || sender,channel,language:resolveLanguage(draftLanguage,settings.language)});
   const draft = await runJson(ctx, 'draft', {
     system: `${isolated.system}
-Resume el mensaje recibido. Prepara la respuesta y, si el mensaje pide seguimiento, identifica la tarea con los hechos del mensaje. No asignes fechas que no estén expresadas en la petición. Devuelve resumen, respuesta y tarea según el esquema.`,
+${resolveLanguage(settings.language)==='en'?'Summarize in English; write the reply in the requested draft language.':'Resume el mensaje recibido.'} Prepara la respuesta y, si el mensaje pide seguimiento, identifica la tarea con los hechos del mensaje. No asignes fechas que no estén expresadas en la petición. Devuelve resumen, respuesta y tarea según el esquema.`,
     messages: isolated.messages,
     schema: DRAFT_SCHEMA,
   });
@@ -81,6 +82,7 @@ Resume el mensaje recibido. Prepara la respuesta y, si el mensaje pide seguimien
   if (reply && needsReply) {
     proposals.push(db.proposals.create('redactar_mensaje', {
       cliente: who, canal: channel === 'correo' ? 'correo' : channel === 'whatsapp' ? 'whatsapp' : 'otro', asunto: '', texto: reply,
+      ...(settings.language||draftLanguage?{idioma:resolveLanguage(draftLanguage,settings.language)}:{}),
       avisos: unexpectedNumbers(text, { texto: reply }, draftingDateReferences(text,base).map(r=>r.date), client, { card: true }),
       avisosFecha: unexpectedDates(text,{texto:reply},base),
     }, 'clasificador'));

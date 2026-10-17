@@ -39,6 +39,7 @@ The helper prints its temporary root and local URL. The guard requires temporary
 ## Verification
 
 ```sh
+node scripts/check-i18n.mjs
 npm test
 npm test
 npm test --prefix runtime/awos
@@ -71,6 +72,6 @@ The first REM publication uses a clean public Git history with selected source f
 
 The bundled AWOS tree includes tracked implementation/workspace source and tests, rather than an unpinned reference to a developer's private checkout. Its root scripts expose the relevant test/build/typecheck operations; historical deployment and pilot instructions are not a production runbook for REM. Keep the upstream MIT notice. Future snapshot refreshes must identify source changes and rerun integration tests.
 
-The public documentation and interface are English. Some implementation comments, domain values, prompts, test names, and language-specific synthetic content remain Spanish for compatibility and measurement integrity. They are not customer records. Do not rename internal protocol identifiers as a cosmetic translation.
+The public developer documentation is English. The workspace supports Spanish and English through `public/i18n/es.json` and `en.json`; Settings → Language persists the selection without a page reload. See [the bilingual workspace contract](../docs/STEP_1_BILINGUAL_WORKSPACE.md). Some implementation comments, domain values, prompts, test names, and language-specific synthetic content remain Spanish for compatibility and measurement integrity. They are not customer records. Do not rename internal protocol identifiers as a cosmetic translation.
 
 No DMG is built or installed by publication. `scripts/build-mac.sh` remains a development packaging utility; executing it produces an ad-hoc-signed local artifact, not a notarized public release. Distribution is a separate gate.

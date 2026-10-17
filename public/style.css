@@ -732,3 +732,8 @@ input::placeholder,textarea::placeholder{color:var(--ink-3);opacity:1}
 @media(max-width:600px){.intake-panel .section-heading{align-items:stretch;flex-direction:column}.intake-panel button{width:100%}}
 
 .intake-panel button{border:1px solid var(--sello);background:var(--sello);color:var(--on-sello);padding:var(--space-2) var(--space-4);border-radius:var(--radius-control);font:var(--font-secondary)}.intake-panel button:focus-visible{outline:2px solid var(--sello);outline-offset:2px}
+
+/* Draft language remains labelled and wraps independently of the send controls. */
+.composer-row > label:not(.sr){display:grid;gap:var(--space-1);font:var(--font-note);min-width:0;color:var(--ink-2)}
+.composer-row > label:not(.sr) select{width:100%;min-width:0;max-width:100%}
+@media(max-width:600px){.composer-row > label:not(.sr){grid-column:1/-1}.composer-row > #prefer{grid-column:1/-1}}
