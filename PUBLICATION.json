@@ -4,7 +4,7 @@
   "scope": "Initial public REM developer foundation; clean history; English documentation and presentation",
   "sources": {
     "rem": {
-      "commit": "35ccafa5c21250f114273f1027fe40b1745114db",
+      "commit": "c9cc05572821d5c1c73ddc0442354ee195e762b6",
       "originalBaseCommit": "e5cba5367358812c8791adc2f3557d1530a0f86a"
     },
     "awos": {
@@ -199,8 +199,8 @@
     },
     {
       "path": "public/app.js",
-      "bytes": 68339,
-      "sha256": "dd087dc7a98f5b1f39b4f90fb3e597fcac12d2bc5063f4e74cdab7292d9936b2"
+      "bytes": 68365,
+      "sha256": "ff4e87b677bf739c4ffb67e3224ac3137205852ad08b52efa01f500c429915f2"
     },
     {
       "path": "public/awos-copies.js",

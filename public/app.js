@@ -815,7 +815,7 @@ settingsBox.addEventListener('click', async (e) => {
 });
 
 /* ---------------- Arranque ---------------- */
-const moduleLibrary=mountModuleLibrary({api,onOpen:item=>{go(MODULE_KINDS[item.manifest.kind].route);activeRemModule={id:item.manifest.id,kind:item.manifest.kind};document.dispatchEvent(new CustomEvent('rem-module-open',{detail:{kind:item.manifest.kind,id:item.manifest.id,title:item.installation?.config.title??item.manifest.name,subtitle:item.installation?.config.subtitle??item.manifest.description}}));}});
+const moduleLibrary=mountModuleLibrary({api,onOpen:item=>{go(MODULE_KINDS[item.manifest.kind].route);activeRemModule={id:item.manifest.id,kind:item.manifest.kind};document.dispatchEvent(new CustomEvent('rem-module-open',{detail:{kind:item.manifest.kind,id:item.manifest.id,title:displayText(item.installation?.config.title??item.manifest.name),subtitle:displayText(item.installation?.config.subtitle??item.manifest.description)}}));}});
 const copiesUI=mountCopies({api}),requestedView=location.hash.slice(1);
 (async()=>{
  await loadAroundMaintenance(load,async()=>{document.getElementById('awos-form').hidden=true;go('awos');await copiesUI?.refresh();});
