@@ -25,3 +25,9 @@ test('English built-in module labels never mutate authoritative source records',
 test('English warnings retain exact supplied values, escaping and no execution controls',()=>{
  const html=warningsHtml(['999','<script>'])+dateWarningsHtml(['16 de octubre']);assert.match(html,/999/);assert.match(html,/16 de octubre/);assert.match(html,/Check the date before approving/);assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>|<button/);
 });
+test('index.html declares the app icon and both icon files exist',()=>{
+ const html=readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
+ assert.match(html,/<link rel="icon" href="favicon\.ico"/);
+ assert.match(html,/<link rel="apple-touch-icon" href="favicon-180\.png"/);
+ for(const f of ['favicon.ico','favicon-180.png'])assert.ok(readFileSync(new URL(`../public/${f}`,import.meta.url)).length>100);
+});

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 200" width="760" height="200"><title>REM</title>
+<rect width="760" height="200" fill="#171719"/>
+<g transform="translate(30 30) scale(1.4)"><rect width="100" height="100" rx="24" fill="#2448B0"/><path d="M30 77V23h19a15.5 15.5 0 0 1 0 31H30M47 54l14 23" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="75" cy="73" r="15" fill="#8BD8AD" stroke="#2448B0" stroke-width="5"/><path d="M68 73.5l5 5.5 9-11" fill="none" stroke="#2448B0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="200" y="118" font-family="'Helvetica Neue',Helvetica,Arial,'SF Pro Display','Inter','Segoe UI',sans-serif" font-size="84" font-weight="700" letter-spacing="-2" fill="#F5F5F7">REM</text>
+<text x="204" y="156" font-family="'Helvetica Neue',Helvetica,Arial,'SF Pro Text','Inter','Segoe UI',sans-serif" font-size="24" fill="#A1A1AA">Tu oficina de trabajo, bajo tu control</text></svg>
