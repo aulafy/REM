@@ -1,0 +1,35 @@
+name: Verify REM foundation
+on: [push, pull_request]
+permissions:
+  contents: read
+concurrency:
+  group: rem-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TZ: Europe/Madrid
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: runtime/awos/package-lock.json
+      - run: npm ci --prefix runtime/awos
+      - name: Audit existing runtime dependency tree
+        run: npm audit --prefix runtime/awos --audit-level=high
+      - name: REM suite, first run
+        run: npm test
+      - name: REM suite, second run
+        run: npm test
+      - name: Runtime suite
+        run: npm test --prefix runtime/awos
+      - name: Runtime typecheck and build
+        run: |
+          npm run typecheck --workspace=@agent-world/pymes --prefix runtime/awos
+          npm run build --prefix runtime/awos
+      - name: Check patch formatting
+        run: git diff --check

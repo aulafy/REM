@@ -1,0 +1,20 @@
+dist/
+eval/results/
+*.db
+*.db-wal
+*.db-shm
+node_modules/
+.DS_Store
+
+# Local configuration, private material, and generated artifacts
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+client_secret*.json
+credentials*.json
+coverage/
+*.log
