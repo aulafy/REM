@@ -1,3 +1,4 @@
+import {resolveLanguage} from './language.js';
 // Agente personal: conversa, consulta los datos locales y PROPONE acciones.
 // Nunca ejecuta nada por su cuenta: cada acción espera la aprobación de la persona.
 import { runJson, runDecision } from './ai/router.js';
@@ -58,7 +59,7 @@ export function normalizeAction(a, agents = []) {
     case 'redactar_mensaje':
       // Los modelos pequeños a veces ponen el mensaje en otro campo.
       if (!s(a.texto)) a = { ...a, texto: a.mensaje || a.contenido || '' };
-      return s(a.texto) ? { cliente: s(a.cliente, 120), canal: ({ correo: 'correo', email: 'correo', mail: 'correo', 'e-mail': 'correo', whatsapp: 'whatsapp', wasap: 'whatsapp' })[s(a.canal).toLowerCase()] || 'otro', asunto: s(a.asunto, 200), texto: s(a.texto), ...Object.fromEntries(['avisos','avisosFecha'].filter(key=>Array.isArray(a[key])).map(key=>[key,a[key].filter(v=>typeof v==='string').slice(0,100)])) } : null;
+      return s(a.texto) ? { cliente: s(a.cliente, 120), canal: ({ correo: 'correo', email: 'correo', mail: 'correo', 'e-mail': 'correo', whatsapp: 'whatsapp', wasap: 'whatsapp' })[s(a.canal).toLowerCase()] || 'otro', asunto: s(a.asunto, 200), texto: s(a.texto), ...(['es','en'].includes(a.idioma)?{idioma:a.idioma}:{}), ...Object.fromEntries(['avisos','avisosFecha'].filter(key=>Array.isArray(a[key])).map(key=>[key,a[key].filter(v=>typeof v==='string').slice(0,100)])) } : null;
     case 'encargar': {
       if (!s(a.encargo)) return null;
       const name = s(a.agente).toLowerCase();
@@ -174,8 +175,9 @@ export function mergeActions(original, additions) {
   return result;
 }
 
-export async function askAgent(ctx, text, { prefer } = {}) {
+export async function askAgent(ctx, text, { prefer, draftLanguage } = {}) {
   const { db } = ctx, settings = ctx.settings(), base = nowDate(ctx);
+  const outputLanguage=resolveLanguage(draftLanguage,settings.language), interfaceLanguage=resolveLanguage(settings.language);
   const history = db.chat.list(12).map((m) => {
     if (m.role !== 'assistant') return { role: 'user', content: m.content };
     const acciones = (m.meta?.proposals || []).map((pid) => db.proposals.get(pid)).filter(Boolean).map((p) => ({ tipo: p.kind, ...p.payload }));
@@ -197,13 +199,14 @@ export async function askAgent(ctx, text, { prefer } = {}) {
   const generalNeeded = ctx.rules !== false && (!Number.isFinite(confidence) || confidence < .65 || multiple || disagreement);
   let general = null;
   if (generalNeeded) general = await runJson(ctx, 'chat', {
-    system: systemPrompt(db, settings, text, base), messages: [...history, { role: 'user', content: text }], schema: AGENT_SCHEMA, prefer,
+    system: systemPrompt(db, settings, text, base)+(interfaceLanguage==='en'?'\nWrite the response for the professional in English. Keep schema keys unchanged.':''), messages: [...history, { role: 'user', content: text }], schema: AGENT_SCHEMA, prefer,
   });
   const spec = EXTRACTIONS[intent] || EXTRACTIONS.conversacion;
-  const isolated = intent === 'mensaje' ? draftingRequest(db,text,base) : null;
+  const isolated = intent === 'mensaje' ? draftingRequest(db,text,base,{language:outputLanguage}) : null;
   const extracted = await runJson(ctx, intent === 'mensaje' ? 'draft' : 'chat', isolated ? {system:isolated.system, messages:isolated.messages, schema:objectSchema(spec.fields), prefer} : {
     system: `Eres un extractor para un asistente de un profesional. Responde solo con el objeto JSON del esquema, sin envoltorios ni acciones adicionales.
-${spec.instructions}
+${interfaceLanguage==='en'?spec.instructions.replace('Contesta brevemente en español.','Reply briefly in English.'):spec.instructions}
+${interfaceLanguage==='en'?'Write user-facing responses in English; preserve schema keys and literal names.':''}
 Claves exactas de la respuesta: ${JSON.stringify(Object.fromEntries(Object.keys(spec.fields).map((key) => [key, ''])))}. No devuelvas claves distintas.
 Hoy es ${today(base)} (${isoToday(base)}). Próximos días: ${nextDays(base)}.
 ${datePrompt(text, base)}
@@ -228,7 +231,7 @@ Las operaciones son propuestas pendientes de aprobación, nunca ejecutadas.`,
     // El planificador no tiene campos de borrador. Ninguno de sus textos se reutiliza.
     const same = addition?.tipo==='redactar_mensaje' && keyText(addition.cliente)===keyText(planned.cliente) && keyText(addition.canal)===keyText(planned.canal);
     if(same){originals.push(addition);continue;}
-    const req=draftingRequest(db,text,base,{clientName:s(planned.cliente,120),channel:s(planned.canal,40)});
+    const req=draftingRequest(db,text,base,{clientName:s(planned.cliente,120),channel:s(planned.canal,40),language:outputLanguage});
     const result=await runJson(ctx,'draft',{system:req.system,messages:req.messages,schema:objectSchema(EXTRACTIONS.mensaje.fields),prefer});
     drafted.push(result.text);
     const action=prepare({...result.data,tipo:'redactar_mensaje'});
@@ -237,13 +240,14 @@ Las operaciones son propuestas pendientes de aprobación, nunca ejecutadas.`,
   const actions = mergeActions(originals, addition ? [addition] : []);
   const proposals = actions.map(({ tipo, ...payload }) => {
     if (tipo === 'redactar_mensaje') {
+      if(settings.language||draftLanguage)payload.idioma=outputLanguage;
       payload.avisos = unexpectedNumbers(text, payload, draftingDateReferences(text,base).map(r=>r.date), db.clients.findByName(payload.cliente), { card: true });
       payload.avisosFecha = unexpectedDates(text,payload,base);
     }
     return db.proposals.create(tipo, payload, 'asistente');
   });
   let reply = String(general?.data?.respuesta || extracted.data?.respuesta || '').trim();
-  if (!reply) reply = proposals.length ? 'Te propongo esto para que lo revises:' : 'No he podido preparar una respuesta válida. ¿Puedes aclarar lo que necesitas?';
+  if (!reply) reply = proposals.length ? (interfaceLanguage==='en'?'Here is a proposal for your review:':'Te propongo esto para que lo revises:') : (interfaceLanguage==='en'?'I could not prepare a valid response. Please clarify what you need.':'No he podido preparar una respuesta válida. ¿Puedes aclarar lo que necesitas?');
   const meta = { via: extracted.via, decisionVia: decision.via, intent, modelIntent, signal, disagreement, confidence, multiple, generalUsed: generalNeeded, proposals: proposals.map((p) => p.id) };
   const id = db.chat.add('assistant', reply, meta);
   return { message: { id, role: 'assistant', content: reply, meta }, proposals, raw: [general?.text, extracted.text, ...drafted].filter(Boolean).join('\n').slice(0, 3000) };

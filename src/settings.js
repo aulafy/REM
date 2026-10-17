@@ -1,5 +1,6 @@
 // Ajustes con valores por defecto y validación. Las claves de API nunca se guardan aquí.
 export const DEFAULTS = {
+  language: null,
   profile: { name: '', business: '', sector: '', tone: 'cercano y profesional' },
   local: { enabled: true, url: 'http://127.0.0.1:11434', model: '' },
   external: { enabled: false, kind: 'openai', baseUrl: 'https://api.openai.com/v1', model: '', label: '' },
@@ -40,6 +41,10 @@ export function loadSettings(db) {
 
 export function saveSettings(db, patch) {
   const cur = loadSettings(db);
+  if (patch.language !== undefined) {
+    if (!['es', 'en'].includes(patch.language)) throw new ValidationError('Elige español o inglés.');
+    db.setSetting('language', patch.language);
+  }
   if (patch.profile) {
     const p = patch.profile;
     db.setSetting('profile', { name: str(p.name, 80), business: str(p.business, 120), sector: str(p.sector, 120), tone: str(p.tone || cur.profile.tone, 120) });

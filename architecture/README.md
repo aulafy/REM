@@ -10,7 +10,7 @@ This guide describes the current REM foundation and its intended direction. **So
 | [Security and data](security-and-data.md) | Physical stores, copies, replay, uncertainty, threat boundaries |
 | [Roadmap](roadmap.md) | What works, missing capabilities, priorities, acceptance and release gates |
 | [Verification](verification.md) | Executed gates and explicit limits for the initial publication |
-| [Development](development.md) | Setup, tests, source provenance, English publication boundary |
+| [Development](development.md) | Setup, tests, source provenance, Bilingual workspace and publication boundary |
 
 ## Purpose
 

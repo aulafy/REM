@@ -44,7 +44,7 @@ Migration to a default governed product, real sending, and installation/distribu
 ## Good first contributions
 
 - Reproduce a bug with a synthetic fixture and a focused test.
-- Improve English interface completeness and accessibility without changing business rules.
+- Improve Spanish/English catalogue completeness and accessibility without changing business rules.
 - Add independent English assistant evaluations.
 - Specify a document checklist or local appointment module using the existing contracts.
 - Design a connector with identity, scopes, cursors, quotas, recovery, and an explicit effects policy.

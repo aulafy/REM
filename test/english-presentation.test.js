@@ -1,15 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {renderStaticDocument} from '../public/i18n.js';
 import {displayText} from '../public/display-text.js';
 import {moduleCard} from '../public/module-ui.js';
 import {warningsHtml,dateWarningsHtml} from '../public/proposal-warnings.js';
 
-test('English navigation preserves domain identifiers and Spanish assistant examples are explicit',()=>{
- const html=readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
+test('Rendered English navigation preserves protocol identifiers and exposes draft-language selection',()=>{
+ const html=renderStaticDocument(readFileSync(new URL('../public/index.html',import.meta.url),'utf8'),'en');
  assert.match(html,/<html lang="en">/);
  for(const [id,label] of [['hoy','Today'],['asistente','Assistant'],['aprobaciones','Review'],['clientes','Clients']])assert.ok(html.includes(`data-view="${id}" aria-label="${label}"`));
- assert.match(html,/Spanish example:/);
+ assert.match(html,/Draft language/);
  assert.match(html,/name="cliente"/);assert.match(html,/\{\{cliente\}\}/);
  assert.match(html,/Approval does not send/);
 });

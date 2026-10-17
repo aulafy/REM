@@ -6,7 +6,7 @@ REM is an MIT-licensed foundation for building AI-assisted web applications for 
 
 The goal is practical: **start from working building blocks, adapt them to a real business, and keep important decisions accountable.** An implementer or forward-deployed engineer (FDE) can reuse the contracts and interfaces instead of rebuilding contacts, reviews, recovery, and process history for every customer.
 
-**Status: developer preview.** This is an evolving source project, not a turnkey production service or a finished autonomous business agent. The interface is being published in English; existing Spanish prompts and synthetic evaluation cases retain their original language so their meaning and scoring are preserved.
+**Status: developer preview.** This is an evolving source project, not a turnkey production service or a finished autonomous business agent. The workspace supports Spanish and English, with an immediate language selector in Settings and a separate language choice for new drafts. Existing Spanish evaluation cases retain their original wording and scoring. English model accuracy has not been measured by translating the interface.
 
 ## Who it is for
 
@@ -106,3 +106,7 @@ Please do not include customer records, credentials, OAuth downloads, private co
 ## License
 
 REM is distributed under the [MIT License](LICENSE). The bundled AWOS source retains its [MIT notice](runtime/awos/LICENSE). External services, AI model weights, and installed dependencies have their own terms and licenses; the repository does not relicense them.
+
+## En español
+
+REM es una base MIT para adaptar una oficina digital con IA al negocio de un autónomo o una pyme, con ayuda de un implementador. En **Ajustes → Idioma** puedes elegir español o inglés; la preferencia se guarda y el cambio conserva los formularios abiertos. Puedes elegir otro idioma al preparar un borrador. **Aprobar guarda el borrador: no lo envía.** Sigue siendo una versión para desarrolladores: el envío real, la instalación para usuarios no técnicos y las integraciones adicionales tienen sus propios pasos de validación.

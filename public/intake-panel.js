@@ -1,28 +1,146 @@
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export function intakeCards(data){
- if(!data||data.enabled!==true||!Array.isArray(data.messages)||!Array.isArray(data.intakes)||!Array.isArray(data.contacts))throw Error('Unrecognized request state.');
- return data.messages.map(m=>{const linked=data.intakes.find(i=>i.messageId===m.id&&i.stage==='linked'),pending=data.intakes.find(i=>i.messageId===m.id&&i.stage==='recorded'),contact=linked&&data.contacts.find(c=>c.id===linked.contactId);return `<article class="awos-card"><h4>${esc(m.sender||'No sender')}</h4><p class="help">${esc(m.channel)} · manual record; not evidence of connector receipt</p><pre class="awos-body">${esc(m.text)}</pre>${linked?`<p>Linked to AWOS CRM. Request history is retained.</p>${contact?`<button type="button" data-intake-propose="${esc(contact.id)}" data-intake-command="${esc(linked.commandId)}">Prepare proposal for ${esc(contact.name)}</button>`:'<p role="note">No unique fictional email is available. Review the CRM record.</p>'}`:pending?`<p role="status">Capture awaiting confirmation; do not create another contact.</p><button type="button" data-intake-resume="${esc(pending.commandId)}">Check and recover capture</button>`:`<button type="button" data-intake-select="${m.id}">Review contact in AWOS</button>`}</article>`;}).join('')||'<p>No saved requests yet. Paste one to start.</p>';
+import {currentUiMessage} from './i18n.js';
+import { bindValue, localized } from './i18n.js';
+import { t as tx } from './i18n.js';
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+export function intakeCards(data) {
+    if (!data || data.enabled !== true || !Array.isArray(data.messages) || !Array.isArray(data.intakes) || !Array.isArray(data.contacts))
+        throw Error(tx("intake-panel.intakeCards.unrecognized_request_state.c7dcf09"));
+    return data.messages.map(m => { const linked = data.intakes.find(i => i.messageId === m.id && i.stage === 'linked'), pending = data.intakes.find(i => i.messageId === m.id && i.stage === 'recorded'), contact = linked && data.contacts.find(c => c.id === linked.contactId); return tx("intake-panel.intakeCards.manual_record_not_evidence_of.84053a9", esc(m.sender || tx("intake-panel.intakeCards.no_sender.c0263cd")), esc(m.channel), esc(m.text), linked ? tx("intake-panel.intakeCards.linked_to_awos_crm_request.2ac0fed", contact ? tx("intake-panel.intakeCards.prepare_proposal_for.7dea73b", esc(contact.id), esc(linked.commandId), esc(contact.name)) : tx("intake-panel.intakeCards.no_unique_fictional_email_is.91706bb")) : pending ? tx("intake-panel.intakeCards.capture_awaiting_confirmation_do_not.6160df9", esc(pending.commandId)) : tx("intake-panel.intakeCards.review_contact_in_awos.37a70c6", m.id)); }).join('') || tx("intake-panel.intakeCards.no_saved_requests_yet_paste.75d18bd");
 }
-export function intakePreviewHtml(p){
- if(!p||!Array.isArray(p.matches)||typeof p.previewHash!=='string')throw Error('Unrecognized match result.');
- const active=p.matches.filter(c=>c.status==='active');return `<p>This records or links a prospect contact. It does not approve or send a proposal.</p>${p.matches.length?`<p>Email or phone matches exist. Select a contact; its details will not be overwritten and no identities will be added.</p>${active.length?`<label>CRM contact<select name="contactId" required>${active.length>1?'<option value="">Select a match</option>':''}${active.map(c=>`<option value="${esc(c.id)}">${esc(c.name)} · ${esc(c.emails.join(', ')||'no email')} · ${esc(c.phone)}</option>`).join('')}</select></label>`:'<p role="alert">Only archived contacts match. Review the CRM before continuing; no duplicate will be created.</p>'}`:'<p>No matches in the complete query. A prospect contact will be created in AWOS.</p>'}${p.matches.length&&!active.length?'':`<button type="submit">${p.matches.length?'Confirm contact link':'Create prospect contact in AWOS'}</button>`}`;
+export function intakePreviewHtml(p) {
+    if (!p || !Array.isArray(p.matches) || typeof p.previewHash !== 'string')
+        throw Error(tx("intake-panel.intakePreviewHtml.unrecognized_match_result.a2f3239"));
+    const active = p.matches.filter(c => c.status === 'active');
+    return tx("intake-panel.intakePreviewHtml.this_records_or_links_a.118fac9", p.matches.length ? tx("intake-panel.intakePreviewHtml.email_or_phone_matches_exist.ad98df3", active.length ? tx("intake-panel.intakePreviewHtml.crm_contact.88fe483", active.length > 1 ? tx("intake-panel.intakePreviewHtml.select_a_match.3354680") : '', active.map(c => `<option value="${esc(c.id)}">${esc(c.name)} · ${esc(c.emails.join(', ') || tx("intake-panel.intakePreviewHtml.no_email.eb249c0"))} · ${esc(c.phone)}</option>`).join('')) : tx("intake-panel.intakePreviewHtml.only_archived_contacts_match_review.7cb8b6f")) : tx("intake-panel.intakePreviewHtml.no_matches_in_the_complete.af8c2c5"), p.matches.length && !active.length ? '' : `<button type="submit">${p.matches.length ? tx("intake-panel.intakePreviewHtml.confirm_contact_link.d71b2da") : tx("intake-panel.intakePreviewHtml.create_prospect_contact_in_awos.1781284")}</button>`);
 }
-export function mountIntakes({api,document:doc=document}){
- const root=doc.getElementById('intake-panel');if(!root)return;
- root.innerHTML=`<header class="section-heading"><div><h3>AWOS requests and contacts</h3><p>Synthetic experiment · paste a message and review the contact before creating or linking it. No sending.</p></div><button type="button" data-intake-refresh>Refresh requests</button></header><p role="status" aria-live="polite" tabindex="-1" data-intake-status></p><form data-intake-paste class="card form"><label>Channel<select name="channel"><option value="correo">Email</option><option value="whatsapp">WhatsApp pegado</option><option value="telegram">Telegram pegado</option><option value="telefono">Phone</option><option value="otro">Other</option></select></label><label>Sender<input name="sender" maxlength="200"></label><label>Fictional request<textarea name="text" maxlength="8000" rows="4" required></textarea></label><button type="submit">Save request without AI</button></form><div data-intake-editor></div><div data-intake-list></div>`;
- const status=root.querySelector('[data-intake-status]'),list=root.querySelector('[data-intake-list]'),editor=root.querySelector('[data-intake-editor]');let data,selected=null,preview=null,busy=false,pendingPaste=null,pendingCapture=null;
- const message=t=>{status.textContent=t;status.focus({preventScroll:true});};
- async function refresh(){try{const next=await api('/api/awos/intakes');root.hidden=!next.enabled;if(!next.enabled)return;const html=intakeCards(next);data=next;list.innerHTML=html;}catch(e){root.hidden=false;data=null;list.innerHTML='';editor.innerHTML='';message('Cannot confirm CRM state. '+e.message);throw e;}}
- async function run(fn){if(busy)return;busy=true;root.querySelectorAll('button,input,textarea,select').forEach(b=>b.disabled=true);try{await fn();}catch(e){message('Operation unconfirmed. '+e.message);if(['AWOS_INTAKE_CRM_CHANGED','AWOS_INTAKE_REVIEW_REQUIRED'].includes(e.code)){preview=null;pendingCapture=null;const box=editor.querySelector('[data-intake-preview]');if(box)box.innerHTML='';}try{await refresh();}catch{}}finally{busy=false;root.querySelectorAll('button,input,textarea,select').forEach(b=>b.disabled=false);}}
- function select(id){selected=data?.messages.find(m=>m.id===Number(id));preview=null;pendingCapture=null;if(!selected){message('The request is no longer visible. Refresh the list.');return;}editor.innerHTML=`<section class="awos-card"><h4>Review request contact</h4><p>${esc(selected.text)}</p><form data-intake-check><label>Name<input name="name" maxlength="200" required></label><label>Fictional email<input name="email" type="email" maxlength="254" placeholder="persona@example.test" value="${esc(/^[^\s@]+@example\.test$/i.test(selected.sender)?selected.sender:'')}"></label><label>Phone<input name="phone" type="tel" maxlength="100"></label><p class="help">Enter an email or phone. Local clients are not used as an alternate CRM. Matching uses email or phone, not similar names. A match does not verify the sender’s identity.</p><button type="submit">Find matches in AWOS</button></form><form data-intake-confirm><div data-intake-preview></div></form></section>`;editor.querySelector('[name=name]').focus();}
- root.addEventListener('input',e=>{if(e.target.closest('[data-intake-check]')){preview=null;pendingCapture=null;editor.querySelector('[data-intake-preview]').innerHTML='';}});
- root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-intake-refresh'))return run(refresh);if(b.dataset.intakeSelect)return select(b.dataset.intakeSelect);if(b.dataset.intakeResume)return run(async()=>{await api('/api/awos/intakes/resume',{method:'POST',body:{commandId:b.dataset.intakeResume}});await refresh();message('Capture recovered from AWOS.');});if(b.dataset.intakePropose){const c=data.contacts.find(c=>c.id===b.dataset.intakePropose);if(c)doc.dispatchEvent(new CustomEvent('awos-intake-propose',{detail:{contactId:c.id,intakeCommandId:b.dataset.intakeCommand}}));}});
- root.addEventListener('submit',e=>{
-  const form=e.target;if(!form.matches('[data-intake-paste],[data-intake-check],[data-intake-confirm]'))return;e.preventDefault();run(async()=>{
-   if(form.hasAttribute('data-intake-paste')){const value={text:form.elements.text.value,sender:form.elements.sender.value,channel:form.elements.channel.value},identity=JSON.stringify(value);if(pendingPaste?.identity!==identity)pendingPaste={identity,body:{commandId:crypto.randomUUID(),...value}};const source=await api('/api/awos/intakes/messages',{method:'POST',body:pendingPaste.body});pendingPaste=null;form.reset();await refresh();select(source.id);message('Request saved. Review the contact details.');doc.dispatchEvent(new CustomEvent('awos-intakes-changed'));return;}
-   if(form.hasAttribute('data-intake-check')){preview=await api('/api/awos/intakes/preview',{method:'POST',body:{messageId:selected.id,name:form.elements.name.value,email:form.elements.email.value,phone:form.elements.phone.value}});editor.querySelector('[data-intake-preview]').innerHTML=intakePreviewHtml(preview);message('Matches loaded. Review and confirm the action.');return;}
-   if(!preview)throw Error('Refresh matches before confirming.');const value={messageId:preview.messageId,name:preview.name,email:preview.email,phone:preview.phone,previewHash:preview.previewHash,contactId:preview.matches.length?form.elements.contactId.value:null,confirmed:true},identity=JSON.stringify(value);if(pendingCapture?.identity!==identity)pendingCapture={identity,body:{commandId:crypto.randomUUID(),...value}};await api('/api/awos/intakes/capture',{method:'POST',body:pendingCapture.body});pendingCapture=null;preview=null;selected=null;editor.innerHTML='';await refresh();message('Request linked to AWOS CRM. You can prepare a proposal; it is not approved or sent.');doc.dispatchEvent(new CustomEvent('awos-intakes-changed'));
-  });
- });
- doc.addEventListener('awos-intake-select',e=>run(async()=>{await refresh();select(e.detail.messageId);}));return {refresh};
+export function mountIntakes({ api, document: doc = document }) {
+    const root = doc.getElementById('intake-panel');
+    if (!root)
+        return;
+    bindValue(root, "innerHTML", () => tx("intake-panel.mountIntakes.awos_requests_and_contacts_synthetic.73aea3b"));
+    const status = root.querySelector('[data-intake-status]'), list = root.querySelector('[data-intake-list]'), editor = root.querySelector('[data-intake-editor]');
+    let data, selected = null, preview = null, busy = false, pendingPaste = null, pendingCapture = null;
+    const message = t => { bindValue(status, "textContent", () => currentUiMessage(t)); status.focus({ preventScroll: true }); };
+    async function refresh() {
+        try {
+            const next = await api('/api/awos/intakes');
+            root.hidden = !next.enabled;
+            if (!next.enabled)
+                return;
+            const html = intakeCards(next);
+            data = next;
+            bindValue(list, "innerHTML", () => html);
+        }
+        catch (e) {
+            root.hidden = false;
+            data = null;
+            bindValue(list, "innerHTML", () => '');
+            bindValue(editor, "innerHTML", () => '');
+            message(tx("intake-panel.refresh.cannot_confirm_crm_state.0b2930d") + e.message);
+            throw e;
+        }
+    }
+    async function run(fn) {
+        if (busy)
+            return;
+        busy = true;
+        root.querySelectorAll('button,input,textarea,select').forEach(b => b.disabled = true);
+        try {
+            await fn();
+        }
+        catch (e) {
+            message(tx("intake-panel.run.operation_unconfirmed.2b417a0") + e.message);
+            if (['AWOS_INTAKE_CRM_CHANGED', 'AWOS_INTAKE_REVIEW_REQUIRED'].includes(e.code)) {
+                preview = null;
+                pendingCapture = null;
+                const box = editor.querySelector('[data-intake-preview]');
+                if (box)
+                    bindValue(box, "innerHTML", () => '');
+            }
+            try {
+                await refresh();
+            }
+            catch { }
+        }
+        finally {
+            busy = false;
+            root.querySelectorAll('button,input,textarea,select').forEach(b => b.disabled = false);
+        }
+    }
+    function select(id) {
+        selected = data?.messages.find(m => m.id === Number(id));
+        preview = null;
+        pendingCapture = null;
+        if (!selected) {
+            message(tx("intake-panel.select.the_request_is_no_longer.00a0190"));
+            return;
+        }
+        bindValue(editor, "innerHTML", () => tx("intake-panel.select.review_request_contact_name_fictional.5afc22c", esc(selected.text), esc(/^[^\s@]+@example\.test$/i.test(selected.sender) ? selected.sender : '')));
+        editor.querySelector('[name=name]').focus();
+    }
+    root.addEventListener('input', e => {
+        if (e.target.closest('[data-intake-check]')) {
+            preview = null;
+            pendingCapture = null;
+            bindValue(editor.querySelector('[data-intake-preview]'), "innerHTML", () => '');
+        }
+    });
+    root.addEventListener('click', e => {
+        const b = e.target.closest('button');
+        if (!b)
+            return;
+        if (b.hasAttribute('data-intake-refresh'))
+            return run(refresh);
+        if (b.dataset.intakeSelect)
+            return select(b.dataset.intakeSelect);
+        if (b.dataset.intakeResume)
+            return run(async () => { await api('/api/awos/intakes/resume', { method: 'POST', body: { commandId: b.dataset.intakeResume } }); await refresh(); message(tx("intake-panel.mountIntakes.capture_recovered_from_awos.b0d10b9")); });
+        if (b.dataset.intakePropose) {
+            const c = data.contacts.find(c => c.id === b.dataset.intakePropose);
+            if (c)
+                doc.dispatchEvent(new CustomEvent('awos-intake-propose', { detail: { contactId: c.id, intakeCommandId: b.dataset.intakeCommand } }));
+        }
+    });
+    root.addEventListener('submit', e => {
+        const form = e.target;
+        if (!form.matches('[data-intake-paste],[data-intake-check],[data-intake-confirm]'))
+            return;
+        e.preventDefault();
+        run(async () => {
+            if (form.hasAttribute('data-intake-paste')) {
+                const value = { text: form.elements.text.value, sender: form.elements.sender.value, channel: form.elements.channel.value }, identity = JSON.stringify(value);
+                if (pendingPaste?.identity !== identity)
+                    pendingPaste = { identity, body: { commandId: crypto.randomUUID(), ...value } };
+                const source = await api('/api/awos/intakes/messages', { method: 'POST', body: pendingPaste.body });
+                pendingPaste = null;
+                form.reset();
+                await refresh();
+                select(source.id);
+                message(tx("intake-panel.mountIntakes.request_saved_review_the_contact.d4e55c1"));
+                doc.dispatchEvent(new CustomEvent('awos-intakes-changed'));
+                return;
+            }
+            if (form.hasAttribute('data-intake-check')) {
+                preview = await api('/api/awos/intakes/preview', { method: 'POST', body: { messageId: selected.id, name: form.elements.name.value, email: form.elements.email.value, phone: form.elements.phone.value } });
+                bindValue(editor.querySelector('[data-intake-preview]'), "innerHTML", () => intakePreviewHtml(preview));
+                message(tx("intake-panel.mountIntakes.matches_loaded_review_and_confirm.ce5b75e"));
+                return;
+            }
+            if (!preview)
+                throw Error(tx("intake-panel.mountIntakes.refresh_matches_before_confirming.9e81e44"));
+            const value = { messageId: preview.messageId, name: preview.name, email: preview.email, phone: preview.phone, previewHash: preview.previewHash, contactId: preview.matches.length ? form.elements.contactId.value : null, confirmed: true }, identity = JSON.stringify(value);
+            if (pendingCapture?.identity !== identity)
+                pendingCapture = { identity, body: { commandId: crypto.randomUUID(), ...value } };
+            await api('/api/awos/intakes/capture', { method: 'POST', body: pendingCapture.body });
+            pendingCapture = null;
+            preview = null;
+            selected = null;
+            bindValue(editor, "innerHTML", () => '');
+            await refresh();
+            message(tx("intake-panel.mountIntakes.request_linked_to_awos_crm.0f35f58"));
+            doc.dispatchEvent(new CustomEvent('awos-intakes-changed'));
+        });
+    });
+    doc.addEventListener('awos-intake-select', e => run(async () => { await refresh(); select(e.detail.messageId); }));
+    return { refresh };
 }
