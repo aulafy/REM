@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/png/rem-wordmark-dark-en.png">
+    <img src="docs/assets/png/rem-wordmark-light-en.png" width="380" alt="REM">
+  </picture>
+</p>
+
 # REM
 
 ### A workspace you can shape around your business.
@@ -7,6 +14,16 @@ REM is an MIT-licensed foundation for building AI-assisted web applications for 
 The goal is practical: **start from working building blocks, adapt them to a real business, and keep important decisions accountable.** An implementer or forward-deployed engineer (FDE) can reuse the contracts and interfaces instead of rebuilding contacts, reviews, recovery, and process history for every customer.
 
 **Status: developer preview.** This is an evolving source project, not a turnkey production service or a finished autonomous business agent. The interface is being published in English; existing Spanish prompts and synthetic evaluation cases retain their original language so their meaning and scoring are preserved.
+
+## Screenshots
+
+Synthetic data only. These show the current interface and will be regenerated after the bilingual and Today steps of the roadmap.
+
+| Today | Proposals |
+|---|---|
+| ![Today](docs/assets/screenshots/today.png) | ![Proposals](docs/assets/screenshots/proposals.png) |
+| **Review** | **Today (375 px)** |
+| ![Review](docs/assets/screenshots/review.png) | <img src="docs/assets/screenshots/today-mobile.png" width="240" alt="Today on mobile"> |
 
 ## Who it is for
 
@@ -102,6 +119,12 @@ The project has been designed and developed with assistance from **Grok, Claude,
 Read [CONTRIBUTING.md](CONTRIBUTING.md). Useful contributions include reproducible bug reports, accessible interface improvements, module implementations, connector contract design, English assistant evaluations, recovery tests, and clearer documentation. Discuss new capabilities before implementing new external effects.
 
 Please do not include customer records, credentials, OAuth downloads, private conversation histories, or generated evaluation logs in issues or pull requests.
+
+## En español
+
+![REM](docs/assets/png/rem-wallpaper-1600x900-es.png)
+
+REM es una base MIT para construir espacios de trabajo con IA para autónomos y pequeñas empresas: contactos, tareas, propuestas, seguimientos y copias, todo local y con revisión humana. **Aprobar no envía nada.** La interfaz actual está en inglés; la versión bilingüe español/inglés está en desarrollo.
 
 ## License
 
