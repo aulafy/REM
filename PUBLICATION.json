@@ -1,0 +1,4046 @@
+{
+  "schemaVersion": 1,
+  "publicationDate": "2026-10-17",
+  "scope": "Initial public REM developer foundation; clean history; English documentation and presentation",
+  "sources": {
+    "rem": {
+      "commit": "35ccafa5c21250f114273f1027fe40b1745114db",
+      "originalBaseCommit": "e5cba5367358812c8791adc2f3557d1530a0f86a"
+    },
+    "awos": {
+      "commit": "2c41c8466f9f238a066096074067f2d49d050ea3",
+      "license": "MIT",
+      "path": "runtime/awos"
+    }
+  },
+  "adaptations": [
+    "English UI copy and presentation aliases; unchanged original-language assistant prompts and evaluation fixtures",
+    "Portable included-runtime test default",
+    "English public documentation and contribution/CI files",
+    "Curated runtime workspace source; root developer scripts limited to documented gates",
+    "No private history, handoffs, reports, credentials, databases, node_modules or installers",
+    "Existing transitive development dependency source-map-js patched from 1.2.1 to 1.2.2 in the runtime lockfile; no other package versions changed"
+  ],
+  "files": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "bytes": 428,
+      "sha256": "103f7c17038ff23b85ff65d34f5b2e78299430db9d6628a93373efa61908ee94"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/module_proposal.md",
+      "bytes": 458,
+      "sha256": "8400cec94421be6cb7587307f3d53a9e4f58a8b6da09ceada6180b5b204af08f"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "bytes": 563,
+      "sha256": "8f214b1ff25dbab188e323dcddea291cdf93c287ecf828004ac4e20725383614"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 1058,
+      "sha256": "c33ed673195455c432aaf99d01274e59b79df9168b4bcce316c75939310ac6e5"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 237,
+      "sha256": "8066d41c4bf33be74a66d6db355762cfc410fe61bacf9ee40832fd2031b7ba95"
+    },
+    {
+      "path": ".nvmrc",
+      "bytes": 3,
+      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 2283,
+      "sha256": "fc05652f6b419697d15866c58085d6ab953eceebbee3bc4c893f8a4d6f10d75e"
+    },
+    {
+      "path": "AI_ASSISTANCE.md",
+      "bytes": 2100,
+      "sha256": "25e3fa8049deecf568f298ed1e5b5890e5694add8e715d115dd4d4bca7dd6425"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 4330,
+      "sha256": "492480d258d5b48cacd4f7424bc8409a784fdb934d2441bd7bc87d6df7a2a429"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1112,
+      "sha256": "50a9f47f4302b8c28f2e5a13494578bf60c599984c4ae1f553330dc505de9286"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8220,
+      "sha256": "d3a354fc6bf8192317f4d6a78db9e1aa907a8f167695890f891afec655085bb9"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 2465,
+      "sha256": "8f196460c0df4f8201e4172e77df8375116827d0620c3be2affbb2f0bdfa2e76"
+    },
+    {
+      "path": "architecture/README.md",
+      "bytes": 3142,
+      "sha256": "ba6b486b14366eeefab6503038aa7a8a49e30513290112d89391ca30e45e5940"
+    },
+    {
+      "path": "architecture/architecture.md",
+      "bytes": 7772,
+      "sha256": "5b76542d0ff5f4358d0b69f3eb986a86b907c15415c0a6e069eda1a94d7301d8"
+    },
+    {
+      "path": "architecture/data-flows.md",
+      "bytes": 7292,
+      "sha256": "fd171c97d9c326f4537d5a59b9ffd360fd6bcd8b27a71821164e2748217e7597"
+    },
+    {
+      "path": "architecture/development.md",
+      "bytes": 5563,
+      "sha256": "c9948cdf4df5c85d940c5718417c2e31c6a5518c3f5c53eb88f25c6814743dcb"
+    },
+    {
+      "path": "architecture/modules.md",
+      "bytes": 6188,
+      "sha256": "d6226fe45e9740a6013da79ab2e8f772d1a222194c92ff3b81731d9d3f7fadd4"
+    },
+    {
+      "path": "architecture/roadmap.md",
+      "bytes": 5974,
+      "sha256": "6320ca0aec807c268034d7d33b34e487fff5e43550dc238aeb7b641bf1833c4e"
+    },
+    {
+      "path": "architecture/security-and-data.md",
+      "bytes": 5220,
+      "sha256": "0035fc0c21c3676d78f1c2b13f37db541714b4ad3b63e6bd4d4c335f2f9f959f"
+    },
+    {
+      "path": "architecture/verification.md",
+      "bytes": 4330,
+      "sha256": "2ee8e5a4703e3e030a914501d611cb32d8cc81a46c0accfa2a4447b245ab6cd8"
+    },
+    {
+      "path": "dev/parallel/opencode-packet.json",
+      "bytes": 323,
+      "sha256": "2ca5baa337526f5918430ce641f02b02557be59defe7ac543c8b30c739d7f513"
+    },
+    {
+      "path": "dev/parallel/revision-modulos.json",
+      "bytes": 1310,
+      "sha256": "0c87ad9358ace0497e0b942e9840315eb1e04971e55d884ec233766a75a13702"
+    },
+    {
+      "path": "docs/MODULES.md",
+      "bytes": 513,
+      "sha256": "7a1cd8def6907a741776ff21a6f15ec201f3f93abab502bfc0a45799eef9aba4"
+    },
+    {
+      "path": "docs/PARALLEL_DEVELOPMENT.md",
+      "bytes": 1724,
+      "sha256": "998a343666075405027654976fa070ade79cb62fa2f2736777338dce0c48c6b4"
+    },
+    {
+      "path": "docs/PUBLICATION_NOTES.md",
+      "bytes": 1114,
+      "sha256": "422ea50599f43277b62d2eaa39fac80407a82767d9de217c0f033b4f0109d4bf"
+    },
+    {
+      "path": "eval/casos.json",
+      "bytes": 8147,
+      "sha256": "62faa77b2c7a8ceefbe019acfea28b505fb1692bd7298b3f7ce932a298e46ff6"
+    },
+    {
+      "path": "eval/examen.json",
+      "bytes": 6278,
+      "sha256": "28392dde55722519a9998bfc9bd44822a46d554a8a8221081b6de5e475e01d64"
+    },
+    {
+      "path": "eval/examen2.json",
+      "bytes": 1674,
+      "sha256": "858a3d2dd89e3835c551db8204e1a8ee61ae471ed8264eff71eadbca3a7e1258"
+    },
+    {
+      "path": "eval/examen3.json",
+      "bytes": 4970,
+      "sha256": "3ebd4b58a6923dd1afb95bd761ef5e1eb2dc252225519b57e7cf9d61f2556aab"
+    },
+    {
+      "path": "modules/README.md",
+      "bytes": 1770,
+      "sha256": "d680c41724ac890ea4bb0fb9dcaecc76666fba055c6be018569bdc4bf5ee65d3"
+    },
+    {
+      "path": "modules/closure/index.js",
+      "bytes": 207,
+      "sha256": "da2633d003014cf4d66b721fd8cd2981f7d1d8a666cdf93921e01454cf5d7c7e"
+    },
+    {
+      "path": "modules/followups/index.js",
+      "bytes": 242,
+      "sha256": "3c46bef8d34cc9c7a8211303bf51c3af0c2266e98e76fc2072921bbfe12802f5"
+    },
+    {
+      "path": "modules/proposals/index.js",
+      "bytes": 250,
+      "sha256": "2bc8ebb60e39415f8b92a0bdbc13e550ecb3752568b057ea0c25a3d8f8f6cb7a"
+    },
+    {
+      "path": "modules/requests/index.js",
+      "bytes": 229,
+      "sha256": "eacd92fe86016fbd734c35c5565e6736c880bf0c741d7b0da4c8840447b8e6b4"
+    },
+    {
+      "path": "package.json",
+      "bytes": 877,
+      "sha256": "1ae7045cae64f1dcb729a842e91046dc3118a3137c681160a36ca66a70a3bba0"
+    },
+    {
+      "path": "public/app.js",
+      "bytes": 68339,
+      "sha256": "dd087dc7a98f5b1f39b4f90fb3e597fcac12d2bc5063f4e74cdab7292d9936b2"
+    },
+    {
+      "path": "public/awos-copies.js",
+      "bytes": 10683,
+      "sha256": "d45e527f48d7afdfe420daa32a98e56f4e328fe49e34b070bf607ee589825e9e"
+    },
+    {
+      "path": "public/awos-panel.js",
+      "bytes": 20348,
+      "sha256": "278dada37a753f25ce45f419c7525511494e1115be8e7d02fe66dbe52fda212b"
+    },
+    {
+      "path": "public/business-controls.js",
+      "bytes": 2613,
+      "sha256": "88de10d5d0f61f5d8409dc756dce5d003f1b88b03b32a37c354551b811016b1c"
+    },
+    {
+      "path": "public/display-text.js",
+      "bytes": 4437,
+      "sha256": "678fd305306cf991357495d1488e2833f62fe11ec93aea4b729f055b670b9680"
+    },
+    {
+      "path": "public/followup-controls.js",
+      "bytes": 1297,
+      "sha256": "fa6b891734b8a9b73148af043628d1aadd5e785ebf168380b9ce4ff8654757cb"
+    },
+    {
+      "path": "public/index.html",
+      "bytes": 27113,
+      "sha256": "20831c05be96299e4b6b79030fc68d2217fb9782093e6f493861ff9b2ffb3433"
+    },
+    {
+      "path": "public/intake-panel.js",
+      "bytes": 8610,
+      "sha256": "2005cb4ee3140401dee6fba8ee3d1f5d82750b0c7d39e20d3a6e004e4594bb55"
+    },
+    {
+      "path": "public/model-capacity.js",
+      "bytes": 1349,
+      "sha256": "55042c384dcaa816ac0da49b8141238ddf5d79293c88587610095657656ddd17"
+    },
+    {
+      "path": "public/module-contract.js",
+      "bytes": 6571,
+      "sha256": "2a11a5c0f441854437627a023717edcacae529436a8f417341fa2966ab34c389"
+    },
+    {
+      "path": "public/module-library.js",
+      "bytes": 8401,
+      "sha256": "0e25f5f3890eb885bc9290ae069de0f177c2449281ba72a3968060e6636f8b81"
+    },
+    {
+      "path": "public/module-ui.js",
+      "bytes": 6284,
+      "sha256": "cce6a58c56233a409471481fa04aafa1aaf6e13379d73e56ba292d211ce1a3ee"
+    },
+    {
+      "path": "public/modules.css",
+      "bytes": 16749,
+      "sha256": "b33837515ef960111d92ec5d5934fc2e57df860067c19d3b4cf19cdab3ac704f"
+    },
+    {
+      "path": "public/proposal-warnings.js",
+      "bytes": 1058,
+      "sha256": "67c8478ab2db2d05731f3ba2fee630e51e7f3a603cf5321dde3a147142a22548"
+    },
+    {
+      "path": "public/style.css",
+      "bytes": 59287,
+      "sha256": "24a2401fa9d1420ab79a1d98468a5a450d2ca9d87ee8e9343cf9025c6bd2cf75"
+    },
+    {
+      "path": "runtime/awos/.npmrc",
+      "bytes": 19,
+      "sha256": "7151cf397def0c2cb0ab65643701d27d335a72c90f775675b5f826bc7005818a"
+    },
+    {
+      "path": "runtime/awos/LICENSE",
+      "bytes": 1063,
+      "sha256": "5ff4bf766dc7494860d607b4e43bb42c5dcaf21c2661daa13e3bc92f5b8f0ee1"
+    },
+    {
+      "path": "runtime/awos/README.md",
+      "bytes": 1124,
+      "sha256": "d5b5d45f1696b43b1bf6cf6657c211a70a91c679a42fd28026bceb80f3c8907d"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/package.json",
+      "bytes": 1200,
+      "sha256": "bd870fd0d3e90bde1fb2ad00e243b586ff5f055b0bcf4bbda60d5b0b20d7b526"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/src/demo-control-plane.ts",
+      "bytes": 37475,
+      "sha256": "ea7978f51148f79a176315aa04e306a3948929505953011ef2c2b91c20fd4fa5"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/src/h3-demo.ts",
+      "bytes": 2770,
+      "sha256": "2513a3db3509c8f589fab63704887a905e4bd28e6332873db850101cd0df9d3a"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/src/h3-goal-service.ts",
+      "bytes": 12092,
+      "sha256": "06bb5b90e787f83caeecf5c13dc5c56588aae896aafc7e8122f919702e515058"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/src/h4-demo.ts",
+      "bytes": 4251,
+      "sha256": "21eb57747539baed9540dd45b2192fbfdd254cda401d2f3e008323da9b7a2fdc"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/src/h4-lost-response-demo.ts",
+      "bytes": 6350,
+      "sha256": "967cd906e510bb6635ac24f6175d4a5c2480c0792ac9eadf958bb4bbfd2a21ca"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/src/index.ts",
+      "bytes": 25077,
+      "sha256": "3396ca98007f657f5cfe5fad4b2b55127efd3a528f437551a8357f244827fabe"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/src/operator-snapshot.ts",
+      "bytes": 6088,
+      "sha256": "b0014d27cac261b9d63942a01bbecfa9d1c8e3561f0c06dee565f1ad0378328d"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/demo-control-plane.test.ts",
+      "bytes": 4262,
+      "sha256": "19c7d7be49936ee3d434945a00f61272da1b2a1c8c83174e17e6656caaa3616f"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/durable-control-plane.test.ts",
+      "bytes": 4181,
+      "sha256": "ec1dd3ce4b92d80a2d06f9d07f7a66bcaae5d87e59bac7f0783fc50fae14c578"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/filesystem-control-plane.test.ts",
+      "bytes": 8763,
+      "sha256": "4841954861ed81c1f8184452d785f19bba8ced9a1d5252b66a641850ba5a0576"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/filesystem-crash.test.ts",
+      "bytes": 3991,
+      "sha256": "de8c7cb8f622188c3f0ff07b18e0cd02ae59da497ef79a9502d7beb4d07ba603"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/filesystem-gates.test.ts",
+      "bytes": 6482,
+      "sha256": "7920bbcddf6dd89f33b26be63e25c5c3731df902539e9d97b88824253cc25fa9"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/fixtures/kill-after-dispatch.ts",
+      "bytes": 1328,
+      "sha256": "625648d79cfb4d3d5e6c8e1ca60ab81e12b35e6e6c9f9b0e7cf55f4d6b36961c"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/fixtures/kill-filesystem-write.ts",
+      "bytes": 4626,
+      "sha256": "c95ae4543b9a4c02860edc1cd019a48fb17ef01f56fe0c79c2706f59214a0fa2"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/fixtures/kill-http-api.ts",
+      "bytes": 2163,
+      "sha256": "050ed5b492cb8fcab1a387a507e84d8de648500c25e21ca6902eddb27e594a6b"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/h3-goal-service.test.ts",
+      "bytes": 11165,
+      "sha256": "86c627e35f3fa0d756c6c75cec166fddce4215bec57dfd000d2e187dbcb997f9"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tests/http-api-control-plane.test.ts",
+      "bytes": 23625,
+      "sha256": "a6c5f0815e2bc87d1091f47f25e55c90e730c92a2ff5ecef5222374bcd8b2e48"
+    },
+    {
+      "path": "runtime/awos/apps/agent-runtime/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/demo.html",
+      "bytes": 6447,
+      "sha256": "024c7cd203c597e8dcbd81723f909bc734df8c684d38fb72b66fb5a11af8fc98"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/index.html",
+      "bytes": 6092,
+      "sha256": "7ddac0851ca273ccb016b7fc63fc01ae0c0add1a900c2d0346668ba305830bde"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/package.json",
+      "bytes": 317,
+      "sha256": "5a5b89dfba79958e0d30fcf179a7a3a12532d26a2d84050e53c30a95149be6eb"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/src/demo.css",
+      "bytes": 10570,
+      "sha256": "32baf2de1737bf9ecccca6eb6d7613984342e086551610404b42cb5ea1068a6d"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/src/demo.ts",
+      "bytes": 12017,
+      "sha256": "c6768f2343e507a98b1c04e992947a5b307aeed53397fa7f41715fe6966a5b20"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/src/main.ts",
+      "bytes": 17886,
+      "sha256": "1bfe142d6f90f2b9897b70c55d36a27a2c04eb807475bbfd5c81156138f186e1"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/tsconfig.json",
+      "bytes": 227,
+      "sha256": "6dab5b42d4acc45b4b1e1ae46d0ffc640368079653ab353b1790e05653c2e1c9"
+    },
+    {
+      "path": "runtime/awos/apps/world-client/vite.config.ts",
+      "bytes": 263,
+      "sha256": "2b48a0c2194e2eb390aeae607f99014ec0076efd59289e0e36fd8406cba04664"
+    },
+    {
+      "path": "runtime/awos/package-lock.json",
+      "bytes": 73057,
+      "sha256": "404519d6cf4c5baed4bd7bb611bf799565ad2580923c606bc62f19c824a560a8"
+    },
+    {
+      "path": "runtime/awos/package.json",
+      "bytes": 394,
+      "sha256": "92af9e163a82fa0637198c238a1925776b01013eaa9cb34c8934147eaf67399a"
+    },
+    {
+      "path": "runtime/awos/packages/artifacts/package.json",
+      "bytes": 427,
+      "sha256": "e220404e7eb51192c3ed0d83f469c5dd0585a1eb4b35551601eee61af7a7d657"
+    },
+    {
+      "path": "runtime/awos/packages/artifacts/src/index.ts",
+      "bytes": 2399,
+      "sha256": "6b7ed2b8dbceeef5f5b9f2b4d298c82c18a2a6864bdf97b9916b7d1d6b392f10"
+    },
+    {
+      "path": "runtime/awos/packages/artifacts/tests/artifacts.test.ts",
+      "bytes": 1669,
+      "sha256": "b80036671a92821b236e9a86247d4aaeceae8049b92715e51027e81f852ed496"
+    },
+    {
+      "path": "runtime/awos/packages/artifacts/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/package.json",
+      "bytes": 356,
+      "sha256": "0e51efc483782ad4c698c39474d23542c143ca35f7cda040553e2aa1807eb0cb"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/budget-account.ts",
+      "bytes": 787,
+      "sha256": "263cebc7d11ba7a44d3cb3979e8f265693d05804ba56473df31470b52c7e84c7"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/budget-ledger-store.ts",
+      "bytes": 1617,
+      "sha256": "f1bc5edfe5f8b803c97914357b0a3e7be4e3c9e839b0b676a755767e1a206d53"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/budget-reservation.ts",
+      "bytes": 798,
+      "sha256": "1ddc5f449937aed742cc734df78c7b59964710770fb232d0d340d8a16b68c210"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/budget-vector.ts",
+      "bytes": 2917,
+      "sha256": "207385da1c889943ebad2a5e57c41df1297dd46d655b9ab839351598a77e90f2"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/clock.ts",
+      "bytes": 102,
+      "sha256": "065677b7ad9806a386531a79b1c65a82106a458601ec27999fbed29ca840ae4a"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/errors.ts",
+      "bytes": 901,
+      "sha256": "9e4961c765a3fdaadb063754dd95a97c155c3c8f071930d904b13b2f90373fdd"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/in-memory-budget-ledger.ts",
+      "bytes": 15402,
+      "sha256": "25aa20ef78b996ef46c121ff20baf4ef8cad6433b81250c509e4705b7a5913de"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/src/index.ts",
+      "bytes": 259,
+      "sha256": "5c19e29498e6d28f5a10a0ff6ac064141252c00f0fe4698f1b41a500f5cca938"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/tests/budget-ledger.test.ts",
+      "bytes": 7717,
+      "sha256": "f10807d8c62a3e344db60b201b2885eaa2938b5792f98e6d363f8e5356e65cbe"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/tests/budget-vector.test.ts",
+      "bytes": 1440,
+      "sha256": "90e34ad3b9c24a3940d9d1c84e3e1c1898702fdaaeaa1f6cbfdbb8a668e8a6f2"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/tests/hierarchy.test.ts",
+      "bytes": 2784,
+      "sha256": "8f36e462f37e22221a80ec730cc12f213a8e58fbf5322422a1c3267609ec7caa"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/tests/reservation.test.ts",
+      "bytes": 2840,
+      "sha256": "b79b6d08b81d0f946e0a0db766b87eba4f3f62e78372f047365855a363f3576a"
+    },
+    {
+      "path": "runtime/awos/packages/budgets/tsconfig.json",
+      "bytes": 132,
+      "sha256": "7d58cbcc2437e988d33ec03f4681b84144a32b8fab95499f9b3182fe3eaef9f3"
+    },
+    {
+      "path": "runtime/awos/packages/capabilities/package.json",
+      "bytes": 383,
+      "sha256": "1f0e9a31c6623584817b178c6d625914e7119806b9f2bc4db2a4a2368aa5b0dd"
+    },
+    {
+      "path": "runtime/awos/packages/capabilities/src/index.ts",
+      "bytes": 1475,
+      "sha256": "6f1c2d0df7afe60d56067ef55c8f8020ffff3516ca876b8671a1d3beb7036731"
+    },
+    {
+      "path": "runtime/awos/packages/capabilities/tests/registry.test.ts",
+      "bytes": 735,
+      "sha256": "3e7119738c7dd9cb48b5df0b3800ffeca0882488896b8a15b44a74538dd0577e"
+    },
+    {
+      "path": "runtime/awos/packages/capabilities/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/package.json",
+      "bytes": 547,
+      "sha256": "546af9b8656c6a527c9596b3610979e93eea76ab8fc2210591221ee0b19961b1"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/action-registry.ts",
+      "bytes": 2302,
+      "sha256": "77917dbec316903d5b39589bb36750e9005b84b093abcae370ce747174e3d364"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/approval-store.ts",
+      "bytes": 2259,
+      "sha256": "0f001db19526b10df7a9f87fffcfb8f548055dfc6c68197b17999b7aac8b0478"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/composition-engine.ts",
+      "bytes": 2646,
+      "sha256": "02c0c20341e8f1042ca4ac7f6a3baf0ab74a39731b5292de81b77233dc0695d8"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/fact-compiler.ts",
+      "bytes": 4405,
+      "sha256": "a74fcba3232e12b4b0d01f5726b11ba0a9ab5925fd07f5270059f0a7116fafe4"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/history-store.ts",
+      "bytes": 2608,
+      "sha256": "300c7d4fa134caac110752586031d8019aca8267978468e39baeb3185e99e254"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/index.ts",
+      "bytes": 244,
+      "sha256": "48cd92735e864b8caec60961ac6a97405e260c04a6f0bdf99aee629c15d41c3f"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/rules.ts",
+      "bytes": 1726,
+      "sha256": "75eb1a256f522dc6dbdaed9c3c33d9f6c953107a1676d47626a71c5f8d500e74"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/src/types.ts",
+      "bytes": 2481,
+      "sha256": "bba01a5d617ba2c42f37e7dd4592a320dc1e476757d319cb94f7b8d2fc424f7b"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/tests/approvals.test.ts",
+      "bytes": 2302,
+      "sha256": "64112e70539751af22585302e0616756b2cd4d77a3577a04e069f4a177db0094"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/tests/composition-engine.test.ts",
+      "bytes": 3560,
+      "sha256": "b1558b918dd17d69bc882416409f111d01057e19c7832ce1e3e5c86d4edf9cde"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/tests/fact-compiler.test.ts",
+      "bytes": 6708,
+      "sha256": "6584a5f9c42d1d8a6b9c5c69ced44dbac9dcaa1da2e021f6ce4e1615c5eeb854"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/tests/helpers.ts",
+      "bytes": 2954,
+      "sha256": "42d0b5a537e248abfac0c2bae8eb7c974ed821554c82ea6b03bb5fe913228218"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/tests/history-store.test.ts",
+      "bytes": 1655,
+      "sha256": "b7b6786a0edc1f415f9a1612400856a15b35d797ff3b47034e3a5cda022fdde5"
+    },
+    {
+      "path": "runtime/awos/packages/composition-policy/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/package.json",
+      "bytes": 647,
+      "sha256": "a54b572d906da975851f954b85f4cb951ecfee87b513b15701ce484f46c2b178"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/src/canonical.ts",
+      "bytes": 884,
+      "sha256": "1c06529d17c4802836e4a2717ee7916ae3b3273df382597ea41a0ea95557a352"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/src/engine.ts",
+      "bytes": 9677,
+      "sha256": "47fdf626c727da1550c4fcd7b91a71b57cb5426b3b49afa665e8fd6deb4ae514"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/src/index.ts",
+      "bytes": 122,
+      "sha256": "f97bfcbb2bb025fea92398c6368b4ae2a31b43f0ec3c93003c7751e55542db72"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/src/ledger-sources.ts",
+      "bytes": 1766,
+      "sha256": "e958a684a29888ca41490f1f2e95dc7b1265a50e6e5852772c9082433c2f8423"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/src/store.ts",
+      "bytes": 1223,
+      "sha256": "c02a8191f8166a38146a24a330af1c4b1332b348d01e2e55828ed0d7801d1d8d"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/src/types.ts",
+      "bytes": 1970,
+      "sha256": "0287a5b79958771989a9f02a3f15ea20fed1f1ce918060965603a2d202f73cf9"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/tests/context.test.ts",
+      "bytes": 7985,
+      "sha256": "cdeea692138c78d8e8950292a8f54b398fd45a4d39cfb0e9dda72c68dd3a77e5"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/tests/helpers.ts",
+      "bytes": 3329,
+      "sha256": "cd0493e7e233331d776a0a2874b8d21dcc336720fb267918ba1ea6da0eae7101"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/tests/ledger-sources.test.ts",
+      "bytes": 2438,
+      "sha256": "ef373eb22517b629e88cac5c3ea7df53d6377bd1fbfb0f8429a3b0f54c27bb36"
+    },
+    {
+      "path": "runtime/awos/packages/context-engine/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/package.json",
+      "bytes": 432,
+      "sha256": "be842d1499542fdd697de9ea2e1191662f015f64ac3d73231bc1a7032e5b4c5d"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/src/contract-store.ts",
+      "bytes": 403,
+      "sha256": "79caf744f790eeffc83c31a64cbe49dd7d0889815006b3b5cc9764645d36814c"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/src/contract-validator.ts",
+      "bytes": 4611,
+      "sha256": "42a9c83f32f03dd0286e9731bb5d37947e96901c477dcdc0ed393469f609a5f4"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/src/contract.ts",
+      "bytes": 1500,
+      "sha256": "a36b977fae92e4e8ed2d463c1c1fcfc6d6b2100dbdf338adcd0c9230832bcf63"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/src/in-memory-contract-store.ts",
+      "bytes": 2009,
+      "sha256": "8b1bba8129fe2c12edc8c2aa13114a25053706b27e977f9d1d01befce557d1ae"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/src/index.ts",
+      "bytes": 156,
+      "sha256": "3ed53da840c22dd8bfbed861be0d670d681fbe7d6339c39b63d11544786cefe8"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/tests/session-contract.test.ts",
+      "bytes": 4801,
+      "sha256": "f79390f0da92f9222d6944447a04462589314c7dea801fc60e19f5402d0cdf1e"
+    },
+    {
+      "path": "runtime/awos/packages/contracts/tsconfig.json",
+      "bytes": 121,
+      "sha256": "9e388ea60852028037c4fd8a6e0311c02d4ff1703d66e5f9b22276b07dcb82d2"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/package.json",
+      "bytes": 875,
+      "sha256": "60a07dfaf614455bdd4626d0f06a8059b7f93180c14049b42a6683fa2d7c1ad2"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/src/commit-gate.ts",
+      "bytes": 7227,
+      "sha256": "8d1a39a1da1f0e21d10fe9c750912e2972cf3fff2d1d3a7eef8245105b623433"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/src/governed-action-runner.ts",
+      "bytes": 14704,
+      "sha256": "3998f10a283ffc65a6eaf6abadb34528af3b8cad81a119b4fbf08d59e4f9ec80"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/src/index.ts",
+      "bytes": 145,
+      "sha256": "512e6b15ce57c1b27ad84c46a8d104ad0549e5e13a976049d095ae4335afed9c"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/src/task-completion.ts",
+      "bytes": 3593,
+      "sha256": "5b2686aff3241c92201dec8e97906f0820dc91b25f0b44e952f7220aeef9f695"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/src/types.ts",
+      "bytes": 4341,
+      "sha256": "2d28ba5e8fc99dad327621934d972be1dc78baf5f794c30feca3de6f8448f0c8"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/tests/governed-action-runner.test.ts",
+      "bytes": 7996,
+      "sha256": "2870c84b503fee3ab70e75192a924e89895037e509bb563bfa720375c9a12ecb"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/tests/helpers.ts",
+      "bytes": 10648,
+      "sha256": "fc357f3ae5f32d8692dc6d6c88358e1e4eaad8d2b86eb569e7684decb940e5c2"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/tests/task-completion.test.ts",
+      "bytes": 2029,
+      "sha256": "6d97c61707612e27452b4480463bfc336515ad073a70660987549149a296d746"
+    },
+    {
+      "path": "runtime/awos/packages/control-plane/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/packages/decision-ledger/package.json",
+      "bytes": 430,
+      "sha256": "0ec6167f23ed6de487f5e32edb75e37b995e0fb7b1e4f632a4b60ea25a5249ac"
+    },
+    {
+      "path": "runtime/awos/packages/decision-ledger/src/index.ts",
+      "bytes": 90,
+      "sha256": "585696a889a615a2a22c529c493381541ccb35568bdf50be4a2a34c814db67a1"
+    },
+    {
+      "path": "runtime/awos/packages/decision-ledger/src/ledger.ts",
+      "bytes": 3346,
+      "sha256": "85ca3f82337638912edf6574917bfe9f7a7515c7c37d094604926ff0e66eefe6"
+    },
+    {
+      "path": "runtime/awos/packages/decision-ledger/src/types.ts",
+      "bytes": 836,
+      "sha256": "655ed71ebff0da787c5f1415d2f84fff495b69e2ffa8e3198ed2d73561e2a15c"
+    },
+    {
+      "path": "runtime/awos/packages/decision-ledger/src/validation.ts",
+      "bytes": 2324,
+      "sha256": "3d7d88684f9efa3c7d2b2d5c9e954182eb041aca3a7515b29a70075d77d28dfa"
+    },
+    {
+      "path": "runtime/awos/packages/decision-ledger/tests/ledger.test.ts",
+      "bytes": 2579,
+      "sha256": "5c587952a35cbffd7ad30a914eb1bdc399ec27b6ed5585bb2cfb9c179534a949"
+    },
+    {
+      "path": "runtime/awos/packages/decision-ledger/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/effects/package.json",
+      "bytes": 499,
+      "sha256": "16a729ffff4781d5805e4a4ab9336411e38b7869c1d3f12cb2f5bccedae13b2d"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/clock.ts",
+      "bytes": 102,
+      "sha256": "065677b7ad9806a386531a79b1c65a82106a458601ec27999fbed29ca840ae4a"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/dispatch-result.ts",
+      "bytes": 457,
+      "sha256": "7bc00879e6ad352f8e8607c59862f690631c9db2b36c3599f5b8be38104064cf"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/effect-coordinator.ts",
+      "bytes": 17247,
+      "sha256": "02be11d2d8021aa5e11ee3fa30e796419afdcb49499c8c173701b51105345a30"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/effect-events.ts",
+      "bytes": 833,
+      "sha256": "d952a355cd44932ff2be3f2727d829f8018184e9066ffb5988f99cb190f094ae"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/effect-status.ts",
+      "bytes": 394,
+      "sha256": "b3e6fc8c644e97084527625e2408aa480a81ff02864aee6da2238502006ddc96"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/effect-store.ts",
+      "bytes": 631,
+      "sha256": "a91cf6b303f971c0fe1c667cfcce0145b6a8da14a8aadb5438d0cde2b842e053"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/effect-transaction.ts",
+      "bytes": 1903,
+      "sha256": "8108190fd987eb99911917f9fe90b6792ec34191a0326f0a91658cbb453e9eb7"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/errors.ts",
+      "bytes": 617,
+      "sha256": "f626f80c278dc478e77bddd711b19295b2c26333098c9835901583e766cf7613"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/idempotency.ts",
+      "bytes": 1006,
+      "sha256": "f5ee7075d3dcc7a6f75f1224544e5bf4fe895f3ea7d16259122780696ad8ec66"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/in-memory-effect-store.ts",
+      "bytes": 7933,
+      "sha256": "2058dca47729748b3c12abd13e80f8adbed3d3a1269a03572a75091887ac1b36"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/index.ts",
+      "bytes": 397,
+      "sha256": "a155c6d88464019cef5466a8077ed6087091a4c12e1a8032014e8fa5c828c4ff"
+    },
+    {
+      "path": "runtime/awos/packages/effects/src/stable-json.ts",
+      "bytes": 1267,
+      "sha256": "5ee404ce266498b6ee5a323fa57f1a84a032916c998773e446072be246190de4"
+    },
+    {
+      "path": "runtime/awos/packages/effects/tests/effect-events.test.ts",
+      "bytes": 1523,
+      "sha256": "9a2e38f806ee8786070db62258999b6641b7f1bbfbb0493dc100793ff52f12f2"
+    },
+    {
+      "path": "runtime/awos/packages/effects/tests/effect-state-machine.test.ts",
+      "bytes": 4398,
+      "sha256": "7bbc31235f1d0859e7ef9970a9400bccb43020f9136957e01a0cb25ef20970e4"
+    },
+    {
+      "path": "runtime/awos/packages/effects/tests/effect-store.test.ts",
+      "bytes": 3042,
+      "sha256": "cc7d9fb5ffa9fd9341ff3740b2c5139b18af8e9add53cec6955b1198340bcadf"
+    },
+    {
+      "path": "runtime/awos/packages/effects/tests/helpers.ts",
+      "bytes": 3123,
+      "sha256": "1bf4b3763ed5276ccbf57020f81a6c253fdb34c6b9d7bb66df40f99ca2459c28"
+    },
+    {
+      "path": "runtime/awos/packages/effects/tests/idempotency.test.ts",
+      "bytes": 1785,
+      "sha256": "18e24b8f9a281374100cf77e7d9470a53bc14fc53e725ac46be12f57b62a989c"
+    },
+    {
+      "path": "runtime/awos/packages/effects/tests/observation-settlement.test.ts",
+      "bytes": 5932,
+      "sha256": "4374088ebc80294846f30a4725af7af7614bf9af994e005c591ad54ef7b6c498"
+    },
+    {
+      "path": "runtime/awos/packages/effects/tsconfig.json",
+      "bytes": 132,
+      "sha256": "7d58cbcc2437e988d33ec03f4681b84144a32b8fab95499f9b3182fe3eaef9f3"
+    },
+    {
+      "path": "runtime/awos/packages/event-store/package.json",
+      "bytes": 171,
+      "sha256": "567d52c99a9b5e1df85a7694881c8f143ba7d5d806aa4bfa3edebadc97c35771"
+    },
+    {
+      "path": "runtime/awos/packages/event-store/src/index.ts",
+      "bytes": 581,
+      "sha256": "12f39ddf05b7e06d83537b33d272f922ec5fe9f68c80579f29ba0d8439a17875"
+    },
+    {
+      "path": "runtime/awos/packages/evidence-ledger/package.json",
+      "bytes": 475,
+      "sha256": "96c1d2f3d0a06f235666de591fa714009e6501bceed14db356086223a882c9b7"
+    },
+    {
+      "path": "runtime/awos/packages/evidence-ledger/src/index.ts",
+      "bytes": 5074,
+      "sha256": "16cc4f86441c30f757f8c90653146726b49904b50877ec776861329624c73216"
+    },
+    {
+      "path": "runtime/awos/packages/evidence-ledger/tests/evidence.test.ts",
+      "bytes": 2596,
+      "sha256": "afcb2ed7d0e3908f3e977a8dec8b3581f3f03a46dcbcd559689e8052905848a9"
+    },
+    {
+      "path": "runtime/awos/packages/evidence-ledger/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/execution-providers/package.json",
+      "bytes": 398,
+      "sha256": "a74b2b909138b8110b51392055b1d7552234d865eaee12decfa721b73745d698"
+    },
+    {
+      "path": "runtime/awos/packages/execution-providers/src/index.ts",
+      "bytes": 59,
+      "sha256": "b218d9d00502d4b1ca2e0bbe753b90982c95d9763219a559a6c218d54f89fc69"
+    },
+    {
+      "path": "runtime/awos/packages/execution-providers/src/registry.ts",
+      "bytes": 6304,
+      "sha256": "bf02a8c6c24ca384ba1d0b88067948885821454a64e471cfb9b087f116dbffd2"
+    },
+    {
+      "path": "runtime/awos/packages/execution-providers/src/testing.ts",
+      "bytes": 4047,
+      "sha256": "9f2e1147d1dfb426fb1cb5dc73a6e206330c217a0f30f9045b731683117185a0"
+    },
+    {
+      "path": "runtime/awos/packages/execution-providers/src/types.ts",
+      "bytes": 3785,
+      "sha256": "0cfc0524737c16036999c430b1e6e426acae3dcbb218c1b9e14da2fb5365213f"
+    },
+    {
+      "path": "runtime/awos/packages/execution-providers/tests/providers.test.ts",
+      "bytes": 8541,
+      "sha256": "5bf9f2fa73d96d4e874636ff75b13b171b0a73f5c24d773cbf9f9fdc4199b0cb"
+    },
+    {
+      "path": "runtime/awos/packages/execution-providers/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/package.json",
+      "bytes": 587,
+      "sha256": "b7547e33b017357f8b7a298499cbd9b51eb4b52be65f633cb1bcd96859852e95"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/src/executor.ts",
+      "bytes": 6279,
+      "sha256": "a248f8a17b32abe7ddb5d0c7e80b9807951063e6c0e6f2c440fee193357dbf8c"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/src/index.ts",
+      "bytes": 127,
+      "sha256": "daf4916b74b65e9c50cf36c273f6520ab2d4c4a024c832b3753825771c4c0711"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/src/observer.ts",
+      "bytes": 3484,
+      "sha256": "12359439aae46b08af3a5b6246d46fd4b22f4002bc11a6c07d1e441a6aab1bcb"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/src/reconciler.ts",
+      "bytes": 1198,
+      "sha256": "a565d33dece3cecd58e54bd06f3b3447b05ab1a3ea683ae5165cb798c08f11c1"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/src/workspace.ts",
+      "bytes": 6364,
+      "sha256": "3ba66caa2437e8904ddaddf323ed2b736c741461383c906940bafaff7c109e43"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/tests/executor.test.ts",
+      "bytes": 4764,
+      "sha256": "86070e92415f84420dc8830d255b6efd85c4fafeae5ad96a256dc626e2f9709b"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/tests/observer.test.ts",
+      "bytes": 2777,
+      "sha256": "39269f9574779a1b1817407a44ebb0ab3df403947c0fd687b23c3b977527a4f2"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/tests/workspace.test.ts",
+      "bytes": 2734,
+      "sha256": "f1dd9792ed682a8759be163148bd9153c259a4a9bd80b8c763b7a8086d611a71"
+    },
+    {
+      "path": "runtime/awos/packages/filesystem/tsconfig.json",
+      "bytes": 132,
+      "sha256": "7d58cbcc2437e988d33ec03f4681b84144a32b8fab95499f9b3182fe3eaef9f3"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/package.json",
+      "bytes": 607,
+      "sha256": "1734ab19f0d891b821db4a9fd9e05511fec1c52038ea88fd8cb719938db2fbd0"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/src/api-resource.ts",
+      "bytes": 5055,
+      "sha256": "fdcc04c00545ed77a5e2e59a13b6e9b54dd6f71ba8c151a9c8920b0f6b0794f1"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/src/executor.ts",
+      "bytes": 3522,
+      "sha256": "0c5ab56adc025dc33f6bde66f23780ec0741367ed12f55a73e1582d4a00fe586"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/src/index.ts",
+      "bytes": 162,
+      "sha256": "354459777582e2f1690693d66cd88bff3c974d6f0394a5bb54e9e60bfc30afe9"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/src/observer.ts",
+      "bytes": 3907,
+      "sha256": "51a15cee39db2521676d56b0997658d3904e59e2f67a92e5b606825dc6fff8df"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/src/reconciler.ts",
+      "bytes": 1377,
+      "sha256": "8da8c32cc39a173a5d40a8d869fffe2f13bd93141f5bd7adb7c41ed0e62f0113"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/src/transport.ts",
+      "bytes": 4098,
+      "sha256": "d87ec92e0ef97c0ade2f12a89dfb53c548f5a150a1414a168f6bdae18ac83dbc"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/tests/fixtures/api-server.ts",
+      "bytes": 4600,
+      "sha256": "b6700272476c2686266f6c8f3a8fc99f2f8168c7dff8934635d97765aa0e2b7e"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/tests/security.test.ts",
+      "bytes": 2590,
+      "sha256": "85e012dfa74709a7cf0a1f998cfd08fdd5d56edd3759924eeea5251abe658fb0"
+    },
+    {
+      "path": "runtime/awos/packages/http-api/tsconfig.json",
+      "bytes": 132,
+      "sha256": "7d58cbcc2437e988d33ec03f4681b84144a32b8fab95499f9b3182fe3eaef9f3"
+    },
+    {
+      "path": "runtime/awos/packages/inference/package.json",
+      "bytes": 228,
+      "sha256": "d536f5beb154576ddde7bc03e73eb1070ddcce39f89c65fce84c1a06b7709827"
+    },
+    {
+      "path": "runtime/awos/packages/inference/src/index.ts",
+      "bytes": 9337,
+      "sha256": "0812241ea31c1b068ce33e950aeaa8e4f1d254e55cf97f2f69a015eb64915427"
+    },
+    {
+      "path": "runtime/awos/packages/inference/src/local-json.ts",
+      "bytes": 5550,
+      "sha256": "8828ded5cce3faadff5948510c0d5728130fcdfdb2954cbc01765bf3822e81c8"
+    },
+    {
+      "path": "runtime/awos/packages/inference/tests/llama-provider.test.ts",
+      "bytes": 4988,
+      "sha256": "5140630c59fa08f367fef3e7ccc2d3201555a584ca2b8f33e729e8cb5ea605db"
+    },
+    {
+      "path": "runtime/awos/packages/inference/tests/local-json.test.ts",
+      "bytes": 2894,
+      "sha256": "66815c31a6216ecdec051d5406b9551d3632589b5910571f38dd23b01734687c"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/package.json",
+      "bytes": 428,
+      "sha256": "b0488e10bc3386b98b1c509799d434beafdee75ecc1bb550c911cca7df4be2c3"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/compiler.ts",
+      "bytes": 1536,
+      "sha256": "7040e5935b964cc133cd81532fbb03579570ed6d2926cd55efc81d18af48ebbf"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/data-flow-store.ts",
+      "bytes": 3431,
+      "sha256": "47d5d4802cd1237f39d3c9562fb7504f99c4209213e20679e488e6604b10ecac"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/flow-engine.ts",
+      "bytes": 3041,
+      "sha256": "8cb5574a4f44811462cb8c7eb954878fd01a5f4f7e48563287c8e5905c070e0d"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/index.ts",
+      "bytes": 298,
+      "sha256": "4bc5f524ed2e6d2f12b4ed4b661c33ab0987519f5d344a7a8c9b6f88ad887964"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/labels.ts",
+      "bytes": 1462,
+      "sha256": "9d2ee579b66124cdfcd5d023e5b53365898a5fa6be3e5fbc97b44ec84386ae2f"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/release-approvals.ts",
+      "bytes": 1952,
+      "sha256": "d395aff344e271947e711a959497b57476370ebbbeac98370c91dd164f67f271"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/rules.ts",
+      "bytes": 1639,
+      "sha256": "b8809f3a48ef569aa3bf903d9eb6aa9ed2f6c5fd0c6b4bce897a6bbb35f8985b"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/sink-registry.ts",
+      "bytes": 1243,
+      "sha256": "ce6f7e320528b59a47d7d338dbdf71c678284205f763a5a78defdb95cf626c0b"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/types.ts",
+      "bytes": 2295,
+      "sha256": "cac7ea32827ebdebe7c1174dbfff84ba82f52210e0d0d2530da794b67f3f5acf"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/src/working-set.ts",
+      "bytes": 1111,
+      "sha256": "0528e5f957520f45516055d77dc758601247f474262d6286dc4f00f04184f85b"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/tests/flow-engine.test.ts",
+      "bytes": 2215,
+      "sha256": "06e3a192f97fe2cddbd5cd9d4f04a30f3bd3c186af0215f3626499bbdf317799"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/tests/helpers.ts",
+      "bytes": 2886,
+      "sha256": "c359befc6a0f959213cb63f15bd775d7f89e0f6e089e827d32ca97fea707dcb4"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/tests/labels-lineage.test.ts",
+      "bytes": 3205,
+      "sha256": "a7b164d3591c93e1012bc8434f48eae588a159ca7914102d4af8e884cf364a8b"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/tests/release-approvals.test.ts",
+      "bytes": 2274,
+      "sha256": "1db318ce0494c44168d83480da986070e86ba97e84a625945fcb1719442f94d3"
+    },
+    {
+      "path": "runtime/awos/packages/information-flow/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/packages/leases/package.json",
+      "bytes": 412,
+      "sha256": "aff6147cf651b50030a147d71029a8115705973012c21f97e9ed94949a5dea80"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/authority-lease-service.ts",
+      "bytes": 2396,
+      "sha256": "a9e6f76564d52614f94d1b2f23fd907d006e370a7959d9cc6418e2db6c32da3a"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/authority-lease-store.ts",
+      "bytes": 311,
+      "sha256": "2475e1197ae1d5aca4f4fbd0cca8e7813bc23a432e9681e97d01eaad3cfea880"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/authority-lease-validator.ts",
+      "bytes": 2600,
+      "sha256": "0de6203e4de2c02aba9bd0493ed45645de8757d2f639b42716d320d84d9d2bc9"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/authority-lease.ts",
+      "bytes": 665,
+      "sha256": "0a6546dd73d80464af96250ec34f1a810f8d4ab68d4ed02df4ffe7170ed34bfe"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/authority-source.ts",
+      "bytes": 445,
+      "sha256": "44658c394563ada222d7514ea36f04bf8ac5c8079b464b2aed7a3ce5b4c6f9e2"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/clock.ts",
+      "bytes": 102,
+      "sha256": "065677b7ad9806a386531a79b1c65a82106a458601ec27999fbed29ca840ae4a"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/commit-gate.ts",
+      "bytes": 1294,
+      "sha256": "4fdbcbf5fab938b2cd89e0cd7306cf4cf5f74aee867bbf2156d42f155c086011"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/fencing.ts",
+      "bytes": 1098,
+      "sha256": "e59bfd593888ffe3b5d9abc2d0d2ce60ccb304f347c6309fb77c8409abdbf433"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/in-memory-authority-lease-store.ts",
+      "bytes": 1340,
+      "sha256": "5c7d1c04c6955837714bf5f9624d5c15a48468c4962d215291b5765be9f93516"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/in-memory-resource-lease-store.ts",
+      "bytes": 3820,
+      "sha256": "eccf576dc13af96902be0391d0c6d43b3167d5256919ba86b8c83332c0aa05ca"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/index.ts",
+      "bytes": 524,
+      "sha256": "16d49d40114035d6c39b830cfec18d212efbb014b6f1d585decad84a505e83b7"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/reasons.ts",
+      "bytes": 492,
+      "sha256": "b8bd1c2e449c297c60f9a3fc95f5b0938ede77d02dfc19297ccc0c22fa73faaa"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/resource-lease-store.ts",
+      "bytes": 550,
+      "sha256": "f422581c57a70ef13612b785dd703847a33781894cc649db6f67a7898e15fa9a"
+    },
+    {
+      "path": "runtime/awos/packages/leases/src/resource-lease.ts",
+      "bytes": 534,
+      "sha256": "0068cbbf6d6262c016a8ee6cc8ff1498ff503f196bdd02613ea1d38dd55ead63"
+    },
+    {
+      "path": "runtime/awos/packages/leases/tests/authority-lease.test.ts",
+      "bytes": 5985,
+      "sha256": "a32c79dd730031014cc679686507aa41c3d7580dd4ef994cdc4ee56159586c42"
+    },
+    {
+      "path": "runtime/awos/packages/leases/tests/fencing.test.ts",
+      "bytes": 1781,
+      "sha256": "a1048563821173ddb1684a371db1c8acb5965bcecfdfe16b8e2103f5b62d8fb2"
+    },
+    {
+      "path": "runtime/awos/packages/leases/tests/resource-lease.test.ts",
+      "bytes": 4351,
+      "sha256": "c4b93a6c4e18c9bc3597e0bfda00b3c51055f47846fa605128d603e6f34d498a"
+    },
+    {
+      "path": "runtime/awos/packages/leases/tsconfig.json",
+      "bytes": 132,
+      "sha256": "7d58cbcc2437e988d33ec03f4681b84144a32b8fab95499f9b3182fe3eaef9f3"
+    },
+    {
+      "path": "runtime/awos/packages/observation/package.json",
+      "bytes": 462,
+      "sha256": "a17768fb2cc9d95314968aebfb19c06a572459be7adfe2bff1c0b7f8d9b81701"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/clock.ts",
+      "bytes": 102,
+      "sha256": "065677b7ad9806a386531a79b1c65a82106a458601ec27999fbed29ca840ae4a"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/errors.ts",
+      "bytes": 416,
+      "sha256": "3a1594257717b665694e2c94807d28e692c4789cb1dd2749a870faa53023d288"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/evidence-reference.ts",
+      "bytes": 249,
+      "sha256": "5c8d3d5cb88fdad7507af1077f7248c20d02d87e3891703b49398bf49a7df8c2"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/expected-postcondition.ts",
+      "bytes": 2272,
+      "sha256": "55c64682d5488cff0a55c90cd6ae60e553de1467793affb4ffe559162081bdd3"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/in-memory-observation-store.ts",
+      "bytes": 2345,
+      "sha256": "2f33be99ad31a2beaac935de61b74f76cd6581781a60226cb512bf04976a3a83"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/in-memory-observer-registry.ts",
+      "bytes": 1528,
+      "sha256": "a190d0751252879eebff68f1582f2ca3d98ef838c2fcef3fe7df78d5664b4beb"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/index.ts",
+      "bytes": 600,
+      "sha256": "b2ecff115b6f5b6aee547d55bfd46e29da3f1e8614561454894bb314aba69e66"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observation-evaluation.ts",
+      "bytes": 763,
+      "sha256": "539fd53169ce1e03354ada5f74b06d8413fdff0619e991072943f25306773cc9"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observation-policy.ts",
+      "bytes": 6336,
+      "sha256": "0ef33b69a95e0a6802bc7f173a510e44d0ce3bd0f691db7fcba3c0161699002c"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observation-service.ts",
+      "bytes": 7488,
+      "sha256": "c3e60198ef73c4b6d489d416b92fb0ae8c5e91d521e4142fc4a6aba64ffb9353"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observation-store.ts",
+      "bytes": 390,
+      "sha256": "9f0b671c32d02607b1d65a8fd058ac7a37e0ac54fd4b0bd20c8c3bf5faa2c6a4"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observation-subject.ts",
+      "bytes": 770,
+      "sha256": "e8d86f8818186da1734be1196d5f991bd75f73911df942a76ca6c5292dffcad4"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observation.ts",
+      "bytes": 905,
+      "sha256": "41c196dd35c16f99329f363df0eea6285fa9bb244a375a5812e59af860b1346a"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observer-descriptor.ts",
+      "bytes": 501,
+      "sha256": "e3e07b85bf600350d17104f592870ffa424410fffee1a84afe790b750ac12e03"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observer-registry.ts",
+      "bytes": 160,
+      "sha256": "e4b79a56b52105655d7cd424426acb45bc9d4d2730080fa37c913a198aebea39"
+    },
+    {
+      "path": "runtime/awos/packages/observation/src/observer.ts",
+      "bytes": 667,
+      "sha256": "27c77a3380cea6f6a54ef837d5ccc7166900591395459e55b19343fcbc3d0e53"
+    },
+    {
+      "path": "runtime/awos/packages/observation/tests/helpers.ts",
+      "bytes": 1785,
+      "sha256": "6d822073fa6649bece10fef3f656ef56abc216c2297048cc0e7ef77a2983b56b"
+    },
+    {
+      "path": "runtime/awos/packages/observation/tests/observation-policy.test.ts",
+      "bytes": 6123,
+      "sha256": "58ca4e8f445a66fc4c3fb68c75569f01b94ba8e7bff111cf48c4e6e526a4c5dc"
+    },
+    {
+      "path": "runtime/awos/packages/observation/tests/observation-service.test.ts",
+      "bytes": 4908,
+      "sha256": "c3e074de2d131e30bddff4e51b7943174ff02fec5c299aba0f305bdadc7af118"
+    },
+    {
+      "path": "runtime/awos/packages/observation/tests/observation-store.test.ts",
+      "bytes": 1752,
+      "sha256": "231e62e807dc765dda73f9c513a22bc3147c5ea457992273fe43d281a3cf2729"
+    },
+    {
+      "path": "runtime/awos/packages/observation/tsconfig.json",
+      "bytes": 132,
+      "sha256": "7d58cbcc2437e988d33ec03f4681b84144a32b8fab95499f9b3182fe3eaef9f3"
+    },
+    {
+      "path": "runtime/awos/packages/policy-engine/package.json",
+      "bytes": 173,
+      "sha256": "657d5cb73ca036dabb7aefc4a42e021d834e084da77763eec5fcbca3839ae340"
+    },
+    {
+      "path": "runtime/awos/packages/policy-engine/src/index.ts",
+      "bytes": 893,
+      "sha256": "0ec73dcb7c10724de7ce1be72667d1d1ed8ce401b8953e7ff65b605a4c803ade"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/package.json",
+      "bytes": 152,
+      "sha256": "f0f0c786fb7aaf43a12bf5889914575235e38ccbd2ded945f7b5f102aac1c361"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/action-intent.ts",
+      "bytes": 1082,
+      "sha256": "c07403a0bc0265811791e5a6d775cd11e8e2f2a18a3db47d7c0ef521b5e51ee9"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/agent-identity.ts",
+      "bytes": 137,
+      "sha256": "fa170990b015bcaae547587adf593ff421ecbf193a17aa8c057a3bf40ddc19c8"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/capability.ts",
+      "bytes": 129,
+      "sha256": "23065f481274a5ee5bae21a814f2280cb20311976f3d4b3e16560f2671811af5"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/index.ts",
+      "bytes": 217,
+      "sha256": "abe538b6d6de7dfc0d57622a7d92f22ac77fe9136c587d08a93fa18a0b30f6e7"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/runtime-event.ts",
+      "bytes": 1082,
+      "sha256": "085a0669d4f9163458f93294f9fb2408817c09c6bfe611d7205c5bf2c816d912"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/task.ts",
+      "bytes": 186,
+      "sha256": "4b7754e10955700fee2aeaed0a63ed128afd07742969d2c595add9fdb8b61ba1"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/world-entity.ts",
+      "bytes": 446,
+      "sha256": "1e9d9175eb45bc9d995b632043c1776718d5c61cc8c363213469a80d09f91556"
+    },
+    {
+      "path": "runtime/awos/packages/protocol/src/world-event.ts",
+      "bytes": 567,
+      "sha256": "69a8aba30d71f2b178a5893ce756355d5bdfaf7b166bf13726f0ff4b1ba1f120"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/package.json",
+      "bytes": 426,
+      "sha256": "47a0ac1c6da144ee9a804b6e7a61c31a3a0571217a92973bd67e0701cc7fd2ab"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/src/attempt-store.ts",
+      "bytes": 5763,
+      "sha256": "8ea23551a7c81a72ae257720ea2708d208bd1b4bfe434a52074d85bc2ee3acdc"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/src/cli-transport.ts",
+      "bytes": 3523,
+      "sha256": "703f127a764efda09b2e46c80490101819bd09e015b88041c9033045769bf7c0"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/src/decoder-v1.ts",
+      "bytes": 6263,
+      "sha256": "b131cdd8b27bdd8df9f182858f9983c142022e4a5de356545ab75e1cd0273881"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/src/index.ts",
+      "bytes": 136,
+      "sha256": "7deca9a7356bc8706c2961d63fcb696ad62e6b4a4bbb1e35f3c5ec483af32452"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/src/probe.ts",
+      "bytes": 755,
+      "sha256": "05016d30d9616d9e07fbaa7e9ebd857a991785f3762ca9320e711375640ed316"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/src/provider.ts",
+      "bytes": 19717,
+      "sha256": "f6264f5aa5d9c766a76ae15f3b026e4f46fbdb190f7f6254b3401865dcb1b44f"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/tests/fixtures/adapter-cli.cjs",
+      "bytes": 5071,
+      "sha256": "455d5cfe18113c310c5dcb73f4e449fdb3edf6f33c3f307fed7c9178865846d0"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/tests/fixtures/fake-cli.cjs",
+      "bytes": 1164,
+      "sha256": "83a230bec77f6e669d690dc252cd7a68e1e9c3856a5b1ece153cd1c6e8a9971e"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/tests/provider.test.ts",
+      "bytes": 13514,
+      "sha256": "c7e27af3a7c76b6433b08016563f96347815f116b86b07021a5424918bd47f31"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/tests/transport.test.ts",
+      "bytes": 3495,
+      "sha256": "e578fc40f4776a29408a6d0b30affda0bc3d1921731c0091112ce040e3f7676a"
+    },
+    {
+      "path": "runtime/awos/packages/provider-orca/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/package.json",
+      "bytes": 543,
+      "sha256": "03dbbeb7933226ecf3f75c9536a2b4749bb8c31081e9b723192ebc1d4cd93d45"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/src/effect-resolution.ts",
+      "bytes": 3181,
+      "sha256": "2f6a1e7519962233d178e2c96a8344bf4fff780ed3a56ac3fb6fbb17df5d51b8"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/src/fixture-reconciler.ts",
+      "bytes": 851,
+      "sha256": "ce0eabe7c01803e51bc870893f57a67d62033535088152d37732562872788a91"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/src/index.ts",
+      "bytes": 206,
+      "sha256": "1c9fe88322f87fda4a3aafb8375bb16fe907f3788c081e3687a700009cb30871"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/src/reconciliation-queue.ts",
+      "bytes": 3863,
+      "sha256": "c8c567e913368c4d5f6690fc799a5d46e4bc98af6a9339de292e1f3f08228e35"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/src/reconciliation-service.ts",
+      "bytes": 8265,
+      "sha256": "597256065c2fe43886ab1939bb51c0b58abe4bd2cd544f1893703a3ea89bd66b"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/src/reconciliation.ts",
+      "bytes": 1564,
+      "sha256": "043836eacd5f995bc2b8af06828c12fff18a101bb29d7cc39646adc6c412f07e"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/tests/reconciliation.test.ts",
+      "bytes": 12474,
+      "sha256": "cd540ce31d8cb92f9bfafbcb350cf6e5da837171a566354f47da8b821a43ca1a"
+    },
+    {
+      "path": "runtime/awos/packages/reconciliation/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/packages/recovery/package.json",
+      "bytes": 513,
+      "sha256": "f693c6305456f3101d8799d86c11eac0e4871736b1d719bbaa5eac27809296c4"
+    },
+    {
+      "path": "runtime/awos/packages/recovery/src/index.ts",
+      "bytes": 106,
+      "sha256": "9419001f2cc540a14a3193b12752355a2a44112f055e82d2eb7a83b63f812e9f"
+    },
+    {
+      "path": "runtime/awos/packages/recovery/src/recovery-manager.ts",
+      "bytes": 8740,
+      "sha256": "ecf91914fe54fc402410b1a9ec42a18981ea3b2c3c515311dfebbe6440b8237b"
+    },
+    {
+      "path": "runtime/awos/packages/recovery/src/recovery-planner.ts",
+      "bytes": 2009,
+      "sha256": "64266d38d7878220ef0e3af190ff77ea529bc9137efa49ba6978689aaa5babff"
+    },
+    {
+      "path": "runtime/awos/packages/recovery/src/types.ts",
+      "bytes": 1515,
+      "sha256": "b60b067db8c85519a9103fe3d71d3ecb2e92c28914098880889bf2dea4a8214a"
+    },
+    {
+      "path": "runtime/awos/packages/recovery/tests/recovery.test.ts",
+      "bytes": 12851,
+      "sha256": "0d7ac424ea5a177d699ea515989b221633e4ec22373aa7fb60b816e5f9df9124"
+    },
+    {
+      "path": "runtime/awos/packages/recovery/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/packages/resources/package.json",
+      "bytes": 358,
+      "sha256": "f5ef08955ef27c9071fe821ffe59a80618be870b0e233c8f06c8f0d12892f8c9"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/demo-resources.ts",
+      "bytes": 2491,
+      "sha256": "c88e7aeaf94c315602fcb086be89724420df0094f4f683477c27c685bd8d86bf"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/derived-resource-policy.ts",
+      "bytes": 508,
+      "sha256": "a4c59338a9302669d90a85b0b8eb5b3d64d0e4c3c07fdb3c80adf20802e61b5f"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/in-memory-resource-registry.ts",
+      "bytes": 5078,
+      "sha256": "11b83027c72f1b601acd22a806a2d734567f2642ffa5806f36bd8575b6b48d14"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/index.ts",
+      "bytes": 383,
+      "sha256": "278a15ee7464c8d0941b6fdfc84e4b94bc15adceec907d93e4450d65c43586f2"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/kinds.ts",
+      "bytes": 1088,
+      "sha256": "f3f0345fb2143b3493afd21ade4a04efbd0b4b9fc4928f184b5c4d09a938e17c"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/resource-id.ts",
+      "bytes": 1827,
+      "sha256": "e66ffc6323a477b8f935cc5dba6e95303cc701fa188bbc11c9e64d44fda56eed"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/resource-registry.ts",
+      "bytes": 619,
+      "sha256": "0120bd0f7d552ed2e6c07e3ffc06e1cbb46263ee10b6c830e20c8c80a0c9443a"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/resource-resolver.ts",
+      "bytes": 2088,
+      "sha256": "b260ec0be728c29925d5f796ffac6d7a6c523a9f3b69fab0a78e3d7e29afaff7"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/resource.ts",
+      "bytes": 1632,
+      "sha256": "eb982fad41dd26918e0201d33eaede4e212cfac794ab919ef93216b38cb48e2b"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/scope-guard.ts",
+      "bytes": 1031,
+      "sha256": "ede6655c216319989430cdb6bd215e840eaa8c73badc62d58b80e9cab91750de"
+    },
+    {
+      "path": "runtime/awos/packages/resources/src/world-entity-adapter.ts",
+      "bytes": 1300,
+      "sha256": "a79db195daa0118b8ae7fdbc964534e24a3a6f6595b0b234f28391bc3f43824a"
+    },
+    {
+      "path": "runtime/awos/packages/resources/tests/resource-registry.test.ts",
+      "bytes": 7936,
+      "sha256": "cadfe5a264b8697f8eeacb0b6cfe66da54c2d1de74ca96b6e286db692cc487eb"
+    },
+    {
+      "path": "runtime/awos/packages/resources/tsconfig.json",
+      "bytes": 132,
+      "sha256": "7d58cbcc2437e988d33ec03f4681b84144a32b8fab95499f9b3182fe3eaef9f3"
+    },
+    {
+      "path": "runtime/awos/packages/routing/package.json",
+      "bytes": 513,
+      "sha256": "3f288a51ec5257034d81fcff547340edd9dbf9cf75d0008a8b47feb76dd8c891"
+    },
+    {
+      "path": "runtime/awos/packages/routing/src/decision-store.ts",
+      "bytes": 1327,
+      "sha256": "f186d994cac71ea36fa39ce3c9e40547255efd21532d6cb0ca93db5a50943697"
+    },
+    {
+      "path": "runtime/awos/packages/routing/src/index.ts",
+      "bytes": 94,
+      "sha256": "384abc8e335b0eaf97567be17729d5ea41a124e4ec13f65dd2b9fa5032623a64"
+    },
+    {
+      "path": "runtime/awos/packages/routing/src/router.ts",
+      "bytes": 9223,
+      "sha256": "ceb7a0a24c0302913286cad7cc8333bacb2503419ae4cc3b2114284425eba6d8"
+    },
+    {
+      "path": "runtime/awos/packages/routing/src/types.ts",
+      "bytes": 1980,
+      "sha256": "a40402f92a24877604e27f0494ed348bcf3d171dc97cc3a2214c434ecc02c913"
+    },
+    {
+      "path": "runtime/awos/packages/routing/tests/router.test.ts",
+      "bytes": 6912,
+      "sha256": "ac30b134a49d7fbe5040c136648ada3b0097472fc1fc518686c02fe6870a6dea"
+    },
+    {
+      "path": "runtime/awos/packages/routing/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/package.json",
+      "bytes": 1095,
+      "sha256": "62c2c58e96db42f326462986ceae73f4abc3ebfb47edeca6f403659ae2989ab8"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/authority-grants.ts",
+      "bytes": 1549,
+      "sha256": "2134531d8ba285987b293ef9218ba2c8abbaea1905a268ca26d92b164e69a8b5"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/context-store.ts",
+      "bytes": 394,
+      "sha256": "c71dea61768d674ca4d770ad8841a188872106fe73e66a0f9f9ba671485936d6"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/database.ts",
+      "bytes": 9416,
+      "sha256": "996a435beeb2be07e03ea07db6aa6724135bb26e0eb0fa642a3d852ef7b31c2f"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/domain-stores.ts",
+      "bytes": 3947,
+      "sha256": "fe2f92b7fadcc7d36102935cc7ef1e925584a2ff70150421c88189375634fed7"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/evidence-store.ts",
+      "bytes": 291,
+      "sha256": "bba7021ebc3b50c7648112a41b64e3143ed654abb93a9b219662fbafe76a8fb6"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/global-task-store.ts",
+      "bytes": 377,
+      "sha256": "8cebcef6132620d8e827233f058e619bb700b83492d7903386b0f2e13f366bb5"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/index.ts",
+      "bytes": 483,
+      "sha256": "53c101e2f672a2dc330246a9ac6ccae57f2bed035da334bcac494e343c0b4c06"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/journal-kernel.ts",
+      "bytes": 5502,
+      "sha256": "d9ba63511ba069beee6a17ba77a0fe8ec1c98cd028cd29d788a2447edd55b233"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/migrations.ts",
+      "bytes": 2188,
+      "sha256": "a8b8a85db7d35a894cea68a9eb3f4f4cb833ee3f194f9b49fab90e978aae4b33"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/record-stores.ts",
+      "bytes": 591,
+      "sha256": "d34bb8575b020d35f07cf227802d8b4f7120aba6279921053f1fcf27fd7f9159"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/routing-store.ts",
+      "bytes": 389,
+      "sha256": "eca1ccf41ff55b263f8cfedb973f88e6e4dfb38ce2128af85d1c23a2470b9a4a"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/runtime-events.ts",
+      "bytes": 599,
+      "sha256": "6c8c342d7fecc4d663284c1190b9c72910414505ce9fc616607475f4e5048469"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/task-store.ts",
+      "bytes": 2466,
+      "sha256": "c0a91bc974c5dcc9e79fdb92dc1a258ffdbddf8e5cc89eaca2be52b034ce8d4f"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/src/verification-collection-store.ts",
+      "bytes": 368,
+      "sha256": "ea219c1ce7cf3b452bf5b0abdc72196b25def4ba4d40f458e59a0160858591aa"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/context-store.test.ts",
+      "bytes": 1471,
+      "sha256": "f54ea186fdec0040d880a0c7d27b56e5b577a7fac94b59faac735c1fecc42e61"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/crash-windows.test.ts",
+      "bytes": 5104,
+      "sha256": "a0d4d3bbefa34408ee17a1c8f454d73e1b7fc9eaa1afb5e934e7a86bda9bf628"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/database.test.ts",
+      "bytes": 3404,
+      "sha256": "f31c97a7c0e4b7800acde13632176cdb2aa9461fd8e49580304c2657dde7935e"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/domain-stores.test.ts",
+      "bytes": 7968,
+      "sha256": "9ae501035fe9554e5a26f79c509b915f2599bb85191c738727a62436ccc27288"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/evidence-store.test.ts",
+      "bytes": 1927,
+      "sha256": "cec36109dcfd775aa46734e9075183733cef607ac557f805243952d9238b5713"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/fixtures/aw2-crash.ts",
+      "bytes": 3034,
+      "sha256": "0a4799eac1d5b97964adc552802dea2f0a8985bdf9c3b63f5bc82ba09c4f8acc"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/fixtures/crash-window.ts",
+      "bytes": 4021,
+      "sha256": "d180eb92245bf2eddd1355762df23a12e81deb7a0172de8a0a85e6caa28ecb16"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/fixtures/kill-after-commit.ts",
+      "bytes": 509,
+      "sha256": "f0bed476787a0687be3987b5ded168f333b568294efce1768b058b634726052d"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/fixtures/records-crash.ts",
+      "bytes": 1470,
+      "sha256": "572ca53d304ef121ebb20d06b371c5860c6644c0dc3677046be2798c2386a590"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/global-task-store.test.ts",
+      "bytes": 2811,
+      "sha256": "cfc1473d3c12c9592ef50842fab83032965e00c914eb65d272fc4328003e5aaa"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/journal-kernel.test.ts",
+      "bytes": 6872,
+      "sha256": "1588f7d6cc5f36654364e39a672314b2d13cc023cad6d1c7cc8a77df4e0d6dcb"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/record-stores.test.ts",
+      "bytes": 1447,
+      "sha256": "a0bcd002f3a08b061e3be97f8d632a41ffafb0e4851944b2f9d5138e3622ab3f"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/routing-store.test.ts",
+      "bytes": 2652,
+      "sha256": "8ce219f7c7860a45bcf1e0ba0bcc6600443b49284480a2a28861017cde2cd282"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/runtime-events.test.ts",
+      "bytes": 6499,
+      "sha256": "7fce404be889e9c835ef1fe36352e0d3291c9cb17d610c54a39433c42326e469"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tests/verification-collection-store.test.ts",
+      "bytes": 1574,
+      "sha256": "2e27e5a43af82c4ab9021a95a8a8fde4143b8696b8dc29394233e1c6c355a777"
+    },
+    {
+      "path": "runtime/awos/packages/runtime-store-sqlite/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/package.json",
+      "bytes": 360,
+      "sha256": "8f3cc1f51e2110be793cc471051786e6dcb5d85769197ef42c2452f44d8bb0d0"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/src/builtin-rules.ts",
+      "bytes": 5636,
+      "sha256": "34e26705fdbef2cb3d7bbb6b4dfb0f9cd60d8b4e27219d46404c73d5406ae0ad"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/src/control-state.ts",
+      "bytes": 1482,
+      "sha256": "ae9b3d7809db513db22125b9ae7b6ebc672d5c6ad38b2cbffb5e55c0653ca9be"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/src/index.ts",
+      "bytes": 140,
+      "sha256": "1f1d87b0f0aaf43b40a4c5d30eadb9f91292c40b234b08ca406ee3e4def2ee87"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/src/supervisor-engine.ts",
+      "bytes": 3202,
+      "sha256": "26ef11e36f2912898efb9561292f6d00ae8b745a3ad84687f398560459178c8b"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/src/types.ts",
+      "bytes": 2833,
+      "sha256": "c2a408ceb737e4344fb33723aa0e0d5a9006d07e26526eb6829fe6f5539767f4"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/tests/control-state.test.ts",
+      "bytes": 2043,
+      "sha256": "bd186237ef847bbe2227d0070a01e67cdf67ea26be65828618d8f250ed411978"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/tests/helpers.ts",
+      "bytes": 846,
+      "sha256": "4f5730e0f4349b9e7875d91cc3342bb5bf1c97b0f4197e4e9d23788e37bbb458"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/tests/supervisor-rules.test.ts",
+      "bytes": 3800,
+      "sha256": "9f0f14ec329f36b74e5cc4aac9b5234bc6905f4a56b5821169a6707955711aec"
+    },
+    {
+      "path": "runtime/awos/packages/supervision/tsconfig.json",
+      "bytes": 91,
+      "sha256": "b9554f5edd3814b9f335b79f61ee33162984efdb0c455d6c3f36b40b2fa0653d"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/package.json",
+      "bytes": 331,
+      "sha256": "0c102814d975ed90faeca3bc3de2aaa6f23887c999c496e096b7f4bfc7bad03c"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/src/index.ts",
+      "bytes": 90,
+      "sha256": "a23fd6aeaaeaea31e2b85e9742596550e45b2f3afa239cf65b2600e155a7b5a0"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/src/kernel.ts",
+      "bytes": 16900,
+      "sha256": "019470b6d62e4b6ab0661a1fef499cec37fed9a644da4c7e950d0e8fa315c003"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/src/read-model.ts",
+      "bytes": 2712,
+      "sha256": "6473856d17ea48cb5ffa0634c9dfb4b01d6db5a91e929fed384f360dca53202a"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/src/types.ts",
+      "bytes": 5188,
+      "sha256": "ba4ac3d3df0042e9022748a90200a2f8c44fbf0ad9d35297d3f2e16deb516138"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/tests/kernel.test.ts",
+      "bytes": 11398,
+      "sha256": "883fd7187a931f2a239f2d404ff6cac404b722a3c71bb4afde1a02593bea8518"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/tests/read-model.test.ts",
+      "bytes": 2966,
+      "sha256": "cd8b9094b5f6bc2527ac3c9cb81153864ea9d60ffbc5816ec2edc50fb4d7e2fc"
+    },
+    {
+      "path": "runtime/awos/packages/task-runtime/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/verification/package.json",
+      "bytes": 702,
+      "sha256": "2e4ac18aa0cef40ddd342586179f9ed520e97340188b5fc1095ff28c5525f71c"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/collector.ts",
+      "bytes": 5857,
+      "sha256": "999de57c6c267253fa5f9d28ea01ae42b6e4cb729910666e55bbfec177122035"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/filesystem-configuration.ts",
+      "bytes": 3214,
+      "sha256": "dcac384b34bfd1810f7956d27abfd096f250a0b19d1862c079d97644857eac93"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/filesystem-decoder.ts",
+      "bytes": 2084,
+      "sha256": "911f0bdb9883383628db1a316827d404524d877bf4c7eb38f8b7a5da2f03c1b9"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/index.ts",
+      "bytes": 243,
+      "sha256": "70801a5611c779f5ee424763ac1a927e5faca8bca968ec1bcf0dfc286b64729f"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/lifecycle.ts",
+      "bytes": 3538,
+      "sha256": "64c6278017f2479d1452cb55e361132b3229b603f461e46b38054dadd9fc56bb"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/registry.ts",
+      "bytes": 2782,
+      "sha256": "baf4d5024d9e3aff64707a22817ff5888b4399d8fd6068019473f6504abd69b4"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/schema-worker.cjs",
+      "bytes": 466,
+      "sha256": "760ff2326421a92808d3a7a27bc0ab30942d6a230df91a39ff20ae952a37acd6"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/schema.ts",
+      "bytes": 1343,
+      "sha256": "57f068f9a58110d112adba9ddd6c0c9c68d202ad1f765ea6113fc85158fe9333"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/types.ts",
+      "bytes": 1027,
+      "sha256": "4066f3cf0e1ee5e69d2c8683eecca0ef76cbc90d8a968975e7fdf72c4820e6d6"
+    },
+    {
+      "path": "runtime/awos/packages/verification/src/verifiers.ts",
+      "bytes": 7255,
+      "sha256": "a88d4e7b35fafca067e36a51e8469b0504311771fc9ec9666f277774029218f7"
+    },
+    {
+      "path": "runtime/awos/packages/verification/tests/collector.test.ts",
+      "bytes": 3514,
+      "sha256": "c59306d5cef0b10230ab718e6084d053705d5a4d0c3c61b943a9d79e8d8aa5e9"
+    },
+    {
+      "path": "runtime/awos/packages/verification/tests/filesystem-decoder.test.ts",
+      "bytes": 3335,
+      "sha256": "4fc1ff297f71ad428457a7b3044a095fccf9067f7f2c619181a105acb01ac285"
+    },
+    {
+      "path": "runtime/awos/packages/verification/tests/governed-filesystem.test.ts",
+      "bytes": 4967,
+      "sha256": "d20a3188657d775f73ff2bfbaf916f206a5f0ae1d237eed3474c36f61e39e21d"
+    },
+    {
+      "path": "runtime/awos/packages/verification/tests/lifecycle.test.ts",
+      "bytes": 5319,
+      "sha256": "6f3ada25ee2359ecf6b3f58ca08b435d4a5c65e3e1ccb48a6760e7fb9f62e7d8"
+    },
+    {
+      "path": "runtime/awos/packages/verification/tests/registry-bounds.test.ts",
+      "bytes": 1972,
+      "sha256": "fa42fa98e084ca9ecf47f3f0791b34bc94efb0a512c6c6864ff7631083d76dff"
+    },
+    {
+      "path": "runtime/awos/packages/verification/tests/verifiers.test.ts",
+      "bytes": 6394,
+      "sha256": "a5aef4c852550928c2d15576e689be835eaf5972be250ca3f3e37fc91ecd347d"
+    },
+    {
+      "path": "runtime/awos/packages/verification/tsconfig.json",
+      "bytes": 87,
+      "sha256": "5772c2e5cac73c234773c821e3c082554d93dfacdca617d5b5e977f079a9bf9d"
+    },
+    {
+      "path": "runtime/awos/packages/world-core/package.json",
+      "bytes": 170,
+      "sha256": "53b7b2f542e3d4b7b5ace27731d23c1a22b87dedefb20208f583c90d77ff58ad"
+    },
+    {
+      "path": "runtime/awos/packages/world-core/src/index.ts",
+      "bytes": 1436,
+      "sha256": "cbea96961055164e33fc341e8509c55e1db78993f9421675f29175a3a9aeb7f5"
+    },
+    {
+      "path": "runtime/awos/pymes/.dockerignore",
+      "bytes": 102,
+      "sha256": "d686ba7dff8be56ee1c71e46345a0db969b09854e450ea3bd7fdc02afe07c825"
+    },
+    {
+      "path": "runtime/awos/pymes/.env.example",
+      "bytes": 2029,
+      "sha256": "4b54584266302669271c27a407fc877458a88181907f44f02e03f0eb4369fae7"
+    },
+    {
+      "path": "runtime/awos/pymes/Dockerfile",
+      "bytes": 886,
+      "sha256": "56b2d3d43648ad3eacb58f322e9494ff4a111919147d71caad82bda39a91083c"
+    },
+    {
+      "path": "runtime/awos/pymes/demo-detail.jpg",
+      "bytes": 13007,
+      "sha256": "e55ee85cbf0f41ff5f5bee749f586f2a2f04d1e067da2a0cd9ad7ca5e8c1cd13"
+    },
+    {
+      "path": "runtime/awos/pymes/demo-overview.jpg",
+      "bytes": 13612,
+      "sha256": "dbcb82798cfebb0ba44cbecea7e90bf072972959f93c3b9829ed1959b5a7c296"
+    },
+    {
+      "path": "runtime/awos/pymes/docker-compose.yml",
+      "bytes": 3174,
+      "sha256": "353daa1c0f2c5f79fa360435b4c4f306eb7cbfa98b31522f4245c7a792d9ca5b"
+    },
+    {
+      "path": "runtime/awos/pymes/examples/capsules/prospect-summary.ts",
+      "bytes": 622,
+      "sha256": "d8b59ebafdc6e9c432eb97c7241f2e3ccbe12173b131f45b2c514a512de60bee"
+    },
+    {
+      "path": "runtime/awos/pymes/index.html",
+      "bytes": 33004,
+      "sha256": "d4f5ae1e4066cff75137fe3c20473ee103969f385a836a515560d24378644d37"
+    },
+    {
+      "path": "runtime/awos/pymes/k8s/deployment.yaml",
+      "bytes": 8160,
+      "sha256": "d2d6ea3cfc4094fb3b535ba6e29041e67b458b3f29ff88816c69f013099b1fac"
+    },
+    {
+      "path": "runtime/awos/pymes/k8s/kustomization.yaml",
+      "bytes": 239,
+      "sha256": "8cf050beef091157da64270ae6c36f21c935060365b39511ba09deefe174f3da"
+    },
+    {
+      "path": "runtime/awos/pymes/k8s/network-policy.example.yaml",
+      "bytes": 591,
+      "sha256": "5ef791a7a2f865afae1d4f4c602181168f2e123c2ecc08e2f9a72cfe7d4765a8"
+    },
+    {
+      "path": "runtime/awos/pymes/k8s/secret.example.yaml",
+      "bytes": 759,
+      "sha256": "b8e06523eade7de340adff5ab82767d5fc2ca2623465fab770653c7a2bace348"
+    },
+    {
+      "path": "runtime/awos/pymes/native/keychain.swift",
+      "bytes": 1737,
+      "sha256": "48f441e5e8e572cbb570d7cd0ccb544dd296e4b4a3281832b8dd2443061f6c1a"
+    },
+    {
+      "path": "runtime/awos/pymes/openclaw-ingress.openapi.yaml",
+      "bytes": 3718,
+      "sha256": "d18fd3593f739fb7dbdfdfbc362d63d27a71894d36d0b5a7de336f926c588d79"
+    },
+    {
+      "path": "runtime/awos/pymes/package.json",
+      "bytes": 1749,
+      "sha256": "7b1580876e69e0180f8c91d8ea258a7bc6a55ce316b9a2f4861e49cfc62ea2b7"
+    },
+    {
+      "path": "runtime/awos/pymes/scripts/backup-volume.sh",
+      "bytes": 516,
+      "sha256": "6bcb4801b71eca6606a392719d0c0d76c1427a5e3514f94d530c31280f73a33a"
+    },
+    {
+      "path": "runtime/awos/pymes/scripts/build-gmail-keychain.sh",
+      "bytes": 188,
+      "sha256": "d6eb3bc02aa90aea5e08a2b1bb88663ea19bb44b4cce42c80802ea49227becbb"
+    },
+    {
+      "path": "runtime/awos/pymes/scripts/check-operations.sh",
+      "bytes": 2327,
+      "sha256": "c187c95177ae7b1017573d215e5c35e2c35b57900e8090306d605e561665a44b"
+    },
+    {
+      "path": "runtime/awos/pymes/scripts/mac-diagnostics.sh",
+      "bytes": 652,
+      "sha256": "ad4a5687c239ecb4c84729e7a65246c14e31ee3a03a6aa12a6ef3e111bab66ad"
+    },
+    {
+      "path": "runtime/awos/pymes/scripts/validate-production-env.sh",
+      "bytes": 1129,
+      "sha256": "368724fe2b6e1e490c357bd6324cc2a87bfaa1864f2f5c5ca26411cbc8d8be02"
+    },
+    {
+      "path": "runtime/awos/pymes/scripts/verify-backup.sh",
+      "bytes": 376,
+      "sha256": "f10dbd64c6036d691ec0ab024fb0be0f80833ff54b154d5ddb19c477928ea17b"
+    },
+    {
+      "path": "runtime/awos/pymes/src/accessibility.css",
+      "bytes": 443,
+      "sha256": "a538ab57b3dca9dd3bc0559235c09db5f4e1a97108c504e1099d2f9d9c82f71e"
+    },
+    {
+      "path": "runtime/awos/pymes/src/api-server.ts",
+      "bytes": 5304,
+      "sha256": "f4a563f8a96907b5491b089e751763bf41a35833afa0c474e093b1ab00710b6f"
+    },
+    {
+      "path": "runtime/awos/pymes/src/appliance-setup.ts",
+      "bytes": 2621,
+      "sha256": "ba4026003f91dacefc2aa042855f486428f79694bdc6cc170f291273d948feec"
+    },
+    {
+      "path": "runtime/awos/pymes/src/auth.ts",
+      "bytes": 252,
+      "sha256": "82c327c0ec16d63c78e4aa505fbb7048f4443c3bb88c0680cb16d45c574784d7"
+    },
+    {
+      "path": "runtime/awos/pymes/src/benchmark-local.ts",
+      "bytes": 2017,
+      "sha256": "aec76da03ccd3ef679a2576aea97f37c47a8fdecaf798ac43ca97661578ff186"
+    },
+    {
+      "path": "runtime/awos/pymes/src/call-plan.ts",
+      "bytes": 1236,
+      "sha256": "7ae3dcfeee806234632c2804e31e507c3c28ad40f4a1a8b846d9021d855ae07c"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-api.ts",
+      "bytes": 3179,
+      "sha256": "5ec845496236fb266e17d6bdc27a648e6eed2d27bb7d5eef2f2bdfea62f86c60"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-assets.d.ts",
+      "bytes": 72,
+      "sha256": "2d6aaac2aaec73fe051051517b3a7dbd8af7599e1b435b90ddf3d4b50e824dfb"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-kit.ts",
+      "bytes": 2099,
+      "sha256": "f13b2ea41367ff0fc7e4b7123ae3d4f0596a1a8c19eef05d5d5defb2944c4156"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-registry.ts",
+      "bytes": 2108,
+      "sha256": "b6f4e0fd7c2d965ff48eab790fc23124722113cfa540473625e8742536d4fb54"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-screen.css",
+      "bytes": 5210,
+      "sha256": "34952f4344a8e0a90cfa1f6285e94596bc89dbef131bbd1965609f4f301c603f"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-screen.ts",
+      "bytes": 15885,
+      "sha256": "9d46f31dbfb10737811014ce871ed05f7b6933117efbdde6c083d19711ff4569"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-sdk.ts",
+      "bytes": 9341,
+      "sha256": "ca165a6f53b0200a80c2a3443f382252ce7c162960f28b8f6537f2347d2215d6"
+    },
+    {
+      "path": "runtime/awos/pymes/src/capsule-store.ts",
+      "bytes": 10297,
+      "sha256": "056709612f618d8839e6b2d828a6c7dbe44810d7a0fdc2f0a26ceb68b4d76358"
+    },
+    {
+      "path": "runtime/awos/pymes/src/case-lifecycle.ts",
+      "bytes": 2329,
+      "sha256": "680212e333b01afbb0a69a9a03410166f5ce8430a64a4499ad0394f28afcebc3"
+    },
+    {
+      "path": "runtime/awos/pymes/src/classification.ts",
+      "bytes": 1768,
+      "sha256": "0a995750773837e27e3761fbdee779304fb51d3bec6f27bf116324092562551c"
+    },
+    {
+      "path": "runtime/awos/pymes/src/clients-screen.ts",
+      "bytes": 7862,
+      "sha256": "daf5543e2c7269b65660824e474f2ec01c848e36a92eba833e7f3158d2437273"
+    },
+    {
+      "path": "runtime/awos/pymes/src/config.ts",
+      "bytes": 5572,
+      "sha256": "28c7516e9e40a23e1b318b3f2ff627b7a10348e71eb964bf8919b5ea5dd593c2"
+    },
+    {
+      "path": "runtime/awos/pymes/src/connectors.ts",
+      "bytes": 18348,
+      "sha256": "82bc51208e3a1f271578bd5152d4a17683986bce2a5879906f82fc001b8c84e0"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-api.ts",
+      "bytes": 3828,
+      "sha256": "38d66e45757da07c2978e0678c91dd1cfafda3127c63425cd63f47b1217dba27"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-contract.ts",
+      "bytes": 9771,
+      "sha256": "b17496e22f576ce9d6d431590b15ca177b50ce8d1dd4414972f0a5051b0bd0a9"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-conversations.ts",
+      "bytes": 3944,
+      "sha256": "7f504f8935aa100937a6e61cf39a714fb7a92204001d472dfd553e2995cc54a8"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-mail-trace.ts",
+      "bytes": 4563,
+      "sha256": "0fe5152e4ef02491da6e406e3d76562a248b5ae29a8764a6a867a1d481bd15b3"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-screen.css",
+      "bytes": 5067,
+      "sha256": "c7e4040014f99e5f8acde6514a34c0cb7ace4c5c131445dd873ba2d56b4ae008"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-screen.ts",
+      "bytes": 31086,
+      "sha256": "36e9ff719b12dd363719dde9c09fd3b986c113af72e0bf2dffbc2ad0d56005b1"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-service.ts",
+      "bytes": 12490,
+      "sha256": "c4e0d37584da45d0cfd73a9891caa81261e2dee7b18182d943f0c805f0de1436"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-store.ts",
+      "bytes": 17026,
+      "sha256": "df4d8f595e3a791d684bcaf3a54eca785eee16ffb2945bc8fd2fd5e468f8896a"
+    },
+    {
+      "path": "runtime/awos/pymes/src/crm-view.ts",
+      "bytes": 7115,
+      "sha256": "2d5ddef9613efd382bfa6b406abb626f326ad5b16ed2882118bf50456311fd7f"
+    },
+    {
+      "path": "runtime/awos/pymes/src/demo-classifier-http.ts",
+      "bytes": 1931,
+      "sha256": "0b60569d47da535e5355b9e08995d0daa8a3f645c6ec5ca66916c7160812e5b8"
+    },
+    {
+      "path": "runtime/awos/pymes/src/demo-data.ts",
+      "bytes": 235,
+      "sha256": "78665f06f0e3be1dd68353e0ee0548b8989c71e46a0c2e0f45ab562509cecb83"
+    },
+    {
+      "path": "runtime/awos/pymes/src/domain.ts",
+      "bytes": 7504,
+      "sha256": "84439970656b184a3da110b11706861d29ea3ace2145d2fda1b10905ca042aeb"
+    },
+    {
+      "path": "runtime/awos/pymes/src/effect-dispatcher.ts",
+      "bytes": 2240,
+      "sha256": "d3f3bf868b1fe206720145944686d09716e9b1a97822e6d7cb42c5f042b7a281"
+    },
+    {
+      "path": "runtime/awos/pymes/src/effect-lease.ts",
+      "bytes": 3688,
+      "sha256": "731817eded000a00631567797c1a6fc880bb3caa20227caa408d09a286acda77"
+    },
+    {
+      "path": "runtime/awos/pymes/src/effect-worker.ts",
+      "bytes": 7032,
+      "sha256": "cfce37074be87b28e3ed12c3583dd927c165af725469b3a0593f33e793c12525"
+    },
+    {
+      "path": "runtime/awos/pymes/src/effects.ts",
+      "bytes": 3532,
+      "sha256": "476056c3f04e18d7a9007687014666be2fdd56d22bd7418d83e483c6fd23b0af"
+    },
+    {
+      "path": "runtime/awos/pymes/src/email-governance.ts",
+      "bytes": 20779,
+      "sha256": "7d443ab691052e61c4dfeb7758a2c867e9a3018851f0e2e267c86920a94de179"
+    },
+    {
+      "path": "runtime/awos/pymes/src/email-provider.ts",
+      "bytes": 6867,
+      "sha256": "af0ff49223f51afdabd86d68d11a2027c018abebed2bc6cfcf844a6b94680f64"
+    },
+    {
+      "path": "runtime/awos/pymes/src/email-reply.ts",
+      "bytes": 923,
+      "sha256": "f47e42e844d28b3a0611e05e565eefe93013f7120288789f79d627bcd422c264"
+    },
+    {
+      "path": "runtime/awos/pymes/src/email-review-store.ts",
+      "bytes": 7912,
+      "sha256": "31ac13fb3adcc2dd7e6f590e143c518db7c652abe3a69fb56445801be996f5f6"
+    },
+    {
+      "path": "runtime/awos/pymes/src/email-task-bridge.ts",
+      "bytes": 12217,
+      "sha256": "c6ab2490d09af3f682e6528c611bb62b31529b19cb04e4e3b68c1bdc4b915f7d"
+    },
+    {
+      "path": "runtime/awos/pymes/src/email-view.ts",
+      "bytes": 6200,
+      "sha256": "8bf9a8c7307b8305e6028f1be95d7b970639eb9e18f5bdc1f4495dec5fa63ffb"
+    },
+    {
+      "path": "runtime/awos/pymes/src/email-workflow.ts",
+      "bytes": 23600,
+      "sha256": "55c15ac6414f4b6408eea12a502c82df54dc998ac06ea658ec508de1dbecb365"
+    },
+    {
+      "path": "runtime/awos/pymes/src/evaluate-classifier.ts",
+      "bytes": 2350,
+      "sha256": "d59853df7783a748ed706c899e43add4bab75456a57b6eeff44be43eb102ddff"
+    },
+    {
+      "path": "runtime/awos/pymes/src/fixtures.ts",
+      "bytes": 4526,
+      "sha256": "bb89ff4b9286178221518dcc534f66b0bb76f8c32ed48340731989ccb3cdce17"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-email-provider.ts",
+      "bytes": 13961,
+      "sha256": "269b1c410318ce409de3626aa3046255e21d1de7f635adc7eb22c62677deeb46"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-fault-injection.ts",
+      "bytes": 13643,
+      "sha256": "b31eb56cd4bb8498a5d6092944f6fb6c6361fa00b451407e990aebb7dca1068e"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-inbox-api.ts",
+      "bytes": 7784,
+      "sha256": "e73d777e791c346704d3c6fae0ecb7797c7ebddcd358790e30888771f54cbe04"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-inbox-incremental.ts",
+      "bytes": 18020,
+      "sha256": "6bac3d3ad629ed1d722b7193c694b5c6a45310322b29d8ab9f62ef82bd2f0e68"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-inbox-screen.css",
+      "bytes": 8936,
+      "sha256": "22b55ce5583eb537e6954347bf4b507d8b29810404b3260ab9cde262607293f2"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-inbox-screen.ts",
+      "bytes": 20247,
+      "sha256": "920574a9f8980594c2d02abfb3be6924e306e26a97b722372518fbe1e5700906"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-inbox-sync.ts",
+      "bytes": 22937,
+      "sha256": "452095d41c4c3610afb4953d1450bd9c0b3988a33b98ffec4614bf6db93dfbfc"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-inbox-view.ts",
+      "bytes": 9546,
+      "sha256": "2ac5afc286669e8e086d8cedc963855e644564c4e2cd11497b53e9c1235c59e2"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-keychain.ts",
+      "bytes": 2481,
+      "sha256": "0d5a8d4f3973cb8c3d04f05a12d4a15269ab086d21e778900026463941dd56fb"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-local-connector.ts",
+      "bytes": 3187,
+      "sha256": "ef98b43b3b6df8d581fbced31f2b1b93b3c381fd8ca22d5460538b5360a54f1d"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-mime.ts",
+      "bytes": 5500,
+      "sha256": "1668383b49ec5f6283ce8973ca014b08defe986d84a89ee7439876c06b5b8372"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-oauth.ts",
+      "bytes": 16910,
+      "sha256": "5317e1445f14e29399a84be40eb9b1bce4e1d98c53e515bf93693bf36b5a855a"
+    },
+    {
+      "path": "runtime/awos/pymes/src/gmail-settings.ts",
+      "bytes": 4255,
+      "sha256": "83f64665dba12a45da9a2fb09d9a2595cc343a109b69c1ce08f43b79376d4944"
+    },
+    {
+      "path": "runtime/awos/pymes/src/inbox-mime.ts",
+      "bytes": 11197,
+      "sha256": "f92999dfb265b387090f62a497b9becb52ee54cad9f8acc35b1190b6cc46f7f8"
+    },
+    {
+      "path": "runtime/awos/pymes/src/inbox-service.ts",
+      "bytes": 15945,
+      "sha256": "f6329a323fdebe36574f004fd61184a195e03dd914eacb2049b99aa50f93bb91"
+    },
+    {
+      "path": "runtime/awos/pymes/src/inbox-store.ts",
+      "bytes": 54498,
+      "sha256": "6877a9979874de82e5f195ead07c05d3c0468ae7d25944f120671f185425aaea"
+    },
+    {
+      "path": "runtime/awos/pymes/src/integration-view.ts",
+      "bytes": 3049,
+      "sha256": "ad1be87e88233f33fed1bf29500a407789033d83c681c179c364aaa4cbcfbc87"
+    },
+    {
+      "path": "runtime/awos/pymes/src/job-planner.ts",
+      "bytes": 3714,
+      "sha256": "76e6872526095819b46f60ae107139c93ba6052827635127caa847e6b482e096"
+    },
+    {
+      "path": "runtime/awos/pymes/src/local-classifier.ts",
+      "bytes": 4299,
+      "sha256": "c6c77cb0e87380126fddac259e3757ae18c597beacfebd48687b9e367accab75"
+    },
+    {
+      "path": "runtime/awos/pymes/src/local-health-screen.ts",
+      "bytes": 1510,
+      "sha256": "2ec6a3b86f6ff4091e973e1c3b562ec71a05141d57e27b169547a27db5c7a3c5"
+    },
+    {
+      "path": "runtime/awos/pymes/src/logout.css",
+      "bytes": 367,
+      "sha256": "223f4530a5b6bdbedb44d0df4d0fbe90581f4f81f1d4e69868464cdfadf716c8"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mac-launch-agent.ts",
+      "bytes": 1646,
+      "sha256": "5f6b6b157467e4bb1c5f523a43c1e27788b8688e8b4d49045464cf310198b8b4"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-assistance-api.ts",
+      "bytes": 2579,
+      "sha256": "561b3b5516b0c850462fedf6a74041d3963c3973aba6917f2a28c5a7f18d0846"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-assistance-contract.ts",
+      "bytes": 3953,
+      "sha256": "b275032cd66f54d0dc726438a1768a920e838467913825f2eeeb34a7cdb334f7"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-assistance-screen.css",
+      "bytes": 1672,
+      "sha256": "51982d80c9fd35566de0311c9783625feb6f5f2a31b6546dee35e6720d767c17"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-assistance-screen.ts",
+      "bytes": 5029,
+      "sha256": "4adb33a4272c8e93b3641e609c6f718cc98aa6e0e893ebdd92d39f9e85df6db9"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-assistance-service.ts",
+      "bytes": 7504,
+      "sha256": "e112689275e14a0d0bb3d070fa600f3f15a834ab4df3cf3a756e0ae60d888435"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-cancellation-contract.ts",
+      "bytes": 3067,
+      "sha256": "16cda0fd676485b27a98c29279ef0254c491e1b595c96cb62ceb0ee4e28c8a50"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-cancellation-screen.ts",
+      "bytes": 7165,
+      "sha256": "9f1032676f104b124e5bd3b46f2deab32f1863011c09ea4119c9a03b100520c8"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-cancellation-store.ts",
+      "bytes": 1482,
+      "sha256": "12d16087e0a1c693d8cb4ca206ae961e104502659ccac20304a0f8dc7b3aa89a"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-source.ts",
+      "bytes": 640,
+      "sha256": "afbc82d6565ffe6eb33717194a38e8e3907771ecb43474317d0ddf1238f062ef"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-task-api.ts",
+      "bytes": 2113,
+      "sha256": "29259b4d75f68aa1b3a8f2376b9403d494d25d646c0abd170d63e8207efe8d03"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-task-contract.ts",
+      "bytes": 3965,
+      "sha256": "ef3c7ed7064e499b8a93a3e8e1ed3e805df5ed3a7c8d2916807c1d595073f868"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-task-screen.ts",
+      "bytes": 7993,
+      "sha256": "4da3de932bbc83739fa297d523a448bca03a5edfb7ddac9389bb38c304817b48"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-task-service.ts",
+      "bytes": 9717,
+      "sha256": "1843cb51bf81b315e0421b7fc1dd042446cdd6841160d4e97cb8fe9d3d1ac970"
+    },
+    {
+      "path": "runtime/awos/pymes/src/mail-task-store.ts",
+      "bytes": 2730,
+      "sha256": "da17ef61c45ec468bc40a7316bf13d079c334a5291c8eea8a5e8b871ee45f285"
+    },
+    {
+      "path": "runtime/awos/pymes/src/main.ts",
+      "bytes": 58117,
+      "sha256": "4a5960e5ddde9d3297bea94f381d062028104fa1739d08715248288cc8a50621"
+    },
+    {
+      "path": "runtime/awos/pymes/src/navigation.ts",
+      "bytes": 9415,
+      "sha256": "7f7ccb5465a11ef4926197af2c36d0cb3454606a1b56905caa63f7477bcfcd25"
+    },
+    {
+      "path": "runtime/awos/pymes/src/openclaw-gateway.ts",
+      "bytes": 4834,
+      "sha256": "cbd0bc95701252037b19f56c8cb7e958da201811e64f81c85478fa613e572136"
+    },
+    {
+      "path": "runtime/awos/pymes/src/p01-pilot-kill.ts",
+      "bytes": 7286,
+      "sha256": "01e4cad2e5f0734c9e5f55bb2401d81f42dd57c9097a3c7bbdd6954f354bdeb2"
+    },
+    {
+      "path": "runtime/awos/pymes/src/pilot-classify.ts",
+      "bytes": 950,
+      "sha256": "6d6dda7d72c949d6d2b4028cd4c3a8a0b6a2834e5e4f36eea3d95b7f06790b17"
+    },
+    {
+      "path": "runtime/awos/pymes/src/pilot-read.ts",
+      "bytes": 1452,
+      "sha256": "eda7e6671da9ed1fcdcacc589675b72aa9e6da5d7c32e13435887b8282df48b0"
+    },
+    {
+      "path": "runtime/awos/pymes/src/professional.css",
+      "bytes": 21668,
+      "sha256": "bc979d395687c54a458989627fd8272a76d76888dd78df15546dacf6305229e5"
+    },
+    {
+      "path": "runtime/awos/pymes/src/provider-effect-handlers.ts",
+      "bytes": 6052,
+      "sha256": "67c6bdd25cd9ce4d06ba3b9dd62b34954b9ec475e9e696448c56e119b1332389"
+    },
+    {
+      "path": "runtime/awos/pymes/src/quote-intake.ts",
+      "bytes": 2620,
+      "sha256": "5d2cdc4640244a332945336fc63b387bf133e15d7fabe03fee10de932234c7b8"
+    },
+    {
+      "path": "runtime/awos/pymes/src/quote-offers.ts",
+      "bytes": 3199,
+      "sha256": "a8d598c5b01a89d28d1050c0fcb4ba327f20d6dc5fce653d0a7daac1d76dcdfd"
+    },
+    {
+      "path": "runtime/awos/pymes/src/refresh.css",
+      "bytes": 320,
+      "sha256": "e500fd2a6d771d2f5966fe9eb9ba4ed44d9a71956f237c0c4da646a818efeaae"
+    },
+    {
+      "path": "runtime/awos/pymes/src/rem-module-sdk.ts",
+      "bytes": 5544,
+      "sha256": "be19a4a4be01d1a853dd82fa23c4cf1d3613ad2b441e4e00be52dfbcb2c4fd5d"
+    },
+    {
+      "path": "runtime/awos/pymes/src/remote-state.css",
+      "bytes": 270,
+      "sha256": "9ab54b6d98249221dc4fd8d8cb045613657bb2dc3a575841419e5e797230804e"
+    },
+    {
+      "path": "runtime/awos/pymes/src/request-id.ts",
+      "bytes": 201,
+      "sha256": "5cb5b1f702676d2076ca1d321bef6f23a8d247c7dd57cfe6d9d47eb1883d67cd"
+    },
+    {
+      "path": "runtime/awos/pymes/src/retry-delay.ts",
+      "bytes": 363,
+      "sha256": "e9ef2ad6798517256acd57f9d9072ef520469d119ad722771155f94d8e36e00c"
+    },
+    {
+      "path": "runtime/awos/pymes/src/retry.css",
+      "bytes": 312,
+      "sha256": "016f92b342fce431e91eba3043b956b37c7fabe813465f8deafd215538859c9c"
+    },
+    {
+      "path": "runtime/awos/pymes/src/review-api.ts",
+      "bytes": 1778,
+      "sha256": "ad1415893906912124b42b51baebd65baef415bd2e3f0efc0783d63c01af119c"
+    },
+    {
+      "path": "runtime/awos/pymes/src/review-contract.ts",
+      "bytes": 4117,
+      "sha256": "b708377923d871ccd443397249d468419044f2a81c6cb09e51d045e3ab0ffe88"
+    },
+    {
+      "path": "runtime/awos/pymes/src/review-screen.css",
+      "bytes": 4176,
+      "sha256": "aa3781fd901e7f0b9ce8bcf5dadbe4bdf0f21c5cc6865c72d1fdec488907bd2a"
+    },
+    {
+      "path": "runtime/awos/pymes/src/review-screen.ts",
+      "bytes": 8603,
+      "sha256": "85bd97b4fd9d2d7a58bb4c752d533137093aba320c43fdfbb442dbb8aabea93f"
+    },
+    {
+      "path": "runtime/awos/pymes/src/review-service.ts",
+      "bytes": 5139,
+      "sha256": "61150f4ec40497a7fb4fdf011273d048e2749279e467ab31e8225fd57d7c6c8d"
+    },
+    {
+      "path": "runtime/awos/pymes/src/runtime-mail-replacement.ts",
+      "bytes": 8399,
+      "sha256": "0b307fab51a1e93217cacb1d19fa461f96b7e615696199ce7f70a73b639032bb"
+    },
+    {
+      "path": "runtime/awos/pymes/src/runtime-screen.css",
+      "bytes": 9524,
+      "sha256": "89373e6829c7556a2dd981f8aab7219d1c3e5fda9ec8c7ca652f6e8e541c4af1"
+    },
+    {
+      "path": "runtime/awos/pymes/src/runtime-screen.ts",
+      "bytes": 31422,
+      "sha256": "105f985ae9c6d4af9101e992514b2592b6272b5b8461c8328216a69e751d823d"
+    },
+    {
+      "path": "runtime/awos/pymes/src/runtime-source.ts",
+      "bytes": 12727,
+      "sha256": "77ef7f53544a43f4410a927660878ed04d9e10766e84d04579db7c535596d296"
+    },
+    {
+      "path": "runtime/awos/pymes/src/runtime-view.ts",
+      "bytes": 3149,
+      "sha256": "4df3494013403e6c51d196a1f952727c184289631731c6b5641cd26e56cd43d6"
+    },
+    {
+      "path": "runtime/awos/pymes/src/search.ts",
+      "bytes": 234,
+      "sha256": "6d8d387b1cfd2ef5b03e890a4ab2c147bf8e7850cae629d16bdff64c24509607"
+    },
+    {
+      "path": "runtime/awos/pymes/src/server.ts",
+      "bytes": 13174,
+      "sha256": "df4454dfe8a8ef5908dd4b2e76c62a3bfa44a51f0fe74c52a069c87920c6471f"
+    },
+    {
+      "path": "runtime/awos/pymes/src/snapshot.css",
+      "bytes": 145,
+      "sha256": "e103d4b5c640b8f526bf864919a1182a314ba1838f0438f7286488183abaa239"
+    },
+    {
+      "path": "runtime/awos/pymes/src/space-api.ts",
+      "bytes": 1708,
+      "sha256": "4e254d951d9f378a81331035c0ef56b62a05aefdfc556fc0c61811133665bac5"
+    },
+    {
+      "path": "runtime/awos/pymes/src/space-contract.ts",
+      "bytes": 6849,
+      "sha256": "d26fc7adaa441bb6b44a0918b8c68e4a00b7dbf9aa59377f58e9d16205fbce90"
+    },
+    {
+      "path": "runtime/awos/pymes/src/space-screen.css",
+      "bytes": 4886,
+      "sha256": "21accce5a1694fda4f5e36cee362781d5a84232da6e55a6182170e23f1441d81"
+    },
+    {
+      "path": "runtime/awos/pymes/src/space-screen.ts",
+      "bytes": 15529,
+      "sha256": "718d8b1de819bd46fd571ea93ef0191447b073557738c5542d3c8eeb3f62e1a3"
+    },
+    {
+      "path": "runtime/awos/pymes/src/style.css",
+      "bytes": 39987,
+      "sha256": "2ac13b7a4a9ba9854f57f37558aa4c10a20dcfd98fa2c2635e4c98d70897da59"
+    },
+    {
+      "path": "runtime/awos/pymes/src/tasks-screen.ts",
+      "bytes": 3682,
+      "sha256": "99eb4fe0f592f86961acb44757f9aacd98df31d8b408782c847e8fa01a9f06a8"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-api.ts",
+      "bytes": 3389,
+      "sha256": "1bec13cd87eb5df574b6754048f75139b050cccd5419c5e2c6b89d4c73e05e72"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-contract.ts",
+      "bytes": 6123,
+      "sha256": "efd495bd068642577ee1e667144799039633344de13adc6b0922d13cb571e6f4"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-identity-contract.ts",
+      "bytes": 6208,
+      "sha256": "fcb46d889ad8967e983e4cdcc44b9f5ad0554128dd01fbb5d1f4fb06c273ad2c"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-identity-screen.ts",
+      "bytes": 7980,
+      "sha256": "ef1e271f112068ee4b7c2991fd9ab041d85c5dec524f2828ecdbeba4794edc53"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-identity-service.ts",
+      "bytes": 3838,
+      "sha256": "2c5220f41b94d39f9b22c1722557c4ba560fff0f84aa9d1bf6a29d2cfe451f35"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-identity-store.ts",
+      "bytes": 4215,
+      "sha256": "e02412b2e3c213a326b48508705a54b785d26a3c2047276522bdf0ce9b87732c"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-screen.css",
+      "bytes": 2991,
+      "sha256": "f4aaec5c120a37bda36e68322ae62e02e61c62ef3dbbe9407c8fecf50ec23719"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-screen.ts",
+      "bytes": 13311,
+      "sha256": "f261631cf44327ebf9f4f835840137f55e4a684bfa14fbf05f0f5ca2d5066120"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-service.ts",
+      "bytes": 7226,
+      "sha256": "3e46c57e4e16b0a44ecf6a319299929985c5519e9a0aaf4b9742423d22283a9d"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-store.ts",
+      "bytes": 11802,
+      "sha256": "5589953759cd99da2890672cd2aad2fd66337103d5d178feff6be055e94bb57a"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-transport.ts",
+      "bytes": 5946,
+      "sha256": "728bb033d5b31764a603ec894eb073a57698e098a2a4edb838427a8cdcf787af"
+    },
+    {
+      "path": "runtime/awos/pymes/src/telegram-view.ts",
+      "bytes": 1310,
+      "sha256": "0de6a017cd26b7b79eced2b722a9411ff13ae80ecf3aa84dc52369d5e67c1499"
+    },
+    {
+      "path": "runtime/awos/pymes/src/ui-server.ts",
+      "bytes": 2978,
+      "sha256": "b10404ac893cfc443bcebd4964265d24ed9bdb51031970d1524fe76629d9ea34"
+    },
+    {
+      "path": "runtime/awos/pymes/src/whatsapp-http.ts",
+      "bytes": 2362,
+      "sha256": "8b92aa687d14e18e689be30a25f5abb4ed422d583eb3572a4ef9ef6642d84a59"
+    },
+    {
+      "path": "runtime/awos/pymes/src/whatsapp-webhook.ts",
+      "bytes": 5026,
+      "sha256": "8b46f614ec27ef335011c0e7fdd38cca288b1750e66d84c4fb548e625435bdbf"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-api.ts",
+      "bytes": 43228,
+      "sha256": "8097f9ebcdf2bbaa9a2ea41b5b0a431441421c8eece163b33e9b03741cae1991"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-client.ts",
+      "bytes": 48311,
+      "sha256": "6e1e905c4aaa14368cbe5e884cb7015b2584f41d48714354e45da9afae025e2b"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-ingress.ts",
+      "bytes": 2365,
+      "sha256": "acf73cd4f6c62cc75f23f0b4fa33fec4b2b1e9f28e48cfb957498046f871bcd2"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-login.css",
+      "bytes": 1491,
+      "sha256": "103f841ba966f309469932481665cf3a3b0d687ec4f8439ba34f67d3fb6c04c7"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-login.ts",
+      "bytes": 1789,
+      "sha256": "161e20d8f750c903cf8ee22bae51df13700d8f6b16c474e0f7d5a0b84a090b60"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-policy.ts",
+      "bytes": 2388,
+      "sha256": "4ee48eb390c0703e76ccff9ac7e1e003bd7c8e312e4cf388dd4e2356d4291c14"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-store-sqlite.ts",
+      "bytes": 11867,
+      "sha256": "eb3b82cb0eecbfe6bc35ed87e2bcecbd7dbb0765277dd496e6526a409e12a5f9"
+    },
+    {
+      "path": "runtime/awos/pymes/src/workspace-store.ts",
+      "bytes": 2036,
+      "sha256": "702459cacecd63bdd79caec94e7923d050b613586f8ddab08b06c032369b565c"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/api-server.test.ts",
+      "bytes": 10007,
+      "sha256": "86b452d7b50034a286b8bb5d503e4d4678cbbfae3c3f3b5e7e576e1ae466a60c"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/auth.test.ts",
+      "bytes": 459,
+      "sha256": "4bf6b1fb2d69229ca83deb2e3109a13cb324344d4fb745cc8280bf303966cb53"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/call-effect-handler.test.ts",
+      "bytes": 1298,
+      "sha256": "0122b5f46feacec922bcfffa21935b594b00df70e023a7387cd2b4e7eed8ac77"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/call-plan.test.ts",
+      "bytes": 1144,
+      "sha256": "d7de1b0945e0f1cd6e0069733712666689aeaff9bdfb970a2c82070a03de48e7"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/call-webhook.test.ts",
+      "bytes": 963,
+      "sha256": "ac2010f1075bea3e8733b7d152e40a2fc17529097418175e3acb68a598eb4259"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/capsule-crash.test.ts",
+      "bytes": 2438,
+      "sha256": "e153e932e192dae296267f7e3d79afae4a9258521bc5d1b60b8a30e85be40f08"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/capsules.test.ts",
+      "bytes": 13408,
+      "sha256": "6c02db6fe2870f89b80531eabe00576fe4b564b6d9521d888093de4e252f7b8d"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/case-lifecycle.test.ts",
+      "bytes": 2178,
+      "sha256": "302b55764db611e1b7beaf5c55402bbbc491ef7ac6be456e7ef8df0b7bcfa379"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/classification.test.ts",
+      "bytes": 2242,
+      "sha256": "963d6016be9a1d0d40b2e164c7f0ed6b775b41d8bc2dfe5487506758630e4fa3"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/config.test.ts",
+      "bytes": 6291,
+      "sha256": "df07c2d7d2a206b91371d4ad4911dbcc31e64ac5aa2358710cf8a564dab005aa"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/connectors.test.ts",
+      "bytes": 8891,
+      "sha256": "ebdb78f7c3ad39b2b560c1983bf31ae6021f5714e70f9e32f774a6f6ec98f113"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm-conversations.test.ts",
+      "bytes": 3896,
+      "sha256": "545c018b5e01537fffefa30fd7f53b85187ee2d4e8a1cc8f9b6f2f4982f864c7"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm-mail-evidence.test.ts",
+      "bytes": 4523,
+      "sha256": "1f8b5fd2b3eac560847c02dfc46ca5156af7b1daec0539a21c53995d344426e8"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm-mail-trace-crash.test.ts",
+      "bytes": 1815,
+      "sha256": "50922930e0517aa30206ab93f4dc660cc7503d8ac4e87be60a8b60b9972664a5"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm-mail-trace.test.ts",
+      "bytes": 6967,
+      "sha256": "1e218110872ed22679c08901d0f5cce49241d40ae3fb448cf2e8d357de4d1df2"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm-task-effect-handler.test.ts",
+      "bytes": 1317,
+      "sha256": "ce71d1c8fae581c9110ce5fc4abbd794bd4645f7043b3d7d9e4eff0a79c213bb"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm-webhook.test.ts",
+      "bytes": 968,
+      "sha256": "c70e2eaeea01c9b82072006f5c4c38e5a1001108917f248a019a6a47a65a7e12"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm-workflow-followup.test.ts",
+      "bytes": 4244,
+      "sha256": "3bab35a47c13f9b24cafc1979990b2af85460fff1ac466e2bc8aca3d610395f1"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/crm.test.ts",
+      "bytes": 23425,
+      "sha256": "1a57d0e56a9f57ec3b694fba760b102efd60d35ff2baf10098aee59f84c9bcd1"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/demo-classifier-http.test.ts",
+      "bytes": 2046,
+      "sha256": "bc4774cde0856f63c735eb2167a854348b7197f652f61087c8709787f1fae5f8"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/domain.test.ts",
+      "bytes": 2473,
+      "sha256": "462e9a7e7dc181e0d473f6a135fd2ea93bcb65c6c0e6119501bfae034864a7f3"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/effect-dispatcher.test.ts",
+      "bytes": 2560,
+      "sha256": "ce401650e211ec878a43cac7fcb0a034a35b557662584646143238e3fb71509c"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/effect-lease.test.ts",
+      "bytes": 3089,
+      "sha256": "3b1a2b79ca20549feb6f52a5feb81b80e308c676f836a23ef8f01397b4d137b0"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/effect-worker-batch.test.ts",
+      "bytes": 2546,
+      "sha256": "771f1e0fde8096061536a48cc44c4bb59a1693bbad3d93001bf71f907d94e98d"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/effect-worker.test.ts",
+      "bytes": 5338,
+      "sha256": "90416b9091ecc392d014e88b80308e2ba24595a5183f49f4352c32d20a12ce34"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/email-crash.test.ts",
+      "bytes": 3901,
+      "sha256": "3ee1b2d43e1555830879f388b52d74c38f6c5dd4519fdb44002a8172e2781bd4"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/email-governance.test.ts",
+      "bytes": 6793,
+      "sha256": "4e8c4b5958e8939ca98a99b2179472dc1834ac9ab6c574c24b3f7ecef62a20cd"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/email-review.test.ts",
+      "bytes": 4398,
+      "sha256": "8bfeb7a0231e0e8e339c4f1dc86300dee86c46b0aa8176e015544130ce1bdc3e"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/email-workflow.test.ts",
+      "bytes": 8752,
+      "sha256": "a785fff9ff5cff1b3454ea9ae12afc4a16a4e4768bd083c252423d7cc08bd6f9"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/capsule-crash.ts",
+      "bytes": 683,
+      "sha256": "819622960c556c5488130e38a6beea483345cdc27a2dbb85856b3e5789b67f2d"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/capsules-browser-qa.ts",
+      "bytes": 2932,
+      "sha256": "97e0a66961386ac5b3f6db402ef49250a98e6fb3bdf65d7c34c37cdde5f9557b"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/crm-conversations-browser-qa.ts",
+      "bytes": 2146,
+      "sha256": "b0813613a8b0b292acc0cdcaaec7a305fdd8dc3cc88f091b9b9b4d09b0e01ee5"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/crm-crash.ts",
+      "bytes": 460,
+      "sha256": "7c46ef9ea1c3b570229ca938365981be9ffd17df9ea23d1bb65cfc9a7f3ef950"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/crm-mail-trace-crash.ts",
+      "bytes": 389,
+      "sha256": "40eceb23c1ac9f3ead4c1a21513d7ef949a4f9e2b5a3206717c9f57250ea5f4a"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/crm-mail-trace-fixture.ts",
+      "bytes": 5745,
+      "sha256": "82155218aa160acafd55e0cb09645e1a93171950e9ba461ec5e9220d7b8b3fba"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/email-crash.ts",
+      "bytes": 2036,
+      "sha256": "18889c2bc221702264efc30cda7b14f444ee50dbbf3e4a7887c0fff19d4f2eae"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/gmail-crash.ts",
+      "bytes": 399,
+      "sha256": "349fff163c16356111459b8f4f22e54b80b541bc3cf76b4ffecf7c9a86120271"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/gmail-fault-crash.ts",
+      "bytes": 921,
+      "sha256": "a97e100f110b9658899684906fdac3ec3eecedda904377b62449943e2c56e469"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/gmail-fault.ts",
+      "bytes": 1130,
+      "sha256": "e7951c9da0b1dc391c3d08f3079d009a8ffc8d9a70bfc513e5d78019102394d7"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/gmail-history-fake.ts",
+      "bytes": 3590,
+      "sha256": "146c2faeaa2877424aa9d354783d8f94b9e2420150a919d4ee83854e8093c31f"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/gmail-inbox-crash.ts",
+      "bytes": 762,
+      "sha256": "b261ae4a2243af7f2e863c826a755152d012587d0c8abd1e4ac0ce19ec487f66"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/gmail-inbox-fake.ts",
+      "bytes": 5889,
+      "sha256": "6c99cd285cdc3dda1d89a64c7b5cf10eed87fe43422a02e789866f7ca63154cc"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/gmail-runtime.ts",
+      "bytes": 2893,
+      "sha256": "4f2ff7bbf962a45c0bf6f5db1fdebd877b7a6580f0261352118c5c913930c1de"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/inbox-p04-crash.ts",
+      "bytes": 1015,
+      "sha256": "a1202443e61ca1a98e61f79307630b7060bbd8868034ed7e1e41c9e60fb69903"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/inbox-p04-lease.ts",
+      "bytes": 538,
+      "sha256": "8bd5885edaa26713d30fdf6be2e25e34fe6ba4d45c924de26e31d5996a30a7d7"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/inbox-p04-scenarios.ts",
+      "bytes": 1333,
+      "sha256": "a823b9bcb0b94377cb6410d8c861206f8311213b8342c91ae682ee6352c8b3e5"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-ai-evaluate.ts",
+      "bytes": 2763,
+      "sha256": "7f0bee2c95ce705191fdfc807285f93e87edbec9a76a28b82c3afebc9c8fc136"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-ai-ui.ts",
+      "bytes": 2575,
+      "sha256": "9b9991366d6588f150d08500ebe7679b06b87a7f35f25e251538c0bf223615ee"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-cancellation-browser-qa.ts",
+      "bytes": 2027,
+      "sha256": "18057e1ec5261a9cfa53146cb6763e4e944d8a3a4325ae1ee5b0a4e516c28433"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-cancellation-crash.ts",
+      "bytes": 929,
+      "sha256": "e0e800571ce52476c71884e1823f5d22127d596f099b32ac816ebed9a3a74270"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-revision-crash.ts",
+      "bytes": 487,
+      "sha256": "cee306f7f25034544f39d0489371e1d544b8bb65b2a33dc80ed9642106b1b600"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-task-crash.ts",
+      "bytes": 584,
+      "sha256": "4485b5feffa96800bb66924ea96c80cce638eb27524983f0dac49dd6a6752914"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-task-fixture.ts",
+      "bytes": 4413,
+      "sha256": "c82628a2be0cbf2493029d0f4fa431a088c781dc4629c3fdfc40d7d7a26e7216"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/mail-task-ui.ts",
+      "bytes": 3006,
+      "sha256": "067dd86298a8cbcda08d95ca770eb73dae8f976edadc04c77c509bbbef54bf20"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/planning-crash.ts",
+      "bytes": 1082,
+      "sha256": "3d47f5c31309e3a5ea01f31cb433edbf07d802cfa542d3ece5a05f063242a913"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/pyme1-harness.ts",
+      "bytes": 8316,
+      "sha256": "04837383a159a2c6bed24cc8b0ac29797b61394a4ed0392b6888d95c97341f3d"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/rem-module-crash.ts",
+      "bytes": 546,
+      "sha256": "4542012650ab7ebef3d0918e4b584757c981a831a6f34333d3166c9e039d2ed3"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/review-ui.ts",
+      "bytes": 2938,
+      "sha256": "2609868ce1963c66d4198ff769333419eb7c6dd22bd414c6a1da15691b2cbc99"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/runtime-mail-replacement-crash.ts",
+      "bytes": 572,
+      "sha256": "5511153db89b084d4d45d011eeccfc0447296611c2b5d7751a938fa1812fe10b"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/runtime-mail-replacement-fixture.ts",
+      "bytes": 3717,
+      "sha256": "79f6e25b3111bedb1fd81b4aebde4afaf53e4fe012924408afa885a218250b91"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/space-crash.ts",
+      "bytes": 650,
+      "sha256": "085cc47f9431c8b6473600d200f2b1232a2662ed50e59bf89b6e85a436c2c7a7"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/telegram-browser-qa.ts",
+      "bytes": 3675,
+      "sha256": "81a7b12ec8f85d01aee6cab3db787a3b23b8e2116445a1a4c8c509c787a6f60a"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/telegram-crash.ts",
+      "bytes": 1052,
+      "sha256": "fc2f05de1c0793472d6beec9508c2313bb1cbcce00095f9196d4b96a4dab30a4"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/telegram-fake.ts",
+      "bytes": 1740,
+      "sha256": "c99aa4cabb24730079318294ca8bcbb846b607380bb9f98e3679f8b6acfd6613"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/telegram-identity-crash.ts",
+      "bytes": 998,
+      "sha256": "9ed9e6ebae7547d5474f1d814a6e0853bd2c86280f691c7ab8ec2ba1b0f19f6e"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/fixtures/telegram-identity.ts",
+      "bytes": 3059,
+      "sha256": "bd50c7b1d4b4771dc8307148c8e10066506d84b7d9eeb0749332d45426f0094c"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-fault-injection.test.ts",
+      "bytes": 10557,
+      "sha256": "b312c58e3438621852728f0535d77a26e791208edd00c2ce65abe201e45636bb"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-fault-runtime.test.ts",
+      "bytes": 5489,
+      "sha256": "7972e567da3ba72b5c6153d662f5cbc980b7bbac03a9fd358bece2a2fc096459"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-inbox-api.test.ts",
+      "bytes": 14578,
+      "sha256": "98568529a7e26a1f79b5eb0ca4038ec3fbfe6ed8ca5a94798a350c41cefbe80b"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-inbox-incremental.test.ts",
+      "bytes": 19266,
+      "sha256": "d605fe5594f84939c432ae162482484e4cc69a10ad57eea77533176d21914eef"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-inbox-sync.test.ts",
+      "bytes": 19095,
+      "sha256": "ff97d743a301281793aa4af4f888bcbc40b9d5d5faf4661855ffb933ee74da74"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-inbox-view.test.ts",
+      "bytes": 9230,
+      "sha256": "f60c17e2af7aa2a71d1f6a9376699981cc1a2e223e02736e085603451ec45e19"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-reconcile-p02.test.ts",
+      "bytes": 17519,
+      "sha256": "ae9a3d178b2e8b0b41402258a9145cc6eaa08ee0f1727366f540cc800b3fa25b"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-runtime.test.ts",
+      "bytes": 5301,
+      "sha256": "3a96da6943e65944bdb81527d304a064c6d71ac487ea89bc7dd057decfaeb6d9"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail-status-race.test.ts",
+      "bytes": 4510,
+      "sha256": "af446f45498f2da699a1af90a0681c471ad90fc7db3cdf9523d525931af1c26b"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/gmail.test.ts",
+      "bytes": 13440,
+      "sha256": "f5c5643b5ea6b34243c01c7dde212b451425a858a8c9e71033a2ce4189ca104c"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/inbox-mime.test.ts",
+      "bytes": 5591,
+      "sha256": "7f4aa6fe25674311adb274a5ad43501cf3ce559aaf929e8a6d595f69397c0702"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/inbox-p04-review.test.ts",
+      "bytes": 6168,
+      "sha256": "02e25cba1e5a506ab325cf90c5dec7a4c084003ad0ce3e2c9d5a6855b9e9bc5f"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/inbox-review.test.ts",
+      "bytes": 14193,
+      "sha256": "2373fe1842b45cb2b8cfbc0fb7b90d7f4db6035526437bcbe776f28d6ffcade2"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/inbox-service.test.ts",
+      "bytes": 7965,
+      "sha256": "11036e2a4bab09b0695df0c7f23b103efe2141537fe286b5790667dabbe29e67"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/integration-view.test.ts",
+      "bytes": 2816,
+      "sha256": "b29e4b990d0d1f03800526caab30eefda7a5ae32094e810381f0244c79d7793e"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/job-planner.test.ts",
+      "bytes": 10522,
+      "sha256": "e9afc6c5679c8ffbf3d35a59d6017353c9500cc4baf743f1d555233e2c61e962"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/local-classifier.test.ts",
+      "bytes": 2196,
+      "sha256": "c81ccd7319d14e86b659f95c9534aa3b86e9a7af3e439f677bcfcb95144b513a"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mac-launch-agent.test.ts",
+      "bytes": 762,
+      "sha256": "12bb48116e78c7d6ad6ffdc788a89b256d0a09a10730d2d06836dfc4c18a084e"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mail-assistance.test.ts",
+      "bytes": 9945,
+      "sha256": "4da540b21ba46125582c7474d8ad3ff0680746c2c9ec32bb0538d6dcf76e0278"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mail-cancellation-crash.test.ts",
+      "bytes": 2194,
+      "sha256": "15722b951d6e4ff99abee5fff3766f01d1255b4fc24f3a0d062dad58e362e05d"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mail-cancellation-screen.test.ts",
+      "bytes": 2752,
+      "sha256": "bb2105b6d6e2ddb02b80fdd16cfc754eec638e922c45296aa798f918415059fc"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mail-cancellation.test.ts",
+      "bytes": 15520,
+      "sha256": "e487591fdd72e3316f8a260062e4fa90c188dd112a91d5df4fbf036b2424a16c"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mail-revision.test.ts",
+      "bytes": 11210,
+      "sha256": "3dfa11c396998c9b3a6cffe6999f705850fdb9337e2ee65f33c87f5d2e13d6dc"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mail-task-gmail.test.ts",
+      "bytes": 4766,
+      "sha256": "7d41ae62c7d4927dfaca1256fa6f13175dbd8f264a1b28618a924a55ed94beec"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/mail-task.test.ts",
+      "bytes": 11042,
+      "sha256": "4734a5a94d1f12d2f379a44091dfea07729481815c0c5fbbfed53fdc9402757a"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/message-effect-handler.test.ts",
+      "bytes": 1378,
+      "sha256": "b8394fd088e8024765161146987f964ff7a24b71724a556771f3a2e09de47200"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/message-webhook.test.ts",
+      "bytes": 1124,
+      "sha256": "fe63f9bfc917c2866a2b5b4c9d03b93f77c7649e5a1f7adc892448b53f6121db"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/openclaw-gateway.test.ts",
+      "bytes": 4459,
+      "sha256": "592c76dc9d400a04102d151e3f252d5817007efe29687860ede8569f8b601014"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/operations-script.test.ts",
+      "bytes": 2833,
+      "sha256": "9e6c3505d0279177ec6d3b00a4220232545ce764e5dac5133b070f7cf75f4d65"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/p01-pilot-kill.test.ts",
+      "bytes": 4709,
+      "sha256": "76d89bab647aa7d35e6e2ccfc56cc847ef9653ce06557cb7a0f5746dc90ed24c"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/provider-effect-handlers.test.ts",
+      "bytes": 1506,
+      "sha256": "8a692bf27e3f88dfe7a03d2642a6988c203ca51b04b04111a202904f22d4148d"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/pyme1-contract.test.ts",
+      "bytes": 3851,
+      "sha256": "696d82f8157006687fac03d027c5719dff8d507c7a5af9ee710ae782b3377ebd"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/pyme1-crm-commands.test.ts",
+      "bytes": 2609,
+      "sha256": "b7ad3e1898c56c09b324cc1b1c709d6c8fbb3b766e1beec67f2343fc2bf1bcde"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/quote-intake.test.ts",
+      "bytes": 1584,
+      "sha256": "e9b8d62408b7b155ba07ee22540290c6547aed740e505d59d282dfc00028b136"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/quote-offers.test.ts",
+      "bytes": 2524,
+      "sha256": "fb84f88c0d14e84d2637d1e962a4d2b92162347deb8e1baacf23d672469eafef"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/rem-modules.test.ts",
+      "bytes": 5553,
+      "sha256": "9d317bef3ce5a4a9e7517f6997ce9484e01a390c5613d15840c33d5d4550f998"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/retry-delay.test.ts",
+      "bytes": 680,
+      "sha256": "a42bc205c81c33b95446b38422cbd5770e115c9b7d57bb9133b82eb797788acf"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/review-queue.test.ts",
+      "bytes": 11185,
+      "sha256": "b863669dcb63326fbfc7fddd327cec81e4db767c02f29bdc75443b47027e8eba"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/runtime-api.test.ts",
+      "bytes": 2796,
+      "sha256": "e95010b9c5eb679322998d832756f52d61e0dbb9b1a4a3ea7c0a6a28542faa0e"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/runtime-mail-replacement.test.ts",
+      "bytes": 13116,
+      "sha256": "ae08b75f11b8766921fc702801bae6f508f675e8026445cd18aadf1f3e2a014d"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/runtime-source.test.ts",
+      "bytes": 3353,
+      "sha256": "9b13cd5528600fdff51fe7a587c09158ec6c02247a26354ae308c770a1cbd9ca"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/runtime-view.test.ts",
+      "bytes": 1130,
+      "sha256": "3a358edf00d140d9b48944af3ed51fa90e96ea87fee2f365df6528258edc3d8a"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/space-crash.test.ts",
+      "bytes": 2219,
+      "sha256": "296f10849878b404857173a12d2910e341fc6a08c92ff8b891d6ec9769b3c618"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/space.test.ts",
+      "bytes": 10460,
+      "sha256": "88c4cc98c2b3a3e3d1489884c0739858c2d8e9a2bc27cdb45cdf9ecf15d76ad6"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/telegram-crash.test.ts",
+      "bytes": 2664,
+      "sha256": "722287d30dafe57375f64aae3cade2575b93ad81168980cca2253524b1eaa170"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/telegram-identity-crash.test.ts",
+      "bytes": 1834,
+      "sha256": "376a1682edd8d61784197f736554608cd170151a5959665da688357f96d77b85"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/telegram-identity.test.ts",
+      "bytes": 10129,
+      "sha256": "278f350cc6af11330f735de594d687c8037023cebf36f87ae0b01dbd29a3c181"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/telegram-view.test.ts",
+      "bytes": 1254,
+      "sha256": "bfdc79dfc41a47d329ef7338d20f2239269b0200b188e45c674fb16c7ad9f323"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/telegram.test.ts",
+      "bytes": 17001,
+      "sha256": "c13a935e3eac644720c8eb44b1d005ad757aecd0e1c1af63751022a8d72b725b"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/ui-server.test.ts",
+      "bytes": 2130,
+      "sha256": "c322ebfe002f140260122511e720eea03f84e1890ad65640f3a79817089d5fb2"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/whatsapp-http.test.ts",
+      "bytes": 2569,
+      "sha256": "45e1e085fe8cccc771c1e75cc209d9e907dfaff3418a6814820f895b6d333ce5"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/whatsapp-webhook.test.ts",
+      "bytes": 2314,
+      "sha256": "14e66604628f0e88bb78b06c453008ce105a073ad89965710021ac4837736804"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/workspace-api.test.ts",
+      "bytes": 23555,
+      "sha256": "9e215802953249c2b3252501fac5eecbcacd6aefd0576a710595740559c9d843"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/workspace-client.test.ts",
+      "bytes": 54228,
+      "sha256": "6b06f025ebe0f25e953dbf422fd656c24d315f30b89f006f216eff024ce29e38"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/workspace-ingress-api.test.ts",
+      "bytes": 6364,
+      "sha256": "180f10b5d272547f4c326a4a18c87f35cc492fb8a25bb14677f02b995249e861"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/workspace-ingress.test.ts",
+      "bytes": 3029,
+      "sha256": "fb75d53efcf1a5471017a16e49f3fd52d48c9c9df24c0a0c75412c7455404246"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/workspace-policy.test.ts",
+      "bytes": 2336,
+      "sha256": "0ddf76802eb63b54ac2f849ad6420667376845e130d262af62ae4ca9e22413be"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/workspace-store-sqlite.test.ts",
+      "bytes": 9090,
+      "sha256": "f47ab5697d1534fe6b7426ee1b3d9d9e50f8b35881d1a0c8862ebf3b3e5d37fc"
+    },
+    {
+      "path": "runtime/awos/pymes/tests/workspace-store.test.ts",
+      "bytes": 1868,
+      "sha256": "9c0b5d5436ef0e1cc7e39dedefb8914bdefa80d78c5eb22a54e4fad3e5be9d48"
+    },
+    {
+      "path": "runtime/awos/pymes/tsconfig.json",
+      "bytes": 264,
+      "sha256": "9c769747c6dcf01ff0ea14b0ee043a4745a189b35a4039c58217b10e70c0084f"
+    },
+    {
+      "path": "runtime/awos/pymes/vite.config.ts",
+      "bytes": 490,
+      "sha256": "3ab17ebcc202879ccbc9dc824afd50b65ff2709fa26b3c1d293a993d19c92544"
+    },
+    {
+      "path": "runtime/awos/scripts/check-k8s-manifest.sh",
+      "bytes": 623,
+      "sha256": "455f23ec12e99514583a9c9655f687c6863a9ba30423346ea2e63eb97fcd78f4"
+    },
+    {
+      "path": "runtime/awos/scripts/check-openclaw-contract.sh",
+      "bytes": 776,
+      "sha256": "ad09edde7c410491844887ecd878f4254f69611a8e047c9d37b8848c2c9a6dea"
+    },
+    {
+      "path": "runtime/awos/scripts/demo-company.sh",
+      "bytes": 815,
+      "sha256": "e8a75672264fdcde88042cb791e5e2b258af46aee25d1e54db0c3ba8a52bf88c"
+    },
+    {
+      "path": "runtime/awos/tsconfig.base.json",
+      "bytes": 265,
+      "sha256": "3941265c385aca8cba51d190f5b975101566220a3c8cfeb3b5840d54bf2674bb"
+    },
+    {
+      "path": "runtime/awos/worlds/demo-office/world.json",
+      "bytes": 351,
+      "sha256": "28423db6dd3326dc9565f6b7c0b11878ff14440d2c98353e377f78503eb3110a"
+    },
+    {
+      "path": "scripts/Launcher.swift",
+      "bytes": 10092,
+      "sha256": "3896e5536a73eec9213fa33d964b1f0609271f9c5e0e7dfe110dd23f585ace0d"
+    },
+    {
+      "path": "scripts/awos-copy.js",
+      "bytes": 1368,
+      "sha256": "b814ab236d6ccf3d7ad96eb011c3673e6aa9d55e0277ca5d4835cc640ec292ba"
+    },
+    {
+      "path": "scripts/build-mac.sh",
+      "bytes": 2626,
+      "sha256": "2eb9be3743ae6890b6dbf89fba3c52b8a903a8f9dfd846d05fe0b70d01e67072"
+    },
+    {
+      "path": "scripts/demo.js",
+      "bytes": 1172,
+      "sha256": "9acfbd0f4894af1ce90746201655b9d01b4a395530c22fae92997d7f6179b314"
+    },
+    {
+      "path": "scripts/eval-redactor-checks.js",
+      "bytes": 1764,
+      "sha256": "5e91ca6b0c383a7860bce2dc7f15716a0a3bbcbc4a0e7fea0d3aab0b6e87daa5"
+    },
+    {
+      "path": "scripts/eval-redactor.js",
+      "bytes": 4127,
+      "sha256": "449290920da73e1f70b7fe21644499514d676889c934ee54b9d8d1f23e37851b"
+    },
+    {
+      "path": "scripts/eval.js",
+      "bytes": 10283,
+      "sha256": "a83203655c5b64dcabf679190f304e6bdf54afdaa2f4ef027551b7f8a787910d"
+    },
+    {
+      "path": "scripts/gentle-rem.sh",
+      "bytes": 560,
+      "sha256": "959ab3c4a084198072aed815f7d438dacdef749836b29e1449b528b9818b7749"
+    },
+    {
+      "path": "scripts/icon.js",
+      "bytes": 1970,
+      "sha256": "0aa2270067d9126153b27c274194f88afbbbbe93d40e0bfbf5663e1a12580d98"
+    },
+    {
+      "path": "scripts/launcher-bash.sh",
+      "bytes": 770,
+      "sha256": "5a8bb645ab70406caa5213631832ef76ada790c6b9c27119b853c03b0ea5d6a2"
+    },
+    {
+      "path": "scripts/parallel-agents.mjs",
+      "bytes": 11353,
+      "sha256": "47ba32f8bdcfc687118be8544ffdb0d808cb2d969ae95258faf04309b167b04b"
+    },
+    {
+      "path": "scripts/qa-awos.js",
+      "bytes": 2195,
+      "sha256": "8e9630f4013bc7f196bb1a29bc8686d3213276b1c4c467b535ff81225cae2d62"
+    },
+    {
+      "path": "scripts/seed-sintetico.js",
+      "bytes": 10946,
+      "sha256": "7f714e78b7d69664a64280034c8363cfb2a5246e8fdd941456223e36b7c71cf3"
+    },
+    {
+      "path": "scripts/verify-awos-copy.mjs",
+      "bytes": 16067,
+      "sha256": "5526e117f847e9a6f8f1f0d54ef7db66b65a6f9c177b81940cc42b20f2fb4be5"
+    },
+    {
+      "path": "src/actions.js",
+      "bytes": 4973,
+      "sha256": "7a50c1a49cd37960bb2903c8842334f255010dfc96f81ec3d28f23b57a2041cf"
+    },
+    {
+      "path": "src/agent.js",
+      "bytes": 19076,
+      "sha256": "1b53fcc47e8361d9102ebaca27636509bfc14a77599d605053b348b64a7f85a3"
+    },
+    {
+      "path": "src/ai/anonymize.js",
+      "bytes": 2117,
+      "sha256": "d63317bef9d43396d053ccb3ef227547839085d1607c8c6f574a5452e35a482d"
+    },
+    {
+      "path": "src/ai/decision.js",
+      "bytes": 6984,
+      "sha256": "7b2beedaea20545eb70e626d8f53bac9be4056973a879720edb2784310813515"
+    },
+    {
+      "path": "src/ai/json.js",
+      "bytes": 913,
+      "sha256": "e3b5634a1f9058de7fee244154ec75a1ed50daccb2e3639feb3f59f3fb090133"
+    },
+    {
+      "path": "src/ai/providers.js",
+      "bytes": 7575,
+      "sha256": "238966cc51497a3bdab978c2a514220c61f78e8af0afb844fb4cca6bd8ce3f09"
+    },
+    {
+      "path": "src/ai/router.js",
+      "bytes": 5033,
+      "sha256": "2d5e8725a74376857bba4000d41b5a6423bcbfa0697e16059255580b913a14c9"
+    },
+    {
+      "path": "src/api.js",
+      "bytes": 20785,
+      "sha256": "de339e81a908b30d812eca35fc20d194291db784445dfb246012a37873f4ad62"
+    },
+    {
+      "path": "src/awos-archive.js",
+      "bytes": 14131,
+      "sha256": "81a06433019502964984ca6a92f7bd3f5f7e54905b23678931ba42218f976c30"
+    },
+    {
+      "path": "src/awos-business.js",
+      "bytes": 9014,
+      "sha256": "bdb80502fd6399e123b765a4720b8c89283f3e472aac9da5fb4573b023615de1"
+    },
+    {
+      "path": "src/awos-client.js",
+      "bytes": 9605,
+      "sha256": "7be90ed5be6e2bcadeed59e88a2a49a927201004fe665726167be531a1e7d7f4"
+    },
+    {
+      "path": "src/awos-copy-picker-worker.js",
+      "bytes": 875,
+      "sha256": "52e4bbe345a5f6f89afe48bc64c3a3ac54d6bde28bfb1d9bce401ffc68e85cbe"
+    },
+    {
+      "path": "src/awos-copy-picker.js",
+      "bytes": 1998,
+      "sha256": "ba360bcdb77500ab5f4ce50460cb0cf39396be6b3a75b2544ba35ca680469119"
+    },
+    {
+      "path": "src/awos-copy-service.js",
+      "bytes": 10763,
+      "sha256": "013038dd4a751961db749ca59092e0ae6635b9e6697bc20585ffb32940e5a857"
+    },
+    {
+      "path": "src/awos-drafter.js",
+      "bytes": 3484,
+      "sha256": "1fb8b7559fd3cef541c6b6c7844184144bcefa2f028220c8dea153b0759dd6cf"
+    },
+    {
+      "path": "src/awos-flow.js",
+      "bytes": 13787,
+      "sha256": "3fe951408d81572586da08230e1f793a1eaaaa4889b7969e8cd63d83bb3e0cb8"
+    },
+    {
+      "path": "src/awos-followups.js",
+      "bytes": 8288,
+      "sha256": "0254a328fc06e2527da0633b7c867bca795ea25aa42a051141dd44fb67722934"
+    },
+    {
+      "path": "src/awos-guard.js",
+      "bytes": 1822,
+      "sha256": "42e08099f630d98433cdc8536abece32dbebd8b19e33c8855e44222cc5ef295a"
+    },
+    {
+      "path": "src/awos-intakes.js",
+      "bytes": 9286,
+      "sha256": "c5ad612ae386b2ffec0babfe61e051a1aee05aabd57c56286e185100709e2097"
+    },
+    {
+      "path": "src/awos-locks.js",
+      "bytes": 1372,
+      "sha256": "89d451b3f3784b300f60df9fb0b325d139fbe090d57cf71240df8095eeb56435"
+    },
+    {
+      "path": "src/awos-maintenance.js",
+      "bytes": 990,
+      "sha256": "909b06e781c24745598ecb09666e017b4bfa4b78f6dff0b5db70e5a4cb49ab7e"
+    },
+    {
+      "path": "src/awos-process.js",
+      "bytes": 1673,
+      "sha256": "b48648f847ba3d263aec2ba496e39a2fa71702ce1c09468104f7f561dbf82d98"
+    },
+    {
+      "path": "src/awos-restored-app.js",
+      "bytes": 3971,
+      "sha256": "76bf0536b6c0b6f41f9bdbae58ce7ddd973ed9242477134e3a15bd5d7e0620e7"
+    },
+    {
+      "path": "src/backups.js",
+      "bytes": 4114,
+      "sha256": "4143d7bc59b3ae28a9964def1746dbd4a54b3e5f9454066913ab5f174accc3a2"
+    },
+    {
+      "path": "src/clock.js",
+      "bytes": 314,
+      "sha256": "31f26121f9c2e950af6fa3021764ccbf99498229b10b1d4cc1b3866d6a64486b"
+    },
+    {
+      "path": "src/dates.js",
+      "bytes": 3635,
+      "sha256": "130d28e8bb939a21513a0aeb4cd3c53528fb76df864d0cbc0f1bf5f31de22e6b"
+    },
+    {
+      "path": "src/db.js",
+      "bytes": 8253,
+      "sha256": "2b53ea3825aaac7c2c2d014dde36e15ddddf514676ff32dd7f45f41cc2818e1a"
+    },
+    {
+      "path": "src/demo.js",
+      "bytes": 10060,
+      "sha256": "bb78156349b3dfe1d7b6e5709505ac0a5e21d8c36f215aa73bd8258b01abba84"
+    },
+    {
+      "path": "src/draft-context.js",
+      "bytes": 3961,
+      "sha256": "ff14fedc906ae254b9583a31771b378cf63e77eef16cc30a587659bbbc89a9a3"
+    },
+    {
+      "path": "src/draft-dates.js",
+      "bytes": 5232,
+      "sha256": "ffe5e474e5bce3a2a2de53707783736115cbdadf84cdf3354269c64f0c7a7b23"
+    },
+    {
+      "path": "src/external-agents.js",
+      "bytes": 5873,
+      "sha256": "f12583d660c80ab199b16181d2475d2d8c918f0469e7c7b9584630149237db09"
+    },
+    {
+      "path": "src/intents.js",
+      "bytes": 1655,
+      "sha256": "0743982d7118cde38ef5214087d7a8717798c57594eef2ef0ac7ee6af3f4cc18"
+    },
+    {
+      "path": "src/local-only.js",
+      "bytes": 810,
+      "sha256": "2b9141b5d348c67d257389fa958e9f2ce2293b9590451fdf4554a53b184d93f8"
+    },
+    {
+      "path": "src/numbers.js",
+      "bytes": 1054,
+      "sha256": "689141b8bc54a6255dff596bf65c77728109b2fecd0fe3d46c300dd5bd80d1de"
+    },
+    {
+      "path": "src/proposal-templates.js",
+      "bytes": 5409,
+      "sha256": "a548b37929d5ed938ff632d5c88dcff0d26e7cd2eb1e57b6fd6be268788211b9"
+    },
+    {
+      "path": "src/rem-modules.js",
+      "bytes": 1365,
+      "sha256": "5544ac99ec604c7012fd46a767cc054af01ecbb9aec3e7b55b502699c5e3f1e5"
+    },
+    {
+      "path": "src/secrets.js",
+      "bytes": 2645,
+      "sha256": "c45e78f8356cc979d39df94e4bcb3906bbd584c5156e63361f444781df884f32"
+    },
+    {
+      "path": "src/server.js",
+      "bytes": 6713,
+      "sha256": "9db4df1eb6d33b9b1d1d3f9ad21d2f6d478bff032bb098fc2848b127d5bdd613"
+    },
+    {
+      "path": "src/settings.js",
+      "bytes": 5254,
+      "sha256": "454b891b94994f6ba0f3e865520cd0ac6e3f6f40f2cca40027c11ea0dcfc37eb"
+    },
+    {
+      "path": "src/triage.js",
+      "bytes": 4578,
+      "sha256": "4c3a8c36866ab1e276b5388ff322d9b74dff6e917845009f1c60b463a115f3a1"
+    },
+    {
+      "path": "test/awos-activation.test.js",
+      "bytes": 1346,
+      "sha256": "6d1d554f363fd05d24060601b409d58340ec1d1b7c1dc9b7abbcf4e1e18886a1"
+    },
+    {
+      "path": "test/awos-allowlist.test.js",
+      "bytes": 1387,
+      "sha256": "6ae4e797d90ae92a9c196626cee26225bbb7aeb5db2a9dd0d64dc997ca1d2dc4"
+    },
+    {
+      "path": "test/awos-api.test.js",
+      "bytes": 4118,
+      "sha256": "6aa4a59e76b77125503a5c956ffc56601e87efaad196633cdcd3547652e84bdd"
+    },
+    {
+      "path": "test/awos-business.test.js",
+      "bytes": 10911,
+      "sha256": "ea571aee546c514d35de9ac104a1d552948eb77f21c1f68045e1d62c7a35f048"
+    },
+    {
+      "path": "test/awos-copies-ui.test.js",
+      "bytes": 4082,
+      "sha256": "c63032a536622ad69c41aeacb0ccab0b0bfca0716167121ca85d7b766c6a4ffd"
+    },
+    {
+      "path": "test/awos-copy-api.test.js",
+      "bytes": 5118,
+      "sha256": "3b9527a5687f87d99e70f8371905d791d101bbb58c9fddfe7da857fdb41c02e6"
+    },
+    {
+      "path": "test/awos-copy-jobs-recovery.test.js",
+      "bytes": 3056,
+      "sha256": "b02bed00168bfd7af52754078409e1c2ae2185a282407436a0e81c0d3d35aa6b"
+    },
+    {
+      "path": "test/awos-copy.test.js",
+      "bytes": 16500,
+      "sha256": "4650e431d80a48e25f3972d6c491b1b022c16bcf5584a2db60cf307fc7d1daf6"
+    },
+    {
+      "path": "test/awos-flow.test.js",
+      "bytes": 5937,
+      "sha256": "691ebe85ac19c6472f15a353145aff9e6747fb557479b95bebdd74353a06269d"
+    },
+    {
+      "path": "test/awos-followups.test.js",
+      "bytes": 2853,
+      "sha256": "796fe144e1d304bf6f8c9db326786d931ab67175ddf1f5288beb069ad7b328b7"
+    },
+    {
+      "path": "test/awos-import-api.test.js",
+      "bytes": 2639,
+      "sha256": "c636ff05a12ddf7bfaaf09b71178ff4e62d06fdbbeed1881d739a008c110364c"
+    },
+    {
+      "path": "test/awos-import.test.js",
+      "bytes": 8514,
+      "sha256": "df450e41fa5bea49793a33371d893cde9b521e45e59082f9be64903f17d0277f"
+    },
+    {
+      "path": "test/awos-local-only.test.js",
+      "bytes": 2636,
+      "sha256": "133318778983fd5c5e4dd7b825c5f05df81ba17b41d29a7e86a49d36508fe490"
+    },
+    {
+      "path": "test/awos-maintenance.test.js",
+      "bytes": 2564,
+      "sha256": "575a0fb7e2491aaad96a5de7554f6aa888bd679dde3c08fc2dcc0288d8c588dc"
+    },
+    {
+      "path": "test/awos-managed-copies.test.js",
+      "bytes": 9587,
+      "sha256": "42c16fac73ef475400fcfaa462c2532605983a24dac3a7e6bafff703ae818663"
+    },
+    {
+      "path": "test/awos-pair-lifecycle.test.js",
+      "bytes": 2582,
+      "sha256": "6ee7bd9ddd3f838d0e2260e28ccbd5d0fe1166de951350ced66b60ece991606e"
+    },
+    {
+      "path": "test/awos-proposal.test.js",
+      "bytes": 2643,
+      "sha256": "cf567d6475017bc357a3aeb4343c7e95d809cd8e5cedb8abeddfde1bd44da79d"
+    },
+    {
+      "path": "test/awos-recovery.test.js",
+      "bytes": 3565,
+      "sha256": "f08565e51e0bafb70267b5619c40a457ce5a353e53e556d8e832f7c6fd200303"
+    },
+    {
+      "path": "test/awos-replacement.test.js",
+      "bytes": 3585,
+      "sha256": "2bde898e9091ccb670777e2d1eaec7f68aeefde29d63d5e82fba65f634d3b512"
+    },
+    {
+      "path": "test/awos-ui.test.js",
+      "bytes": 2306,
+      "sha256": "eb19ee62d4a8185b93bf3780b9d5e9f36ad285e00d2b0884ff60bc778aa32f42"
+    },
+    {
+      "path": "test/backups.test.js",
+      "bytes": 6363,
+      "sha256": "dae04e423dba957646e29af453d18421e71e31a426684da34a9ce378c683fe69"
+    },
+    {
+      "path": "test/core.test.js",
+      "bytes": 12908,
+      "sha256": "600876855093b4651ba5bbf08d109f6215f8e657594d8c4bebcf46cb5bc9093c"
+    },
+    {
+      "path": "test/demo.test.js",
+      "bytes": 2168,
+      "sha256": "8a7214e9a4ed427dc02de92c98faf08d9c685d17160710277efd176589b1221c"
+    },
+    {
+      "path": "test/draft-context.test.js",
+      "bytes": 5237,
+      "sha256": "57b4aeb68b2e7c8e1168acffd11062c4fd8e1af6e1417cfc02757c817160ac1e"
+    },
+    {
+      "path": "test/draft-dates.test.js",
+      "bytes": 6487,
+      "sha256": "7b844b13cc59b4a787fca075ce64132ecdf1d04b70eb1c9197abb9e08449141b"
+    },
+    {
+      "path": "test/draft-warnings.test.js",
+      "bytes": 4161,
+      "sha256": "d0375ef59efa07b3853f97e6fc9ead9f17af552f798569951ddbde4ff37a03c4"
+    },
+    {
+      "path": "test/english-presentation.test.js",
+      "bytes": 2325,
+      "sha256": "e1c3decb0a2d0c477f9848b1f46485902871566e743bccf2d2f7f350f0242538"
+    },
+    {
+      "path": "test/eval.test.js",
+      "bytes": 2871,
+      "sha256": "3f5e02af2b335676b46d41d12e70ffd611a7fadc69f7af1a9049a6eacff77eb2"
+    },
+    {
+      "path": "test/evaluation-options.test.js",
+      "bytes": 4429,
+      "sha256": "341e4073dd1b47b070ecf840ace0028a87cc159cc9066efbf596bafa09c31fa9"
+    },
+    {
+      "path": "test/examen3-checks.test.js",
+      "bytes": 2410,
+      "sha256": "293b66b8ea8cfc2a58557a217d8c403b27e0c7f445648fdff7ac41743aad453e"
+    },
+    {
+      "path": "test/followup-consolidation.test.js",
+      "bytes": 4742,
+      "sha256": "424e3a7e93793b5bf7ad6837d6cb0f92e6497ea18f98fde97ec6b837446dedfd"
+    },
+    {
+      "path": "test/followup-runtime-recovery.test.js",
+      "bytes": 3322,
+      "sha256": "5df6af057e4fe76cebdc7e59a5e1b78b2cf8292da888abf2b1911b24e52effd0"
+    },
+    {
+      "path": "test/helpers/awos-copy-crash.js",
+      "bytes": 576,
+      "sha256": "56ef5b3ed1562feb357fee081b36021377a54cb8d724bbb86afbfbafbea3fb80"
+    },
+    {
+      "path": "test/helpers/awos-copy-effects.mjs",
+      "bytes": 2274,
+      "sha256": "2548a66128bc059c5f4cf034205254d4f6a4e7899f5efa10bc96826d417c88c1"
+    },
+    {
+      "path": "test/helpers/awos-copy-fixture.js",
+      "bytes": 1476,
+      "sha256": "1f7a811a250d4e1edcf22dd6f4ef2acb70dd721336830fc70a15674054cd56d0"
+    },
+    {
+      "path": "test/helpers/awos-crash-worker.js",
+      "bytes": 587,
+      "sha256": "31ad627d14f8c7cd153aa2a9f10ce01823ba161e4307b1c8a544fc132ade938f"
+    },
+    {
+      "path": "test/helpers/awos-harness.js",
+      "bytes": 1129,
+      "sha256": "a4837750ab98f46914c212ba1b6001c131bee298a4c8d81e4f784f8d6303abdc"
+    },
+    {
+      "path": "test/helpers/awos-managed-crash.mjs",
+      "bytes": 1709,
+      "sha256": "7d328c1caef4dcb1b1e66ee67e7cdd01ddd09ec97dea1c00e1023f24c8ac64fb"
+    },
+    {
+      "path": "test/helpers/awos-managed-fixture.js",
+      "bytes": 1298,
+      "sha256": "b44f6852a474bdb6751b9e4362e9d28f6df0e590216fbab4323b69bb6710ed61"
+    },
+    {
+      "path": "test/helpers/awos-picker-crash.mjs",
+      "bytes": 778,
+      "sha256": "1445a2a76ced0917d07a35b711b2cb8daa73a9527a0b0216abafac2243b7173d"
+    },
+    {
+      "path": "test/helpers/business-crash.mjs",
+      "bytes": 819,
+      "sha256": "d2583e7d81cfcdadb63d84d049378637920bbb8dd031ae9ff1a6676142ed4bf0"
+    },
+    {
+      "path": "test/helpers/followup-preparation-crash.mjs",
+      "bytes": 788,
+      "sha256": "9db0973f10f9041914c11c20e1430e8445005e1fc45f3391491067f8c252994d"
+    },
+    {
+      "path": "test/helpers/free-port.js",
+      "bytes": 304,
+      "sha256": "5aaa430275c00549fa52adee55090f636f3fd24436b2af960449b6f5b5f53e0c"
+    },
+    {
+      "path": "test/helpers/intake-crash.mjs",
+      "bytes": 703,
+      "sha256": "2cd92e51387f9169b569ad166c3c2ffbe54d3340ef98433b6d0c4e67536b6109"
+    },
+    {
+      "path": "test/helpers/module-library-dom.js",
+      "bytes": 4062,
+      "sha256": "93c4c07ea52530214cd2ea4f1ed8aa3713881e2924f49b83651a2e306b1ee510"
+    },
+    {
+      "path": "test/helpers/observe-listens.mjs",
+      "bytes": 584,
+      "sha256": "33aaa82b28a28b3e662eb4b9f6e3da3647d3ffb9eece18316b602616f5fcae35"
+    },
+    {
+      "path": "test/http.test.js",
+      "bytes": 4803,
+      "sha256": "b5ff5b57143db0928acc988834bebc1d7339a5e61bc5508b46c8861784d3b812"
+    },
+    {
+      "path": "test/intakes-api.test.js",
+      "bytes": 2360,
+      "sha256": "aed75d632ca02bd9c6f88656245730c24f2c66333f1ba4c8ea65a0b871db3428"
+    },
+    {
+      "path": "test/intakes-recovery.test.js",
+      "bytes": 2943,
+      "sha256": "02cf5696dccee61056a56198b88f3bbff6d34bef9c0ef32b0cb2537e9e13c2f5"
+    },
+    {
+      "path": "test/intakes.test.js",
+      "bytes": 8518,
+      "sha256": "ce8f936da2604c24a087a2248cbe322075bec8ca1f400e6364e67b90b41f1a59"
+    },
+    {
+      "path": "test/intent-agent.test.js",
+      "bytes": 10759,
+      "sha256": "9e6c2ff1c7f3ec71f6582af4e07361c6bd5dd0be687b84505f73a0f822faf21b"
+    },
+    {
+      "path": "test/lifecycle.test.js",
+      "bytes": 6096,
+      "sha256": "77f0550ab975fbfc1b5eb4cf14280bdc69628f9bfcc35e888df9f1c558e2bcef"
+    },
+    {
+      "path": "test/message-intent.test.js",
+      "bytes": 2393,
+      "sha256": "2678ab04d106a10fac6acb4080d7362e4467baa450c0ddcd976fc3f66715f673"
+    },
+    {
+      "path": "test/model-capacity.test.js",
+      "bytes": 2128,
+      "sha256": "058419cdd48862c339a4c4857947b00946bf4a71f4ac20406961f650971eabe1"
+    },
+    {
+      "path": "test/module-library-controller.test.js",
+      "bytes": 6511,
+      "sha256": "14f517002ff3dce5c6352cf251838ddd5b2ba36971d993608037d34b99c3f673"
+    },
+    {
+      "path": "test/parallel-agents.test.js",
+      "bytes": 5886,
+      "sha256": "dfd1829d57c60cdda57e334c6360892b86b38d8db25c56d2f937db88b5fa71c3"
+    },
+    {
+      "path": "test/proposal-templates.test.js",
+      "bytes": 2065,
+      "sha256": "045ea8d80935cb0b47c085ba7f93b7cba499a79c134283ccc925b4767c9de2f4"
+    },
+    {
+      "path": "test/redactor-operational-claims.test.js",
+      "bytes": 962,
+      "sha256": "bfb96ffcd2cb3c7fef06b62731f2a15bc0f078bdf0f1d168745d7c82180b739e"
+    },
+    {
+      "path": "test/rem-modules.test.js",
+      "bytes": 7340,
+      "sha256": "e0df65c147ffa07f8bb1b13d6d3e0a0b55d66cac59d7e0f5a07521e1f172348f"
+    },
+    {
+      "path": "test/seed-sintetico.test.js",
+      "bytes": 3397,
+      "sha256": "4dbe363332f708d139da44c697d148a9329be051d2f70159c0373331f9120448"
+    }
+  ]
+}
